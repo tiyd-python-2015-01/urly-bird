@@ -1,9 +1,13 @@
 {% extends "layout.html" %}
-
 {% block body %}
-<h1>You've Logged In</h1>
-<form action="{{ url_for('logoff') }}" method="GET">
-  <input type="submit" value="logout"/>
-<h2>Hello _____</h2>
-</form>
+<h2>User Page</h2>
+<br>
+  {% if current_user.is_authenticated() %}
+  <a href="{{ url_for('logoff') }}">Logout</a>
+  <a href="/index">Homepage.</a>
+
+    Hello {{ current_user.name }}!
+  {% endif %}
+</br>
+<br>
 {% endblock %}
