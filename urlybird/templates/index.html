@@ -1,7 +1,22 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h2>All books</h2>
+<div>
+  {% if current_user.is_authenticated() %}
+  Welcome {{ current_user.name }}
+</div>
+<div>
+  <a href="{{ url_for('logout')}}">Logout</a>
+  {% endif %}
+</div>
+<div>
+<a href="{{ url_for('index') }}">Home</a>
+</div>
+<div>
+<a href="{{ url_for('login') }}">Login</a>
+</div>
+
+<h2>All links</h2>
 
 {% for book in books %}
 <div class="book">
