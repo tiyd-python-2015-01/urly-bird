@@ -1,0 +1,10 @@
+% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <form action="{{ url_for('index') }}" method=post class=index>
+      <h3> You are Logged_in</h3>
+  {% else %}
+  <h3> You are NOT Logged_in</h3>
+    </form>
+  {% endif %}
+{% endblock %}

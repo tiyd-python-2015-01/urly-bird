@@ -1,56 +1,58 @@
-# URLy Bird
+# urly-bird
 
-## Description
 
-Create a URL shortener/bookmarking site with Flask.
+Quickstart
+----------
 
-## Objectives
+Run the following commands to bootstrap your environment.
 
-### Learning Objectives
 
-After completing this assignment, you should understand:
+```
+cd urly-bird
+pip install -r requirements.txt
+python manage.py db init
+python manage.py db migrate
+python manage.py db upgrade
+python manage.py server
+```
 
-* How to build simple applications in Flask
 
-## Details
+Deployment
+----------
 
-### Deliverables
+In your production environment, make sure you have an application.cfg
+file in your instance directory.
 
-* A Git repo called urly-bird containing at least:
-  * `README.md` file explaining how to run your project
-  * a `requirements.txt` file
-  * a suite of tests for your project (on day 2)
 
-### Requirements  
+Shell
+-----
 
-* Passing unit tests
-* No PEP8 or Pyflakes warnings or errors
+To open the interactive shell, run:
 
-## Day 1
+    python manage.py shell
 
-### Normal Mode
+By default, you will have access to `app` and `db`.
 
-Create a Flask app with the following features:
 
-* User registration
-* User login
-* User logout
+Running Tests
+-------------
 
-You can have an index page that only shows the current logged in/logged out status and has links to each of these features.
+To run all tests, run:
 
-### Hard Mode
+    python manage.py test
 
-In addition to the requirements from **Normal Mode**:
 
-* Display the name of the user on the page
-* Add Foundation and style your forms with it
-* Start on the Bookmark model
+Migrations
+----------
 
-## Day 2
+Whenever a database migration needs to be made, run the following commmand:
 
-Coming soon!
+        python manage.py db migrate
 
-## Additional Resources
+This will generate a new migration script. Then run:
 
-* [Flask Skeleton](https://github.com/tiyd-python-2015-01/cookiecutter-flask). Use this at your own risk. It explains how to use it in the README.
-* [Hashids](http://hashids.org/python/). These may be useful for creating short URLs.
+        python manage.py db upgrade
+
+to apply the migration.
+
+For a full migration command reference, run `python manage.py db --help`.
