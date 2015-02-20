@@ -2,10 +2,15 @@
 
 {% block body %}
 
-    <form method="POST" action={{ url_for('register') }}>
-        <div>{{ form.email.label }}: {{ form.email() }}</div>
-        <div>{{ form.password.label }}: {{ form.password() }}</div>
-        <input type="button" value="submit" />
+    <form method="POST" action="{{ url_for("login") }}">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.email.label }} {{ form.email(size=20) }}
+        </div>
+        <div>
+            {{ form.password.label }} {{ form.password(size=20) }}
+        </div>
+        <input type="submit" value="Login">
     </form>
 
 {% endblock %}

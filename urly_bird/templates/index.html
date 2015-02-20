@@ -3,8 +3,16 @@
 {% block body %}
 
     <ul>
-        <li><a href={{ url_for('login') }}> Login </a></li>
-        <li><a href={{ url_for('register') }}> Register </a></li>
+        {% if not current_user.is_authenticated() %}
+            <h3>"Welcome to URLy bird" -John Mitsch, President, CEO, CFO, Black Belt</h3>
+            <li><a href={{ url_for('login') }}> Login </a></li>
+        {% else %}
+            <h3>Welcome, {{ current_user.name }}</h3>
+        {% endif %}
+            <li><a href={{ url_for('register') }}> Register </a></li>
+        {%  if current_user.is_authenticated() %}
+            <li><a href={{ url_for("logout") }}> Logout </li>
+        {% endif %}
     </ul>
 
 {% endblock %}
