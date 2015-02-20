@@ -1,4 +1,3 @@
-from urly_bird.app import app
 
 """Add your views here."""
 
