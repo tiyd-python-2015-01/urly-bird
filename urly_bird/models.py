@@ -2,19 +2,14 @@ from .app import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
 
 
-@login_manager.user_loader
-def load_user(id):
-    return User.query.get(id)
-
-
-#class Url-bird(db.Model):
+#class Urly-bird(db.Model):
 #    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#    title = db.Column(db.String(255), nullable=False)
-#    description = db.Column(db.Text)
-#    url = db.Column(db.String(255), nullable=False, unique=True)
+#    short = db.Column(db.String(255), nullable=False, unique=True)
+
+#    long = db.Column(db.String(255), nullable=False, unique=True)
 #
 #    def __repr__(self):
-#        return "<Book {}>".format(self.title)
+#        return "<Urly-bird {}>".format(self.short)
 
 
 class User(db.Model, UserMixin):

@@ -2,7 +2,7 @@
 """Add your views here."""
 
 from flask import render_template, flash, redirect, request, url_for
-from flask.ext.login import login_user, logout_user
+from flask.ext.login import login_user, logout_user, login_required
 
 from .app import app, db,  login_manager
 from .forms import LoginForm, RegistrationForm
@@ -40,6 +40,7 @@ def login():
     return render_template("login.html", form=form)
 
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
