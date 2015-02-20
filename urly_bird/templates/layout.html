@@ -1,0 +1,30 @@
+<!doctype html>
+<head>
+    <title>My Name is Url</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<div class=page>
+    <h1>My Name is Url:</h1>
+
+    <div class=metanav>
+        {% if request.path != "/" %}
+        <button onclick="location.href='{{url_for('index')}}'">Home</button>
+        {% endif %}
+        {% if current_user.is_authenticated() %}
+        <button onclick="location.href='{{url_for('logout')}}'">Log Out</button>
+        <div class=align-right>
+            <h2>Hello, {{ session.username }}</h2>
+        </div>
+        {% else %}
+        <button onclick="location.href='{{url_for('login')}}'">Log In</button>
+        <div class=align-right>
+            <a class=metanav href="{{ url_for('create_user') }}">Create New Account</a>
+        </div>
+        {% endif %}
+    </div>
+    {% for message in get_flashed_messages() %}
+        <div class=flash>{{ message }}</div>
+    {% endfor %}
+    {% block body %}
+    {% endblock %}
+</div>

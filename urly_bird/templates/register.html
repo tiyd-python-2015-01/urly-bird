@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h2>Account Creation</h2>
+    <h3>Please enter e-mail and choose a password:</h3>
+    <form method=POST action="{{ url_for('create_user') }}">
+        {{ form.hidden_tag() }}
+        <div>
+            <div class=left>{{ form.name.label }}</div>
+            <div class=right>{{ form.name(size=20) }}</div>
+        </div>
+        <div>
+            <div class=left>{{ form.email.label }}</div>
+            <div class=right>{{ form.email(size=20)}}</div>
+        </div>
+        <div>
+            <div class=left>{{ form.password.label }}</div>
+            <div class=right>{{ form.password(size=20)}}</div>
+        </div>
+        <div>
+            <div class=left>{{ form.password_verification.label }}</div>
+            <div class=right>{{ form.password_verification(size=20) }}</div>
+        </div>
+        <input type=submit value=Register>
+    </form>
+{% endblock %}

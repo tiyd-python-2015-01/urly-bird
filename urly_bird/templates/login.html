@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h2>Login:</h2>
+    <form method=POST action="{{ url_for('login') }}">
+        {{ form.hidden_tag() }}
+    <div>
+        <div class=left>{{ form.email.label }}</div>
+        <div class=right>{{ form.email(size=20) }}</div>
+        <div class=left>{{ form.password.label }}</div>
+        <div class=right>{{ form.password(size=20)}}</div>
+    </div>
+        <div><input type=submit value="Log In"></div>
+    </form>
+{% endblock %}
