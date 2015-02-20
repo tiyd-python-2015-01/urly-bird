@@ -16,6 +16,16 @@ class Book(db.Model):
     def __repr__(self):
         return "<Book {}>".format(self.title)
 
+# class Bookmark(db.Model):
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     longurl = db.Column()
+#     shorturl = db.Column()
+#     summary = db.Column()
+#     user.id =
+
+
+
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
