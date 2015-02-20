@@ -39,8 +39,7 @@ def login():
     flash_errors(form)
     return render_template("login.html", form=form)
 
-@app.route("/logout")
-@login_required
+@app.route("/logout", methods=["GET","POST"])
 def logout():
     logout_user()
     return redirect(url_for("index"))
