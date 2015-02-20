@@ -3,7 +3,7 @@ from flask.ext.login import login_user, login_required, logout_user
 
 from . import app, db
 from .forms import LoginForm, RegistrationForm
-from .models import User
+from .models import User, Link
 
 
 def flash_errors(form, category="warning"):
@@ -63,4 +63,17 @@ def logout():
     logout_user()
     flash("You have been logged out")
     return redirect(url_for('index'))
+
+@app.route('/shorten', methods=['GET', 'POST'])
+def shorten():
+    if request.method == 'POST':
+        url_input = request.form['url']
+        link = Link(original_link = url_input)
+        db.session.add(link)
+        db.session.commit()
+        link.get_short_link()
+        print('link'+ link.short_link)
+        return render_template("shorten.html", short_link=link.short_link)
+    return render_template("shorten.html", short_link=link.short_link)
+
 

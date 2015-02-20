@@ -12,6 +12,7 @@
             <li><a href={{ url_for('register') }}> Register </a></li>
         {%  if current_user.is_authenticated() %}
             <li><a href={{ url_for("logout") }}> Logout </li>
+            <li><a href='/shorten'> Shorten </a></li>
         {% endif %}
     </ul>
 

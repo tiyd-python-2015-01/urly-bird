@@ -1,6 +1,6 @@
 from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
-import hashids
+from hashids import Hashids
 
 
 @login_manager.user_loader
@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     encrypted_password = db.Column(db.String(60))
+    links = db.relationship('Link', backref='user', lazy='dynamic')
 
     def get_password(self):
         return getattr(self, "_password", None)
@@ -32,9 +33,9 @@ class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     original_link = db.Column(db.String(255), nullable=False)
     short_link = db.Column(db.String(255))
-    user = db.Column(db.Integer, ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def get_short_link(self):
        salt = Hashids(salt="and pepper", min_length=1)
        hash = salt.encode(self.id)
-       self.short_link = hash
+       self.short_link = 'http://localhost:5000/' + hash
