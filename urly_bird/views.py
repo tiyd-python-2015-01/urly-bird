@@ -5,7 +5,7 @@ from urly_bird.app import app
 from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_user
 
-from urly_bird.app import app, db
+from .app import app, db
 from .forms import LoginForm, RegistrationForm
 from .models import User
 
