@@ -1,9 +1,11 @@
 from flask import Flask, render_template
 
 from .extensions import (
-    db,
-    migrate,
-    debug_toolbar,
+   db,
+   migrate,
+   debug_toolbar,
+   bcrypt,
+   login_manager,
 )
 
 SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/urly-bird.db"
@@ -17,5 +19,6 @@ app.config.from_pyfile('application.cfg', silent=True)
 db.init_app(app)
 debug_toolbar.init_app(app)
 migrate.init_app(app, db)
+login_manager.init_app(app)
 
 from . import views

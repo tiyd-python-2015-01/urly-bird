@@ -1,10 +1,17 @@
-% extends "layout.html" %}
+{% extends "layout.html" %}
 {% block body %}
-  {% if session.logged_in %}
+{% if current_user.is_authenticated() %}
+Hi {{ current_user.name }}!
+{% endif %}
+
     <form action="{{ url_for('index') }}" method=post class=index>
-      <h3> You are Logged_in</h3>
-  {% else %}
-  <h3> You are NOT Logged_in</h3>
+
+
+       <a href='/register'>Register</a>
+       <br>
+       <a href='/login'>Login</a>
+       <br>
+       <a href='/logout'>Logout</a>
     </form>
-  {% endif %}
+
 {% endblock %}

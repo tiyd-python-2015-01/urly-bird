@@ -2,9 +2,9 @@
 """Add your views here."""
 
 from flask import render_template, flash, redirect, request, url_for
-from flask.ext.login import login_user
+from flask.ext.login import login_user, logout_user
 
-from .app import app, db
+from .app import app, db,  login_manager
 from .forms import LoginForm, RegistrationForm
 from .models import User
 
@@ -15,6 +15,9 @@ def flash_errors(form, category="warning"):
         for error in errors:
             flash("{0} - {1}".format(getattr(form, field).label.text, error), category)
 
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(id)
 
 @app.route("/")
 def index():
@@ -36,6 +39,10 @@ def login():
     flash_errors(form)
     return render_template("login.html", form=form)
 
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
