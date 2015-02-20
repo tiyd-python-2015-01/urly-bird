@@ -52,7 +52,7 @@ In addition to the requirements from **Normal Mode**:
 
 Create forms in your application for logged in users to create bookmarks. Each bookmark should have a title, a URL, and an optional description. In addition, it should have a unique code -- something like "x1yrd3a" -- for each bookmark for use in looking it up later.
 
-Create a route like "/b/<code>" that will redirect any user -- not just logged in users -- to the bookmark associated with that code. The route does not have to look just like the example.
+Create a route like "/b/\<code\>" that will redirect any user -- not just logged in users -- to the bookmark associated with that code. The route does not have to look just like the example.
 
 On a logged in user's index page, they should see a list of the bookmarks they've saved in reverse chronological order. The bookmark links should use the internal short-code route, not the original URL.
 
