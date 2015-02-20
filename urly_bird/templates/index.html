@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if current_user.is_authenticated() %}
+    Hi {{ current_user.name }}!
+  {% endif %}
+
+    <form action="{{ url_for('index') }}" method=post class=index>
+
+       <a href='/register'>Register</a>
+       <br>
+       <a href='/login'>Login</a>
+       <br>
+       <a href='/logout'>Logout</a>
+    </form>
+
+{% endblock %}
