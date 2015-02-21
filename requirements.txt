@@ -3,4 +3,6 @@ flask-script
 flask-sqlalchemy
 flask-migrate
 flask-wtf
+flask-login
+flask-bcrypt
 hashids

@@ -1,7 +1,23 @@
 from flask_wtf import Form
-from wtforms import StringField
-from wtforms.validators import DataRequired
+from wtforms.fields.html5 import URLField
+from wtforms.validators import DataRequired, url, Email, EqualTo
 
 
 class UrlForm(Form):
-    text = StringField('text', validators=[DataRequired()])
+    text = URLField('text', validators=[DataRequired(), url()])
+
+
+class Login(Form):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+
+
+class RegisterUser(Form):
+    name = SringField('Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password',
+                             validators=[DataRequired(),
+                             EqualTo('password_verification',
+                             message="Passwords must match")])
+    password_verify = PasswordField('Repeat Password',
+                                    validators=[DataRequired()])
