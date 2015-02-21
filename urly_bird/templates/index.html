@@ -21,10 +21,19 @@
           <div class="row">
             <hr>
           </div>
-
     {% endfor %}
-  </ul>
-
+    </ul>
+  {% else %}
+  <div class="row">
+     <div class=" small-12 columns">
+        <ul class="example-orbit" data-orbit>
+          <img src="{{ url_for('static', filename='dogs1.png') }}" alt="slide 1" />
+      </div>
+  </div>
+  <div class="row">
+       <div class="small-1 columns"></div>
+       <div class="small-11 columns"><h2> Ana's URL Shortener - Small is the New Big</h2></div>
+  </div>
   {% endif %}
 
 

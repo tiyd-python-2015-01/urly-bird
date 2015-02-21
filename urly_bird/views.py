@@ -1,4 +1,4 @@
-
+from datetime import datetime
 """Add your views here."""
 
 from flask import render_template, flash, redirect, request, url_for
@@ -38,7 +38,6 @@ def links():
     return render_template("links.html",links=links)
 
 @app.route("/all_links")
-@login_required
 def all_links():
     links = Links.query.order_by(Links.id.desc()).all()
     return render_template("index.html",links=links)
@@ -63,6 +62,15 @@ def login():
 @app.route('//urly/<path:new_url>')
 def show_link(new_url):
     link = Links.query.filter_by(short=new_url).first()
+    cl_user = current_user.id
+    cl_time = datetime.utc_now()
+    cl_link = link.id
+    new_click = Clicks(user_id=current_user,
+                       link_id = link,
+                       when = datetime.utc_now())
+    db.session.add(new_click)
+    db.session.commit()
+    flash("click is in")
     return redirect(url_for(link.long))
 
 

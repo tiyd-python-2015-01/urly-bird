@@ -43,3 +43,9 @@ class Links(db.Model):
 
     def __repr__(self):
         return "<Urly-bird {}>".format(self.short)
+
+class Clicks(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    link_id = db.Column(db.Integer, db.ForeignKey('links.id'))
+    when = db.Column(db.DateTime)
