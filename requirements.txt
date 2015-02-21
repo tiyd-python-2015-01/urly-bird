@@ -1,2 +1,4 @@
 flask
-Flask-Script
+flask-script
+flask-sqlalchemy
+flask-migrate
