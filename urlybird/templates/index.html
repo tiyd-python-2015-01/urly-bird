@@ -3,9 +3,10 @@
 {% block body %}
 <h1>From Hell's heart, I stab at thee!</h1>
 
-<form action="{{ url_for('add_url')}}" method="post">
+<form action="{{ url_for('add_url') }}" method="post">
   {{ new_url_form.hidden_tag() }}
-  <div> {{ new_url_form.text}} </div>
+  <div> {{ new_url_form.orig_url }} </div>
+  <div> {{ new_url_form.title }} </div>
   <div> <input class="button" type="submit" value="Shorten URL"/> </div>
 </form>
 

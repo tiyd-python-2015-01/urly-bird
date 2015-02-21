@@ -1,5 +1,5 @@
 from flask import render_template, redirect, request, url_for
-from .forms import UrlForm
+from .forms import UrlForm, RegisterUser, Login
 from .models import BookmarkedUrl
 from . import app, db
 from hashids import Hashids
@@ -13,12 +13,20 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    new_login = Login()
+    return render_template('login.html', new_login=new_login)
 
 
 @app.route('/logout', methods=['POST'])
 def logout():
     return redirect(url_for('index'))
+
+
+@app.route('/register', methods=['Get', 'POST'])
+def register():
+    new_registration_form = RegisterUser()
+    return render_template('register.html',
+                            new_registration_form=new_registration_form)
 
 
 @app.route('/add', methods=['POST'])
