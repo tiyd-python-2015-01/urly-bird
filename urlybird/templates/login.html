@@ -8,14 +8,32 @@
     </div>
     {% endfor %}
 {% endif %}
-    <form method="POST" action="{{ url_for("login") }}">
-        {{ form.hidden_tag() }}
-        <div>
-            {{ form.email.label }} {{ form.email(size=20) }}
-        </div>
-        <div>
-            {{ form.password.label }} {{ form.password(size=20) }}
-        </div>
-        <input type="submit" value="Login">
-    </form>
+
+<div class='row'>
+  <form method="POST" action="{{ url_for("login") }}">
+    {{ form.hidden_tag() }}
+    <div class="large-8 columns">
+      <fieldset>
+        <legend>Login</legend>
+
+          {% if get_flashed_messages() %}
+              {% for message in get_flashed_messages() %}
+              <div data-alert class="alert-box">
+                {{ message }}
+              </div>
+              {% endfor %}
+          {% endif %}
+
+        <label>{{ form.email.label }}
+          <input name='email' type="text" placeholder="Your Email Address" />
+        </label>
+        <label>{{ form.password.label }}
+          <input name='password' type="text" placeholder="Your Simple Password" />
+        </label>
+
+        <button type="submit" class='button tiny' value='Login'>Login</button>
+      </fieldset>
+    </div>
+  </form>
+</div>
 {% endblock %}
