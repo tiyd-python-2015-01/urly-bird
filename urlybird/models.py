@@ -16,16 +16,6 @@ class Book(db.Model):
     def __repr__(self):
         return "<Book {}>".format(self.title)
 
-# class Bookmark(db.Model):
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     longurl = db.Column()
-#     shorturl = db.Column()
-#     summary = db.Column()
-#     user.id =
-
-
-
-
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -47,3 +37,16 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return "<User {}>".format(self.email)
+
+class Bookmark(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    longurl = db.Column(db.String(255), nullable=False)
+    shorturl = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    summary = db.Column(db.String(255))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User',
+        backref=db.backref('bookmarks', lazy='dynamic'))
+
+    def __repr__(self):
+        return "<Bookmark {}>".format(self.shorturl)

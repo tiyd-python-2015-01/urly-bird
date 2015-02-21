@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
 from . import app, db
-from .forms import LoginForm, RegistrationForm
-from .models import Book, User
+from .forms import LoginForm, RegistrationForm, BookmarkForm, BookForm
+from .models import Book, User, Bookmark
 
 
 def flash_errors(form, category="warning"):
@@ -17,6 +17,32 @@ def flash_errors(form, category="warning"):
 def index():
     books = Book.query.all()
     return render_template("index.html", books=books)
+
+@app.route("/book", methods=["GET", "POST"])
+def book():
+    form = BookForm()
+    if form.validate_on_submit():
+        book = Book(title=form.title.data,
+                    description=description.title.data,
+                    url=url.title.data)
+        db.session.add(book)
+        db.session.commit()
+        flash("Your book was created.")
+    else:
+        flash("Your book could not be created.")
+    books = Book.query.all()
+    return render_template("book.html", books=books)
+
+
+@app.route("/bookmark", methods=["GET", "POST"])
+def bookmark():
+    form = BookmarkForm()
+
+    bookmark = Bookmark(longurl=form.longurl.data,
+                title=form.title.data,
+                summary=form.summary.data)
+    bookmark_list = Bookmark.query.all()
+    return render_template("bookmark.html", form=form, bookmark_list=bookmark_list)
 
 
 @app.route("/login", methods=["GET", "POST"])

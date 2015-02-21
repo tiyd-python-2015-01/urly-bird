@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form method="POST" action="{{ url_for("bookmark") }}">
+  {{ form.hidden_tag() }}
+  <div>
+    {{ form.longurl.label }} {{ form.longurl(size=100) }}
+
+  </div>
+  <div>
+    {{ form.title.label }} {{ form.title(size=20) }}
+  </div>
+  <div>
+    {{ form.summary.label }} {{ form.summary(size=100) }}
+  <input type="submit" value="Create">
+</form>
+
+{% for bookmark in bookmark_list %}
+<div class="bookmark">
+  <a href="{{ bookmark.longurl }}">{{ bookmark.title }}</a>
+  {% if bookmark.summary %}
+  <br/>
+  {{ bookmark.summary }}
+  {% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}

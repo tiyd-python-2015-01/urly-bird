@@ -8,7 +8,7 @@ from .extensions import (
     login_manager,
 )
 
-SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/freeshelf.db"
+SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/urlybird.db"
 DEBUG = True
 SECRET_KEY = 'development-key'
 
