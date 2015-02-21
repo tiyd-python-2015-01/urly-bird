@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{% if get_flashed_messages() %}
+    {% for message in get_flashed_messages() %}
+    <div data-alert class="alert-box">
+      {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
+    <form method="POST" action="{{ url_for("login") }}">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.email.label }} {{ form.email(size=20) }}
+        </div>
+        <div>
+            {{ form.password.label }} {{ form.password(size=20) }}
+        </div>
+        <input type="submit" value="Login">
+    </form>
+{% endblock %}

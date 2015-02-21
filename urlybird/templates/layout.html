@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>URLy Bird</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  </head>
+  <body>
+    <div id="wrapper">
+
+      {% block header %}
+      {% if current_user.is_active() %}
+      <nav class="top-bar" data-topbar role="navigation">
+        <section class="top-bar-section">
+          <!-- Right Nav Section -->
+          <ul class="right">
+            <li class='active'><a href="/logout">Logout</a></li>
+          </ul>
+          <!-- Left Nav Section -->
+          <ul class="left">
+            <li class="active"><a href="/dashboard">Dashboard</a>
+          </ul>
+        </section>
+      </nav>
+      {% else %}
+
+      <nav class="top-bar" data-topbar role="navigation">
+        <section class="top-bar-section">
+          <!-- Right Nav Section -->
+          <ul class="right">
+            <li class='active'><a href="/login">Login</a></li>
+            <li class='active'><a href="/register">Register</a></li>
+          </ul>
+          <!-- Left Nav Section -->
+          <ul class="left">
+            <li class="active"><a href="/dashboard">URLy Bird</a>
+          </ul>
+        </section>
+      </nav>
+
+      {% endif %}
+      {% endblock %}
+
+
+      {% block body %}{% endblock %}
+
+      {% block footer %}
+      <div class="row">
+        <footer>
+          Copyright (c) 2015
+        </footer>
+      </div>
+
+      {% endblock %}
+    </div>
+
+    <script type="text/javascript" href="{{ url_for('static', filename='modernizr.js') }}"></script>
+    <script type="text/javascript" href="{{ url_for('static', filename='main.js') }}"></script>
+  </body>
+</html>
