@@ -1,31 +1,75 @@
-
 <!DOCTYPE html>
-<html>
+<html class="no-js" lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title></title>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}"> -->
+    <title>Ana's Link Shortener</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
+    <script src="{{ url_for('static', filename='js/vendor/modernizr.js') }}"></script>
   </head>
   <body>
     <div id="wrapper">
+
+      {% for message in get_flashed_messages() %}
+            <div class="flash">
+                {{ message }}
+            </div>
+        {% endfor %}
+      </div>
       {% block header %}
-      <header>
-        <h1>Ana's Very Own URLY</h1>
-      </header>
+
+      <div class="row">
+        <div class="small-12 columns">
+          <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+              <li class="name">
+                <h1><a href="/" title="Home">Ana's Urly</a></h1>
+              </li>
+              <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+            </ul>
+            <section class="top-bar-section">
+                <ul class="right">
+                    <li><a href='/register'>Register</a></li>
+                    <li class="divider"></li>
+                    <li><a href='/login'>Login</a></li>
+                    <li class="divider"></li>
+                    <li><a href='/logout'>Logout</a></li>
+                </ul>
+                <ul class="left">
+                  <li class="divider"></li>
+                  <li class="has-form">
+                     <a href='/add_link' class="button">Add Links</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li class="has-form">
+                     <a href='/all_links' class="button">See All Links</a>
+                  </li>
+                </ul>
+            </section>
+            </nav>
+            </div>
+            </div>
+        <div class="row">
+          <div class="small-12 columns">
+            <ul class="right">
+              {{ current_user.email }}
+            </ul>
+          </div>
+        </div>
+      {% endblock %}
+      {% block body %}
       {% endblock %}
 
-      {% block body %}{% endblock %}
 
-      {% block footer %}
-      <footer>
-        Copyright (c) 2015
-      </footer>
-      {% endblock %}
-    </div>
+    <script src="{{ url_for('static', filename='js/vendor/fastclick.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
+    <script>
+        $(document).foundation();
+    </script>
 
-    <script type="text/javascript" href="{{ url_for('static', filename='modernizr.js') }}"></script>
-    <script type="text/javascript" href="{{ url_for('static', filename='main.js') }}"></script>
-  </body>
+    </body>
 </html>

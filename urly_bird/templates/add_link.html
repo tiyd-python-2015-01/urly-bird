@@ -1,21 +1,27 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <form method="POST" action="{{ url_for("login") }}">
+    <form method="POST" action="{{ url_for("add_link") }}">
         {{ form.hidden_tag() }}
+
         <div class="row">
           <div class="large-12 columns">
-            {{ form.email.label }} {{ form.email(placeholder='yourname@email.com',size=20) }}
+            Title {{ form.title(size=40) }}
           </div>
         </div>
         <div class="row">
           <div class="large-12 columns">
-            {{ form.password.label }} {{ form.password(size=20) }}
+            URL {{ form.long(size=255) }}
           </div>
         </div>
         <div class="row">
           <div class="large-12 columns">
-          <input class ="button tiny" type="submit" value="Login">
+            Description {{ form.description(size=400) }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+          <input class ="button tiny" type="submit" value="Add Link">
         </div>
       </div>
     </form>

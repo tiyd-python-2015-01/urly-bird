@@ -21,4 +21,4 @@ debug_toolbar.init_app(app)
 migrate.init_app(app, db)
 login_manager.init_app(app)
 
-from . import views
+from . import views, models

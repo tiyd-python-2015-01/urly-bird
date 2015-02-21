@@ -1,16 +1,6 @@
 from .app import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
-
-
-class Urly_bird(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    short = db.Column(db.String(255), nullable=False, unique=True)
-
-    long = db.Column(db.String(255), nullable=False, unique=True)
-
-    def __repr__(self):
-        return "<Urly-bird {}>".format(self.short)
-
+from hashids import Hashids
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -32,3 +22,24 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return "<User {}>".format(self.email)
+
+
+class Links(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    short = db.Column(db.String(255), nullable=False, unique=True)
+    long = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(255), nullable = False)
+    description = db.Column(db.Text)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __init__(self, long, title, description=""):
+        self.long = long
+        self.title = title
+        self.description = description
+
+    def set_short(self, id):
+        hashids = Hashids()
+        self.short = hashids.encode(id)
+
+    def __repr__(self):
+        return "<Urly-bird {}>".format(self.short)
