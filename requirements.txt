@@ -2,3 +2,5 @@ flask
 flask-script
 flask-sqlalchemy
 flask-migrate
+flask-wtf
+hashids
