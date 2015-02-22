@@ -1,9 +1,10 @@
 from flask import render_template, flash, redirect, request, url_for
-from flask.ext.login import login_user, logout_user, login_required
+from flask.ext.login import login_user, logout_user, login_required, current_user
 
 from . import app, db
-from .forms import LoginForm, RegistrationForm# Newlink
+from .forms import LoginForm, RegistrationForm, Newlink
 from .models import User
+import random
 
 
 def flash_errors(form, category="warning"):
@@ -62,3 +63,40 @@ def register():
         flash_errors(form)
 
     return render_template("register.html", form=form)
+
+@app.route("/add_link", methods=["GET", "POST"])
+def add_link():
+    user = current_user #(THIS IS A FLASK TOKEN)
+    form = Newlink()
+    if form.validate_on_submit():
+        url = Links.query.filter_by(url=form.url.data).first()
+        if url:
+            flash("You already have a link made for that URL")
+        else:
+            chopped = chopper(url)
+            link = Links(user = current_user.id,
+                        url=form.url.data,
+                        shortlink=chopped,
+                        description=form.description.data)
+            db.session.add(link)
+            db.session.commit()
+            #login_user(user)
+            flash("You added a new choppedURL.")
+            return redirect(url_for("index"))
+    else:
+        flash_errors(form)
+
+    return redirect(url_for('index'))
+
+
+
+def chopper(anyurl):
+    alpha = list('abcdefghijklmnopqrstuvwxyz\
+                  ABCDEFGHIJKLMNOPQRSTUVWXYZ\
+                  1234567890')
+    shortlink = ''.join(random.sample(alpha, 5))
+    existing = Links.query.filter_by(shortlink=shortlink).first()
+    if shortlink == existing:
+        return chopper(anyurl)
+    else:
+        return shortlink

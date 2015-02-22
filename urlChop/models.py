@@ -25,18 +25,19 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.encrypted_password, password)
 
-    # @property
-    # def all_links(self):
-    #     return [links.longlink for links in self.links]
+    @property
+    def all_links(self):
+        return [links.url for links in self.links]
 
     def __repr__(self):
         return "<User {}>".format(self.email)
 
-# class Links(db.Model):
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     shortlink = db.Column(db.String(255), unique=True, nullable=False)
-#     description = db.Column(db.String(255))
-#     user = db.relationship('User', backref=db.backref('favorites', lazy='dynamic'))
-#
-#     def __repr__(self):
-#         return "<Links {}>".format(self.email)
+class Links(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    url = db.Column(db.String(255), unique=True, nullable=False)
+    shortlink = db.Column(db.String(255), unique=True, nullable=False)
+    description = db.Column(db.String(255))
+    user = db.relationship('User', backref=db.backref('favorites', lazy='dynamic'))
+
+    def __repr__(self):
+        return "<Links {}>".format(self.email)

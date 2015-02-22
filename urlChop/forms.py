@@ -20,7 +20,7 @@ class RegistrationForm(Form):
     password_verification = PasswordField('Repeat password')
 
 
-# class Newlink(form):
-#    name = StringField('Title', validators=[DataRequired()])
-#    address = StringField("Address", validators=[DataRequired(), URL()])
-#    description = StringField("Optional Description")
+class Newlink(Form):
+   name = StringField('Title', validators=[DataRequired()])
+   url = StringField("Web Address", validators=[DataRequired(), URL()])
+   description = StringField("Optional Description")
