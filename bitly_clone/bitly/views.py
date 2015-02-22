@@ -6,7 +6,8 @@ from .forms import LoginForm, RegistrationForm, ShortenLink
 from .models import User, Bookmark
 from hashids import Hashids
 from random import randint
-
+from datetime import datetime
+from sqlalchemy import desc
 hashids = Hashids(salt = "a nice salt")
 
 def shortener():
@@ -14,9 +15,10 @@ def shortener():
     id = hashids.encode(*rand_list)
     return id
 
-@app.route("/")
+@app.route("/", methods = ["GET"])
 def index():
-    return render_template("index.html")
+    links = Bookmark.query.order_by(Bookmark.sub_date.desc()).limit(5)
+    return render_template("index.html", links = links)
 
 def flash_errors(form, category="warning"):
     '''Flash all errors for a form.'''
@@ -49,7 +51,9 @@ def shorten_link():
         bookmark = Bookmark(url = form.address.data,
                             title = form.title.data,
                             shortlink =  shortener(),
-                            user = current_user)
+                            user = current_user,
+                            sub_date = datetime.utcnow(),
+                            click_count = 0)
         db.session.add(bookmark)
         db.session.commit()
         flash("Link added")
@@ -91,6 +95,8 @@ def logoff():
 @app.route('/<shortlink>', methods = ["GET"])
 def go_to_bookmark(shortlink):
     the_link = Bookmark.query.filter_by(shortlink=shortlink).first()
+    the_link.click_count += 1
+    db.session.commit()
     return redirect("http://"+the_link.url, code=301)
 
 @app.route("/delete", methods = ["POST"])

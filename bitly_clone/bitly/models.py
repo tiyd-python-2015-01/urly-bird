@@ -1,6 +1,6 @@
 from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
-
+from datetime import datetime
 
 @login_manager.user_loader
 def load_user(id):
@@ -33,5 +33,7 @@ class Bookmark(db.Model):
     shortlink = db.Column(db.String(255), unique=True, nullable = False)
     title = db.Column(db.String(255), unique=True, nullable= False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    sub_date = db.Column(db.DateTime)
+    click_count = db.Column(db.Integer)
 
     user = db.relationship('User')

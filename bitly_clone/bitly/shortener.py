@@ -1,6 +1,7 @@
 from hashids import Hashids
 from random import randint
 
+#wtf is a salt?
 hashids = Hashids(salt = "a nice salt")
 
 def shortener():
