@@ -21,4 +21,6 @@ class RegistrationForm(Form):
 
 
 # class Newlink(form):
+#    name = StringField('Title', validators=[DataRequired()])
 #    address = StringField("Address", validators=[DataRequired(), URL()])
+#    description = StringField("Optional Description")

@@ -32,9 +32,8 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return "<User {}>".format(self.email)
 
-# class Links(db.Model, UserMixin):
+# class Links(db.Model):
 #     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     longlink = db.Column(db.String(255), nullable=False)
 #     shortlink = db.Column(db.String(255), unique=True, nullable=False)
 #     description = db.Column(db.String(255))
 #     user = db.relationship('User', backref=db.backref('favorites', lazy='dynamic'))

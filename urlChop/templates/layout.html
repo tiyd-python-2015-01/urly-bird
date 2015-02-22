@@ -13,7 +13,6 @@
 
 <body>
 
-
 {% include "navbar.html" %}
 
 <div id="wrapper">
@@ -29,13 +28,8 @@
         {% endfor %}
     {% endblock %}
 
-    {% include "welcome.html" %}
-
     {% block body %}{% endblock %}
 
-    <button id="someId">
-        Click Me
-    </button>
 
     {% block footer %}
         <footer>
