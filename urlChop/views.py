@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 
 from . import app, db
 from .forms import LoginForm, RegistrationForm, Newlink
-from .models import User
+from .models import User, Links, UserLinks
 import random
 
 
@@ -16,8 +16,8 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-    #links = User.query.all()
-    return render_template("index.html")#links=links)
+    links = Links.query.all()
+    return render_template("index.html", links=links)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -64,10 +64,10 @@ def register():
 
     return render_template("register.html", form=form)
 
-@app.route("/add_link", methods=["POST"])
-@login_required
+@app.route("/add_link", methods=["GET", "POST"])
+# @login_required
 def add_link():
-    user = current_user #(THIS IS A FLASK TOKEN)
+    #user = current_user #(THIS IS A FLASK TOKEN)
     form = Newlink()
     if form.validate_on_submit():
         url = Links.query.filter_by(url=form.url.data).first()

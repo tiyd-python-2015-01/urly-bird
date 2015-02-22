@@ -14,14 +14,13 @@
       {% if current_user.is_authenticated() %}
         <li><a href="{{ url_for('add_link') }}">Make New Chop</a><li>
         <li><a href="{{ url_for('logout') }}">Logout</a><li>
-        href="{{ url_for('logout') }}">Logout
         {% else %}
         <li><a href = "{{ url_for('register') }}" > Register</a></li>
         <li><a href = "{{ url_for('login') }}">Login</a></li>
       {% endif %}
       </a></li>
 
-      <!-- this was default Foundation NavBar code -->
+      <!-- ###this was default Foundation NavBar code#### -->
       <!-- <li class="active"><a href="#">Right Button Active</a></li> -->
       <!-- <li class="has-dropdown">
         <a href="#">Right Button Dropdown</a>
