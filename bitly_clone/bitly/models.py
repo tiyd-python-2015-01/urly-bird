@@ -26,3 +26,12 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return "<User {}>".format(self.email)
+
+class Bookmark(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    url = db.Column(db.String(255), nullable= False)
+    shortlink = db.Column(db.String(255), unique=True, nullable = False)
+    title = db.Column(db.String(255), unique=True, nullable= False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    user = db.relationship('User')

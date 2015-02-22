@@ -1,13 +1,30 @@
 {% extends "layout.html" %}
+{% block nav %}
+<div class = metanav>
+{% if current_user.is_authenticated() %}
+<a href="{{ url_for('logoff') }}">Logout</a>
+<a href="{{ url_for('index') }}">Homepage</a>
+{% else %}
+<a href = "{{ url_for('register') }}">Register</a>
+<a href="{{ url_for('login') }}">Log in</a>
+{% endif %}
+{% endblock %}
 {% block body %}
-<h2>User Page</h2>
-<br>
-  {% if current_user.is_authenticated() %}
-  <a href="{{ url_for('logoff') }}">Logout</a>
-  <a href="/index">Homepage.</a>
-
-    Hello {{ current_user.name }}!
-  {% endif %}
-</br>
-<br>
+<h3>User Page</h3>
+<h2>Enter a link to shorten.</h2>
+<form method="POST" action="{{ url_for("shorten_link") }}">
+  {{ form.hidden_tag() }}
+  <div>
+    {{form.title.label }} {{ form.title(size=20) }}
+    {{ form.address.label }} {{ form.address(size=30) }}
+  </div>
+  <input type="submit" value="Shorten">
+</form>
+<h3>Your links</h3>
+{% for link in links %}
+    <div class="hmm">
+      {{ link.url }} <a href = {{url_for("go_to_bookmark",
+                      shortlink = link.shortlink)}}>{{link.shortlink}}</a>
+    </div>
+{% endfor %}
 {% endblock %}

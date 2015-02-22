@@ -1,13 +1,11 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h1>Please login below</h1>
+<h3>Please login below</h3>
 <form method="POST" action="{{ url_for("login") }}">
   {{ form.hidden_tag() }}
   <div>
     {{ form.email.label }} {{ form.email(size=20) }}
-  </div>
-  <div>
     {{ form.password.label }} {{ form.password(size=20) }}
   </div>
   <input type="submit" value="Login">

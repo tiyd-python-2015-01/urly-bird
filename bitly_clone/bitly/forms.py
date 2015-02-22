@@ -19,3 +19,7 @@ class RegistrationForm(Form):
                     EqualTo('password_verification',
                             message="Passwords must match")])
     password_verification = PasswordField('Repeat password')
+
+class ShortenLink(Form):
+    title = StringField('Title', validators=[DataRequired()])
+    address = StringField("URL", validators=[DataRequired()])
