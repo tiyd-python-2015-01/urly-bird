@@ -92,3 +92,10 @@ def logoff():
 def go_to_bookmark(shortlink):
     the_link = Bookmark.query.filter_by(shortlink=shortlink).first()
     return redirect("http://"+the_link.url, code=301)
+
+@app.route("/delete", methods = ["POST"])
+def rm_bookmark():
+    link = Bookmark.query.filter_by(shortlink=request.form['link_to_delete']).first()
+    db.session.delete(link)
+    db.session.commit()
+    return redirect(url_for("shorten_link"))

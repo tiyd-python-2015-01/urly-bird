@@ -23,8 +23,13 @@
 <h3>Your links</h3>
 {% for link in links %}
     <div class="hmm">
-      {{ link.url }} <a href = {{url_for("go_to_bookmark",
+      <b>{{ link.title }} </b> &nbsp <a href = {{url_for("go_to_bookmark",
                       shortlink = link.shortlink)}}>{{link.shortlink}}</a>
+                      <form action="{{ url_for('rm_bookmark') }}" method=post class=delete-movie>
+                      <input type=hidden value="{{ link.shortlink }}"name="link_to_delete"></input>
+                      <input type=submit value  = "delete" input/>
+                      </br></br>
+                      </form>
     </div>
 {% endfor %}
 {% endblock %}
