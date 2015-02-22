@@ -12,6 +12,8 @@
     <ul class="right">
       <li><a
       {% if current_user.is_authenticated() %}
+        <li><a href="{{ url_for('add_link') }}">Make New Chop</a><li>
+        <li><a href="{{ url_for('logout') }}">Logout</a><li>
         href="{{ url_for('logout') }}">Logout
         {% else %}
         <li><a href = "{{ url_for('register') }}" > Register</a></li>

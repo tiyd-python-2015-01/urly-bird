@@ -36,8 +36,30 @@ class Links(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     url = db.Column(db.String(255), unique=True, nullable=False)
     shortlink = db.Column(db.String(255), unique=True, nullable=False)
-    description = db.Column(db.String(255))
-    user = db.relationship('User', backref=db.backref('favorites', lazy='dynamic'))
+    description = db.Column(db.String(255), unique=False, nullable=True)
 
     def __repr__(self):
         return "<Links {}>".format(self.email)
+
+
+class UserLinks(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    links_id = db.Column(db.Integer, db.ForeignKey('links.id'))
+    #clicks = db.Column(db.Integer, default=0, nullable=False)
+
+    user = db.relationship('User', backref=db.backref('all_links', lazy='dynamic'))
+    link = db.relationship('Links')
+
+
+    def __repr__(self):
+        return "<User {} | Item {}>".format(self.user_id, self.item_id)
+
+# Clinton's freeshelf example from Friday
+# class Favorite(db.Model):
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#     book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
+#
+#     user = db.relationship('User', backref=db.backref('favorites', lazy='dynamic'))
+#     book = db.relationship('Book')
