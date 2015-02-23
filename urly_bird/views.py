@@ -82,7 +82,6 @@ def update_link(id):
     form = LinkUpdateForm(obj=update_link)
     if form.validate_on_submit():
         form.populate_obj(update_link)
-        flash(update_link.description)
         db.session.commit()
         return redirect(url_for("index"))
     else:

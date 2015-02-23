@@ -2,7 +2,6 @@
 
 {% block body %}
 {% if current_user.is_authenticated() %}
-update_url
     <form method="POST" action="{{ update_url}}">
       {{ form.hidden_tag() }}
         <div class="row">
