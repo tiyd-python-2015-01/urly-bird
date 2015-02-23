@@ -6,13 +6,14 @@ from .extensions import (
     debug_toolbar,
     bcrypt,
     login_manager,
+    config
 )
 
 SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/urly_bird.db"
 DEBUG = True
 SECRET_KEY = 'development-key'
 
-app = Flask(__name__, instance_relative_config=True)
+app = Flask('urly_bird')
 app.config.from_object(__name__)
 app.config.from_pyfile('application.cfg', silent=True)
 
