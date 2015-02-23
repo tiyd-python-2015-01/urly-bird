@@ -1,8 +1,8 @@
 from flask import render_template, flash, request, url_for, redirect
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from .forms import LoginForm, RegisterForm, CreateLinkForm
+from .forms import LoginForm, RegisterForm, CreateLinkForm, LinkNotesForm, CustomLinkForm
 from . import app, db
-from .models import User, Link
+from .models import User, Link, Custom
 
 
 def flash_errors(form, category="warning"):
@@ -14,7 +14,6 @@ def flash_errors(form, category="warning"):
 
 @app.route('/')
 def index():
-
     return render_template('index.html')
 
 
@@ -29,7 +28,6 @@ def login():
             return redirect(request.args.get('next') or url_for("index"))
         else:
             flash("That user name or password is not correct.")
-
     flash_errors(form)
     return render_template('login.html', form=form)
 
@@ -52,8 +50,14 @@ def register():
             return redirect(url_for("index"))
     else:
         flash_errors(form)
-
     return render_template("registration.html", form=form)
+
+
+@app.route('/<small_link>')
+def redirect_link(small_link):
+    link = Link.query.filter(Link.short_link == small_link).first()
+    big_link = link.long_link
+    return redirect(big_link)
 
 
 @app.route("/logout", methods=["GET", "POST"])
@@ -77,9 +81,7 @@ def create_link():
         return redirect(url_for('create_link'))
     else:
         flash_errors(form)
-
-    return render_template("create_link.html",
-                           form=form)
+    return render_template("create_link.html", form=form)
 
 
 @app.route('/show_links', methods=["GET", "POST"])
@@ -96,21 +98,40 @@ def customize_link(small_link):
     form = CustomLinkForm()
     old_link = Link.query.filter(Link.short_link == small_link).first().short_link
     if form.validate_on_submit():
-        new_link = Custom(link=old_link,
-                          new_link=form.custom_link.data)
+        new_link = Custom(link=old_link, new_link=form.custom_link.data)
         db.session.add(new_link)
         db.session.commit()
         flash("You've customized your link!")
         return redirect(url_for('show_links'))
     else:
         flash_errors(form)
-
     return render_template("custom_link.html", form=form)
-# @app.route('/user/<small_link>)
 
 
-@app.route('/<small_link>')
-def redirect_link(small_link):
+@app.route('/delete_link/<small_link>')
+@login_required
+def delete_link(small_link):
     link = Link.query.filter(Link.short_link == small_link).first()
-    big_link = link.long_link
-    return redirect(big_link)
+    db.session.delete(link)
+    db.session.commit()
+    return redirect(url_for('show_links'))
+
+
+@app.route('/notes/<small_link>')
+@login_required
+def note_link(small_link):
+    form = LinkNotesForm
+    link = Link.query.filter(Link.short_link == small_link).first()
+    if form.validate_on_submit():
+        link.description = form.notes
+        db.session.add(link)
+        db.session.commit()
+        flash("Your notes have been added.")
+        return redirect(url_for('show_links'))
+    else:
+        flash_errors(form)
+    return render_template("notes.html", form=form)
+
+
+
+

@@ -59,7 +59,7 @@ class Custom(db.Model):
     new_link = db.Column(db.String(255), unique=True)
 
     def __repr__(self):
-        return url_for('index')+"{}".format(self.new_link)
+        return self.new_link
 
 
 

@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <form method="POST" action="{{ url_for('create_link') }}">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.long_link.label }} {{ form.long_link(size=40) }}
+        </div>
+        <input type="submit" value="create link" class="small button round">
+    </form>
+{% endblock %}
