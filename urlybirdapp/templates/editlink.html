@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="large-12 columns">
+  <fieldset>
+    <h4>Edit Bookmark:</h4>
+      <form action='/edit/{{ id }}' methods=['POST']>
+        {{ form.hidden_tag() }}
+        <div>
+          {{ form.url.label }} {{ form.url(size=100) }}<br>
+          {{ form.text.label }} {{ form.text(size=100) }}
+        </div>
+        <div>
+          <input type='Submit' value='Submit'>
+        </div>
+      </form>
+    </fieldset>
+</div>
+
+{% endblock %}

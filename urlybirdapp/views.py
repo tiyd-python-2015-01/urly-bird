@@ -49,8 +49,8 @@ def logout():
 @app.route('/home')
 @login_required
 def home_view():
-    link_list = Links.query.filter_by(user_id=current_user.id).all()
-    return render_template('home_page.html', link_list=link_list)
+    links = Links.query.filter_by(user_id=current_user.id).order_by(Links.id.desc())
+    return render_template('home_page.html', link_list=links)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -93,18 +93,32 @@ def add_link():
                          short = shorturl)
             db.session.add(link)
             db.session.commit()
-            flash('New Link Added.')
+            flash('New Link Added')
             return redirect(url_for('home_view'))
     else:
         flash_errors(form)
         return render_template('addlink.html', form=form)
 
 
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_bookmark(id):
+    current = Links.query.get(id)
+    form = AddLink(obj=current)
+    if form.validate_on_submit():
+        form.populate_obj(current)
+        db.session.commit()
+        flash('Bookmark Updated')
+        return redirect(url_for('home_view'))
+    else:
+        return render_template('editlink.html', form=form, id=id)
+
+
+
 def short():
     chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ0123456789'
     tag = ''.join(random.sample(chars, 6))
     short = Links.query.filter_by(short=tag).first()
-    if short == tag:
+    if short6:
         return short()
     else:
         return tag
