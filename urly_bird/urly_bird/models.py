@@ -1,6 +1,5 @@
 from .app import db
 from flask.ext.login import UserMixin
-
 """Add your models here."""
 
 
@@ -22,5 +21,20 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.encrypted_password, password)
 
+    @property
+    def links(self):
+        return [link.shortlink for link in self.link]
+
     def __repr__(self):
         return "<User {}>".format(self.email)
+
+
+class Link(db.Model):
+    """form to add link
+        association with user"""
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    url = db.Column(db.String(255), nullable= False)
+    shortlink = db.Column(db.String(255), unique=True, nullable = False)
+    title = db.Column(db.String(255), unique=True, nullable= False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User')

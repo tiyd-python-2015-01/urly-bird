@@ -1,18 +1,23 @@
 from .app import app
 from flask import render_template, flash, redirect, request, url_for
 from . import models
+from .models import User
 from .utils import flash_errors
 from .forms import RegistrationForm, LoginForm
-# from flask.ext.login import login_user
+from flask.ext.login import login_user, login_required, logout_user, LoginManager
 
 """Add your views here."""
 
 
-@app.route('/logout')
+login_manager = LoginManager()
+@login_manager.user_loader
+def load_user(userid):
+    return User.get(userid)
+
+@app.route("/logout", methods=["GET"])
 def logout():
-    session.pop('logged_in', None)
-    flash('You were logged out')
-    return redirect(url_for('/'))
+    logout_user()
+    return redirect("login.html")
 
 
 @app.route("/")

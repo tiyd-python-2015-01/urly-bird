@@ -13,12 +13,23 @@
         <header>
             <h1>Lynx</h1>
         </header>
+    {% block nav %}
+    <div class = metanav>
+    {% if user.is_authenticated() %}
+    <a href="{{ url_for('logoff') }}">Logout</a>
+    <a href="/user_page">User page</a>
+    <a href="{{ url_for('index') }}">Homepage</a>
+    {% else %}
+    <a href = "{{ url_for('register') }}">Register</a>
+    <a href="{{ url_for('login') }}">Log in</a>
+    {% endif %}
+    {% endblock %}
 
-        {% for message in get_flashed_messages() %}
-            <div class="flash">
-                {{ message }}
-            </div>
-        {% endfor %}
+    {% for message in get_flashed_messages() %}
+        <div class="flash">
+            {{ message }}
+        </div>
+    {% endfor %}
     {% endblock %}
 
     {% block body %}{% endblock %}
