@@ -11,7 +11,7 @@ def load_user(id):
 class Bookmark(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255), nullable=False, unique=False)
-    url = db.Column(db.String(255), nullable=False, unique=True)
+    url = db.Column(db.String(255), nullable=False, unique=False)
     short_url = db.Column(db.String(10), nullable=False, unique=True)
     description = db.Column(db.String(255), nullable=True, unique=False)
 

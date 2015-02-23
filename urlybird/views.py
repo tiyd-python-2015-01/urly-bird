@@ -6,7 +6,7 @@ from .app import app, db
 from .forms import LoginForm, RegistrationForm, AddBookmark
 from .models import Bookmark, User, BookmarkUser, Click
 from datetime import datetime
-from sqlalchemy import desc
+from sqlalchemy import desc, and_
 import random
 
 
@@ -80,7 +80,10 @@ def register():
 def add_bookmark():
     form = AddBookmark()
     if form.validate_on_submit():
-        url = Bookmark.query.filter_by(url=form.url.data).first()
+        url_list = BookmarkUser.query.filter_by(user_id=current_user.id).all()
+
+        url = [item.id for item in url_list if item.item_id==form.url.data]
+
         if url:
             flash("You've already shortened that URL!")
         else:
@@ -113,9 +116,19 @@ def url_redirect(short_url):
     else:
         return redirect(url_for('/'))
 
+@app.route('/r/<int:int_id>', methods=["GET"])
+def delete_bookmark(int_id):
+    deleted_object = BookmarkUser.query.filter_by(id=int_id).first()
+    print('heyyyyyyyyy {}'.format(deleted_object))
+    db.session.delete(deleted_object)
+    db.session.commit()
+    flash("You successfully removed that link")
+    return redirect(url_for('dashboard'))
+
+
 def shorten_url(a_url):
     alphabet = list('abcdefghijklmnopqrstuvwxyz1234567890')
-    shortened_url = ''.join(random.sample(alphabet, 5))
+    shortened_url = ''.join(random.sample(alphabet, 6))
     existing_url = Bookmark.query.filter_by(short_url=shortened_url).first()
     if shortened_url == existing_url:
         return shorten_url(a_url)
