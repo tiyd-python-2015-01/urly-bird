@@ -6,7 +6,7 @@
       <form  method='GET' action="{{ url_for("dashboard") }}">
         <div class="large-8 columns">
         <fieldset>
-          <legend>Top Bookmarks</legend>
+          <legend>Most Recent Bookmarks</legend>
 
           {% for bookmark in bookmarks %}
           {% if bookmark.bookmark.title %}

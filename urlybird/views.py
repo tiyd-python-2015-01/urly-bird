@@ -20,8 +20,8 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-    top_bookmarks = BookmarkUser.query.order_by(desc(BookmarkUser.id)).all()
-    return render_template("index.html", bookmarks=top_bookmarks[:10])
+    top_bookmarks = BookmarkUser.query.order_by(desc(BookmarkUser.id))[:10]
+    return render_template("index.html", bookmarks=top_bookmarks)
 
 @app.route("/dashboard", methods=['GET', 'POST'])
 @login_required
@@ -123,8 +123,13 @@ def shorten_url(a_url):
         return shortened_url
 
 def add_click(bookmark_id):
+    if current_user.is_active():
+        user = current_user.id
+    else:
+        user = 0
+
     click = Click(item_id=bookmark_id,
-                  user_id=current_user.id,
+                  user_id=user,
                   timestamp=datetime.utcnow())
     db.session.add(click)
     db.session.commit()
