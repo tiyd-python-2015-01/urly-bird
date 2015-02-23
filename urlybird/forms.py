@@ -22,10 +22,7 @@ class RegisterForm(Form):
 
 class CreateLinkForm(Form):
     long_link = URLField("Original Link", validators=[DataRequired(), URL()])
-
-
-class LinkNotesForm(Form):
-    notes = StringField("Link Notes", validators=[DataRequired()])
+    description = StringField("Link Notes", validators=[DataRequired()])
 
 
 class CustomLinkForm(Form):

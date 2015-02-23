@@ -29,5 +29,7 @@ pandas==0.15.2
 python-bcrypt==0.3.1
 python-dateutil==2.4.0
 pytz==2014.10
+psycopg2==2.6
 six==1.9.0
 wtf==0.1
+flask-appconfig==0.9.1

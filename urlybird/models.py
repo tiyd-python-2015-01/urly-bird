@@ -45,6 +45,8 @@ class Link(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     description = db.Column(db.String(255))
     custom_links = db.relationship('Custom', backref='link', lazy='dynamic')
+    click_counter = db.relationship('Click', backref='link', lazy='dynamic')
+
 
     def set_short_link(self):
         self.short_link = hashid.encode(datetime.now().microsecond, random.randint(0, 100000))
@@ -60,6 +62,14 @@ class Custom(db.Model):
 
     def __repr__(self):
         return self.new_link
+
+
+class Click(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    clicks = db.Column(db.Integer, nullable=False)
+    click_link = db.Column(db.String(255), db.ForeignKey('link.short_link'))
+
+
 
 
 

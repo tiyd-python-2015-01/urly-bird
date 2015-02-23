@@ -1,6 +1,6 @@
 from flask import render_template, flash, request, url_for, redirect
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from .forms import LoginForm, RegisterForm, CreateLinkForm, LinkNotesForm, CustomLinkForm
+from .forms import LoginForm, RegisterForm, CreateLinkForm, CustomLinkForm
 from . import app, db
 from .models import User, Link, Custom
 
@@ -14,7 +14,8 @@ def flash_errors(form, category="warning"):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    links = Link.query.order_by(Link.id).all()
+    return render_template('index.html', links=links)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -114,23 +115,24 @@ def delete_link(small_link):
     link = Link.query.filter(Link.short_link == small_link).first()
     db.session.delete(link)
     db.session.commit()
+
     return redirect(url_for('show_links'))
 
 
-@app.route('/notes/<small_link>')
+@app.route('/edit/<small_link>', methods=["GET", "POST"])
 @login_required
-def note_link(small_link):
-    form = LinkNotesForm
-    link = Link.query.filter(Link.short_link == small_link).first()
+def edit_link(small_link):
+    note_link = Link.query.filter(Link.short_link == small_link).first()
+    form = CreateLinkForm(obj=note_link)
     if form.validate_on_submit():
-        link.description = form.notes
-        db.session.add(link)
+        form.populate_obj(note_link)
         db.session.commit()
-        flash("Your notes have been added.")
+        flash("Your edits have been made.")
         return redirect(url_for('show_links'))
     else:
         flash_errors(form)
-    return render_template("notes.html", form=form)
+
+    return render_template("edit_link.html", form=form)
 
 
 

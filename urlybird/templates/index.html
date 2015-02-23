@@ -6,4 +6,9 @@
 {% else %}
 <h2>Please login!</h2>
 {% endif %}
+    {% for link in links %}
+    <li>
+    {{ link }}
+    </li>
+    {% endfor %}
 {% endblock %}

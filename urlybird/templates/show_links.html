@@ -7,7 +7,7 @@
         <div>
         <a href='/change_link{{ link }}' class="small round button" value="Change">Change</a>
         <a href="/delete_link{{ link }}" class="small round button" value="Delete">Delete</a>
-        <a href="/notes{{ link }}" class="small round button" value="Notes">Notes</a>
+        <a href="{{ url_for("edit_link", small_link=link) }}" class="small round button">Edit</a>
         </div>
     {% endfor %}
 {% endblock %}
