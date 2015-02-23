@@ -19,7 +19,7 @@
     {% block header %}
         <header>
             <h1>Welcome to the urlChopper</h1>
-            <img src="/static/lumberjack1.jpg" />
+            <img src="/static/lumberjack1.jpg", width="200" height="40"  />
         </header>
 
         {% for message in get_flashed_messages() %}
@@ -30,6 +30,7 @@
     {% endblock %}
 
     {% block body %}{% endblock %}
+    {% block chop %}{% endblock %}
 
 
     {% block footer %}

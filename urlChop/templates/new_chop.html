@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 
-{% block body %}
+{% block chop %}
     <form method="POST" action="{{ url_for("add_link") }}">
-        <!-- {{ form.hidden_tag() }} -->
+        {{ form.hidden_tag() }}
         <div>
             {{ form.name.label }} {{ form.name(size=20) }}
         </div>
         <div>
-            {{ form.url.label }} {{ form.email(size=20) }}
+            {{ form.url.label }} {{ form.url(size=20) }}
         </div>
         <div>
-            {{ form.description.label }} {{ form.password(size=20) }}
+            {{ form.description.label }} {{ form.description(size=20) }}
         </div>
         <button type="chop">Login</button>
     </form>

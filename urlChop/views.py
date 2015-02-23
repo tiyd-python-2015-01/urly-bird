@@ -65,7 +65,7 @@ def register():
     return render_template("register.html", form=form)
 
 @app.route("/add_link", methods=["GET", "POST"])
-# @login_required
+@login_required
 def add_link():
     #user = current_user #(THIS IS A FLASK TOKEN)
     form = Newlink()
@@ -87,20 +87,9 @@ def add_link():
     else:
         flash_errors(form)
 
-    return redirect(url_for('index'))
+    render_template("new_chop.html", form=form)
 
-# Clinton's Friday freeshelf example
-# @app.route("/favorite", methods=["POST"])
-# @login_required
-# def add_favorite():
-#     book_id = request.form['book_id']
-#     book = Book.query.get(book_id)
-#     favorite = Favorite(user=current_user, book=book)
-#     db.session.add(favorite)
-#     db.session.commit()
-#     flash("You have added {} as a favorite.".format(book.title))
-#     return redirect(url_for("index"))
-
+    #return redirect(url_for('index'))
 
 
 def chopper(anyurl):
@@ -113,3 +102,15 @@ def chopper(anyurl):
         return chopper(anyurl)
     else:
         return shortlink
+
+# Clinton's Friday freeshelf example
+# @app.route("/favorite", methods=["POST"])
+# @login_required
+# def add_favorite():
+#     book_id = request.form['book_id']
+#     book = Book.query.get(book_id)
+#     favorite = Favorite(user=current_user, book=book)
+#     db.session.add(favorite)
+#     db.session.commit()
+#     flash("You have added {} as a favorite.".format(book.title))
+#     return redirect(url_for("index"))
