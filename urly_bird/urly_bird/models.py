@@ -2,9 +2,6 @@ from . import bcrypt, login_manager, db, app
 from flask.ext.login import UserMixin
 
 
-"""Add your models here."""
-
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)

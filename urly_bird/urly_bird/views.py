@@ -20,7 +20,6 @@ def logout():
 
 @app.route("/")
 def index():
-    # books = Book.query.all()
     return render_template("layout.html")
 
 
