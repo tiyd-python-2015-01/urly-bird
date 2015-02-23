@@ -1,26 +1,21 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div>
-  {% if current_user.is_authenticated() %}
-  Welcome {{ current_user.name }}
-</div>
-  <div>
-    <a href="{{ url_for('logout')}}">Logout</a>
-  </div>
-  {% endif %}
-
-  {% if not current_user.is_authenticated() %}
-  <div>
-    <a href="{{ url_for('register') }}">Register</a>
-  </div>
-  <div>
-    <a href="{{ url_for('login') }}">Login</a>
-  </div>
-  {% endif %}
-
 
 <h2>All links</h2>
+
+{% for bookmark in bookmark_list %}
+<div class="bookmark">
+  <a href="{{ bookmark.longurl }}">{{ bookmark.title }}</a>
+  {% if bookmark.summary %}
+  <br/>
+  {{ bookmark.summary }}
+  {% endif %}
+</div>
+{% endfor %}
+
+
+
 
 
 {% endblock %}

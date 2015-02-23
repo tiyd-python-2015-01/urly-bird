@@ -17,6 +17,24 @@
   <h3>A site for creating shortened Bookmark URLs for any URL you want.</h3>
   <h3>Allowing YOU... to be the Duke of URL!</h3>
 
+  <div>
+    {% if current_user.is_authenticated() %}
+    Welcome {{ current_user.name }}
+  </div>
+  <div>
+    <a href="{{ url_for('logout')}}">Logout</a>
+  </div>
+  {% endif %}
+
+  {% if not current_user.is_authenticated() %}
+  <div>
+    <a href="{{ url_for('register') }}">Register</a>
+  </div>
+  <div>
+    <a href="{{ url_for('login') }}">Login</a>
+  </div>
+  {% endif %}
+
     {% for message in get_flashed_messages() %}
     <div class="flash">
       {{ message }}

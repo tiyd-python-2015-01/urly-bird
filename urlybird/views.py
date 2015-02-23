@@ -17,8 +17,8 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-
-    return render_template("index.html")
+    bookmark_list = Bookmark.query.all()
+    return render_template("index.html", bookmark_list=bookmark_list)
 
 
 @app.route("/bookmark", methods=["GET", "POST"])
