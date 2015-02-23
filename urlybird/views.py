@@ -126,6 +126,5 @@ def add_click(bookmark_id):
     click = Click(item_id=bookmark_id,
                   user_id=current_user.id,
                   timestamp=datetime.utcnow())
-    print(click)
     db.session.add(click)
     db.session.commit()
