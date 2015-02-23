@@ -15,8 +15,8 @@ def flash_errors(form, category="Warning"):
 
 @app.route('/')
 def index():
-    new_url_form = UrlForm()
-    return render_template('index.html', new_url_form=new_url_form)
+    form = UrlForm()
+    return render_template('index.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
