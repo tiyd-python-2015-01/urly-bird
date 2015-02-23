@@ -14,12 +14,13 @@ DEBUG = True
 SECRET_KEY = 'development-key'
 
 
-#app = Flask("urlybird")
-app = Flask(__name__)
+app = Flask("urlybird")
+#app = Flask(__name__)
 app.config.from_object(__name__)
 
+# Heroku
+config.init_app(app)
 
-#config.init_app(app) Heroku
 db.init_app(app)
 debug_toolbar.init_app(app)
 migrate.init_app(app, db)
