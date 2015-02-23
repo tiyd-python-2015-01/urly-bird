@@ -12,7 +12,7 @@
     {% for link in links %}
           <div class="row">
              <div class=" small-12 columns">
-              <strong> {{link.title}}:</strong> <a href="{{ link.long }}" target="_blank">http://urly/{{ link.short }}</a>
+              <strong> {{link.title}}:</strong> <a href="/urly/{{ link.short }}" target="_blank">/urly/{{ link.short }}</a>
                 {% if link.description %}
                      <br>{{ link.description }}
                 {% endif %}
@@ -34,7 +34,9 @@
        <div class="small-1 columns"></div>
        <div class="small-11 columns"><h2> Ana's URL Shortener - Small is the New Big</h2></div>
   </div>
-  {% endif %}
+
+
+{% endif %}
 
 
 

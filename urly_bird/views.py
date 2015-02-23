@@ -6,7 +6,7 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 
 from .app import app, db,  login_manager
 from .forms import LoginForm, RegistrationForm, LinkAddForm
-from .models import User, Links
+from .models import User, Links, Clicks
 from .utils import flash_errors
 
 
@@ -37,6 +37,7 @@ def links():
     links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
     return render_template("links.html",links=links)
 
+
 @app.route("/all_links")
 def all_links():
     links = Links.query.order_by(Links.id.desc()).all()
@@ -59,19 +60,18 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route('//urly/<path:new_url>')
+@app.route('/urly/<new_url>')
 def show_link(new_url):
     link = Links.query.filter_by(short=new_url).first()
     cl_user = current_user.id
-    cl_time = datetime.utc_now()
+    cl_time = datetime.utcnow()
     cl_link = link.id
-    new_click = Clicks(user_id=current_user,
-                       link_id = link,
-                       when = datetime.utc_now())
+    new_click = Clicks(user_id=cl_user,
+                       link_id = cl_link,
+                       when = cl_time)
     db.session.add(new_click)
     db.session.commit()
-    flash("click is in")
-    return redirect(url_for(link.long))
+    return redirect(link.long)
 
 
 @app.route("/logout", methods=["GET","POST"])
