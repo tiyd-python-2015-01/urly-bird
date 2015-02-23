@@ -97,7 +97,7 @@ def go_to_bookmark(shortlink):
     the_link = Bookmark.query.filter_by(shortlink=shortlink).first()
     the_link.click_count += 1
     db.session.commit()
-    return redirect("http://"+the_link.url, code=301)
+    return redirect("http://"+the_link.url, code = 301)
 
 @app.route("/delete", methods = ["POST"])
 def rm_bookmark():
