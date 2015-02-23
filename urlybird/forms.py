@@ -23,8 +23,3 @@ class BookmarkForm(Form):
     longurl = StringField('Website', validators=[DataRequired(), URL()])
     title = StringField('Title', validators= [DataRequired()])
     summary = StringField("Summary")
-
-class BookForm(Form):
-    title = StringField('Book Title', validators=[DataRequired()])
-    description = StringField('Description')
-    url = StringField("URL", validators=[DataRequired(), URL()])

@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
 from . import app, db
-from .forms import LoginForm, RegistrationForm, BookmarkForm, BookForm
-from .models import Book, User, Bookmark
+from .forms import LoginForm, RegistrationForm, BookmarkForm
+from .models import User, Bookmark
 
 from hashids import Hashids
 
@@ -17,32 +17,23 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-    books = Book.query.all()
-    return render_template("index.html", books=books)
 
-@app.route("/book", methods=["GET", "POST"])
-def book():
-    form = BookForm()
-    book = Book(title=form.title.data,
-                description=form.description.data,
-                url=form.url.data)
-    db.session.add(book)
-    db.session.commit()
-    flash("Your book was created.")
-    # else:
-    #     flash("Your book could not be created.")
-    # books = Book.query.all()
-    # return render_template("book.html", books=books)
+    return render_template("index.html")
 
 
 @app.route("/bookmark", methods=["GET", "POST"])
 def bookmark():
     form = BookmarkForm()
-
-    bookmark = Bookmark(longurl=form.longurl.data,
-                title=form.title.data,
-                summary=form.summary.data)
     bookmark_list = Bookmark.query.all()
+    if form.validate_on_submit():
+        short_bookmark = "short"
+        bookmark = Bookmark(longurl=form.longurl.data,
+                    shorturl=short_bookmark,
+                    title=form.title.data,
+                    summary=form.summary.data)
+        db.session.add(bookmark)
+        db.session.commit()
+        return redirect(url_for("bookmark"))
     return render_template("bookmark.html", form=form, bookmark_list=bookmark_list)
 
 
@@ -54,7 +45,7 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash("Logged in successfully.")
-            return redirect(request.args.get("next") or url_for("index"))
+            return redirect(request.args.get("next") or url_for("bookmark"))
         else:
             flash("That email or password is not correct.")
 

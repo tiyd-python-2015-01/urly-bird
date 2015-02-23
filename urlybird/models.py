@@ -6,17 +6,6 @@ from flask.ext.login import UserMixin
 def load_user(id):
     return User.query.get(id)
 
-
-class Book(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text)
-    url = db.Column(db.String(255), nullable=False, unique=True)
-
-    def __repr__(self):
-        return "<Book {}>".format(self.title)
-
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
@@ -44,9 +33,9 @@ class Bookmark(db.Model):
     shorturl = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     summary = db.Column(db.String(255))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User',
-        backref=db.backref('bookmarks', lazy='dynamic'))
+    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    #user = db.relationship('User',
+    #    backref=db.backref('bookmarks', lazy='dynamic'))
 
     def __repr__(self):
         return "<Bookmark {}>".format(self.shorturl)
