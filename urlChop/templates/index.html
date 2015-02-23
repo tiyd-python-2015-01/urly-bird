@@ -8,6 +8,17 @@
     <div class="medium-3 columns"><h2>Your Chops</h2></div>
       <ul>
         {% for link in current_user.links %}
+        <li> <strong>{{link.description}}</strong>{{link.shortlink}}</li>
+        <a href="http://127.0.0.1:5000/b/{{link.shortlink}}">GoToChop</a>
+        {% endfor %}
+      </ul
+    </div>
+  </div>
+  {% else %}
+  <div class="row"
+    <div class="medium-3 columns"><h2>All Chops</h2></div>
+      <ul>
+        {% for link in links %}
         <li> {{link.description}} {{link.shortlink}} </li>
         <a href="http://127.0.0.1:5000/b/{{link.shortlink}}">Link</a>
         {% endfor %}

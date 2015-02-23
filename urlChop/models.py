@@ -2,6 +2,7 @@ from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
 
 
+
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(id)
@@ -40,10 +41,21 @@ class Links(db.Model):
     shortlink = db.Column(db.String(255), unique=True, nullable=False)
     description = db.Column(db.String(255), unique=False, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    #add new column for...run a query matching how many times the links
+    #have been of the link ID's match the link_id from Clicks model
 
     def __repr__(self):
         return "<Links {}>".format(self.email)
 
+
+class Clicks(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    link_id = db.Column(db.Integer, db.ForeignKey('links.id'))
+    datetime = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return "<Links {}>".format(self.email)
 
 # Clinton's freeshelf example from Friday
 # class Favorite(db.Model):

@@ -12,11 +12,11 @@
     <ul class="right">
       <li><a
       {% if current_user.is_authenticated() %}
-        <li><a href="{{ url_for('add_link') }}">Make New Chop</a><li>
-        <li><a href="{{ url_for('logout') }}">Logout</a><li>
+        <li class="active"><a href="{{ url_for('add_link') }}">Make New Chop</a><li>
+        <li class="active"><a href="{{ url_for('logout') }}">Logout</a><li>
         {% else %}
-        <li><a href = "{{ url_for('register') }}" > Register</a></li>
-        <li><a href = "{{ url_for('login') }}">Login</a></li>
+        <li class="active"><a href = "{{ url_for('register') }}" > Register</a></li>
+        <li class="active"><a href = "{{ url_for('login') }}">Login</a></li>
       {% endif %}
       </a></li>
 
