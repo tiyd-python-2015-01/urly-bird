@@ -1,11 +1,11 @@
 from .extensions import db
-from flask.ext.login import UserMixin
+import flask.ext.login as fel
 import bcrypt
 
 """Add your models here."""
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, fel.UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
@@ -32,8 +32,7 @@ class User(db.Model, UserMixin):
 
 
 class Link(db.Model):
-    """form to add link
-        association with user"""
+    """user added urls"""
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     url = db.Column(db.String(255), nullable=False)
     shortlink = db.Column(db.String(255), unique=True, nullable=False)

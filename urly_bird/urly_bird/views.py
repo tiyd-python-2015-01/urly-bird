@@ -1,25 +1,25 @@
 from .app import app
 from flask import render_template, flash, redirect, request, url_for
 from .extensions import db
-from .models import User
+from . import models
 from .utils import flash_errors
 from .forms import RegistrationForm, LoginForm
-import flask.ext.login as fel
+from flask.ext.login import LoginManager
 
 """Add your views here."""
 
 
-login_manager = fel.LoginManager()
+login_manager = LoginManager()
 
 
 @login_manager.user_loader
 def load_user(userid):
-    return User.get(userid)
+    return models.User.get(userid)
 
 
 @app.route("/logout", methods=["GET"])
 def logout():
-    fel.logout_user()
+    logout_user()
     return redirect("login.html")
 
 
@@ -33,9 +33,9 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = models.User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
-            fel.login_user(user)
+            login_user(user)
             flash("Logged in successfully.")
             return redirect(request.args.get("next") or url_for("index"))
         else:
@@ -49,16 +49,16 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = models.User.query.filter_by(email=form.email.data).first()
         if user:
             flash("A user with that email address already exists.")
         else:
-            user = User(name=form.name.data,
+            user = models.User(name=form.name.data,
                         email=form.email.data,
                         password=form.password.data)
             db.session.add(user)
             db.session.commit()
-            fel.login_user(user)
+            login_user(user)
             flash("You have been registered and logged in.")
             return redirect(url_for("index"))
     else:
