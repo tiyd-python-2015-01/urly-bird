@@ -11,12 +11,18 @@
     <ul class="pagination">
     {% for link in links %}
           <div class="row">
-             <div class=" small-12 columns">
+             <div class=" small-10 columns">
               <strong> {{link.title}}:</strong> <a href="/urly/{{ link.short }}" target="_blank">/urly/{{ link.short }}</a>
                 {% if link.description %}
                      <br>{{ link.description }}
                 {% endif %}
-              </div>
+                <form method="POST" action="{{ url_for("delete_link") }}">
+
+                    <input type="hidden" name="link_id" value="{{ link.id }}"/>
+                    <input type="submit" class="button tiny" value="Delete Link"/>
+
+                </form>
+              <div>
           </div>
           <div class="row">
             <hr>

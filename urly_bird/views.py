@@ -43,6 +43,14 @@ def all_links():
     links = Links.query.order_by(Links.id.desc()).all()
     return render_template("index.html",links=links)
 
+@app.route("/delete_link", methods=["GET", "POST"])
+def delete_link():
+    link_id = request.form['link_id']
+    link = Links.query.get(link_id)
+    db.session.delete(link)
+    db.session.commit()
+    links = links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
+    return render_template("index.html",links=links)
 
 
 @app.route("/login", methods=["GET", "POST"])
