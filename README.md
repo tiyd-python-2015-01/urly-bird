@@ -68,6 +68,23 @@ In addition to the requirements from **Normal Mode**:
 * Add a new model, Click, that records each click of a bookmark, including the user -- or an anonymous user if no one is logged in -- and the timestamp.
 
 
+## Day 3
+
+We are going to do two things today:
+
+* Record bookmark clicks.
+* Deploy to Heroku.
+
+First, add a new model, Click, that records each click of a bookmark, including the user -- or an anonymous user if no one is logged in -- and the timestamp.
+
+Second, convert your configuration over to using Flask-AppConfig and deploy your application to Heroku.
+
+### Hard Mode
+
+Besides just recording each click of a bookmark, record the IP address and User-Agent of each click.
+
+Complete all hard mode tasks not completed from days 1 and 2.
+
 ## Additional Resources
 
 * [Flask Skeleton](https://github.com/tiyd-python-2015-01/cookiecutter-flask). Use this at your own risk. It explains how to use it in the README.
