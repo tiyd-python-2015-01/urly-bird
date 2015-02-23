@@ -43,6 +43,27 @@ def all_links():
     links = Links.query.order_by(Links.id.desc()).all()
     return render_template("all_links.html",links=links)
 
+
+@app.route("/add_link", methods=["GET", "POST"])
+def add_link():
+    form = LinkAddForm()
+    if form.validate_on_submit():
+        new_link = Links(long=form.long.data,
+                   title=form.title.data,
+                   description=form.description.data)
+        last_id = db.session.query(db.func.max(Links.id)).scalar()
+        if not last_id:
+            last_id=0
+        new_link.set_short(last_id+1)
+        new_link.user = current_user.id
+        db.session.add(new_link)
+        db.session.commit()
+        return redirect(url_for("index"))
+    else:
+        flash_errors(form)
+    return render_template("add_link.html", form=form)
+
+
 @app.route("/delete_link", methods=["GET", "POST"])
 def delete_link():
     link_id = request.form['link_id']
@@ -125,24 +146,3 @@ def register():
         flash_errors(form)
 
     return render_template("register.html", form=form)
-
-
-@app.route("/add_link", methods=["GET", "POST"])
-@login_required
-def add_link():
-    form = LinkAddForm()
-    if form.validate_on_submit():
-        new_link = Links(long=form.long.data,
-                   title=form.title.data,
-                   description=form.description.data)
-        last_id = db.session.query(db.func.max(Links.id)).scalar()
-        if not last_id:
-            last_id=0
-        new_link.set_short(last_id+1)
-        new_link.user = current_user.id
-        db.session.add(new_link)
-        db.session.commit()
-        return redirect(url_for("index"))
-    else:
-        flash_errors(form)
-    return render_template("add_link.html", form=form)
