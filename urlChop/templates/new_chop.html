@@ -4,13 +4,10 @@
     <form method="POST" action="{{ url_for("add_link") }}">
         {{ form.hidden_tag() }}
         <div>
-            {{ form.name.label }} {{ form.name(size=20) }}
+          {{ form.description.label }} {{ form.description(size=20) }}
         </div>
         <div>
             {{ form.url.label }} {{ form.url(size=20) }}
-        </div>
-        <div>
-            {{ form.description.label }} {{ form.description(size=20) }}
         </div>
         <button type="submit">CHOP</button>
     </form>

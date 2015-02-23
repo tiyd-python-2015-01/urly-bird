@@ -23,7 +23,7 @@ class RegistrationForm(Form):
 
 
 class Newlink(Form):
-   name = StringField('Title', validators=[DataRequired()])
+   description = StringField("Description", validators=[DataRequired()])
    url = StringField("Web Address", validators=[DataRequired(), URL()])
-   description = StringField("Optional Description")
-   #submit = SubmitField('Submit')#this is a flask-bootstrap thing
+   # submit = SubmitField('Submit')#this is a flask-bootstrap thing
+   # name = StringField('Title', validators=[DataRequired()])

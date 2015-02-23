@@ -88,7 +88,14 @@ def add_link():
 
     return render_template("new_chop.html", form=form)
 
-    #return redirect(url_for('index'))
+@app.route('/b/<hashid>')
+def short(hashid):
+   link = Links.query.filter(Links.shortlink==hashid).first()
+   if link:
+       return redirect(link.url)
+   else:
+       flash('You didnt find anything')
+       return redirect(url_for('index'))
 
 
 def chopper(anyurl):
