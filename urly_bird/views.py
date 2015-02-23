@@ -52,7 +52,7 @@ def user():
             return redirect(url_for("index"))
     elif request.method == 'POST':
         flash("Error adding URL.")
-    return render_template("user.html", form=form, urls=url_list)
+    return render_template("user.html", form=form, urls=url_list, domain=request.url_root)
 
 
 @app.route("/register", methods=['GET', 'POST'])
