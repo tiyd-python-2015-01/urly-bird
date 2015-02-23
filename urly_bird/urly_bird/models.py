@@ -1,11 +1,11 @@
-from .extensions import db
-import flask.ext.login as fel
-import bcrypt
+from . import bcrypt, login_manager, db, app
+from flask.ext.login import UserMixin
+
 
 """Add your models here."""
 
 
-class User(db.Model, fel.UserMixin):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)

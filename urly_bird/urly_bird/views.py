@@ -1,15 +1,10 @@
-from .app import app
 from flask import render_template, flash, redirect, request, url_for
-from .extensions import db
-from . import models
+from .extensions import login_manager, db
+from . import app, models
 from .utils import flash_errors
 from .forms import RegistrationForm, LoginForm
-from flask.ext.login import LoginManager
 
 """Add your views here."""
-
-
-login_manager = LoginManager()
 
 
 @login_manager.user_loader

@@ -1,8 +1,20 @@
+from flask.ext.appconfig import HerokuConfig
+config = HerokuConfig()
+
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.debugtoolbar import DebugToolbarExtension
-from flask.ext.migrate import Migrate
-
-
-migrate = Migrate()
-debug_toolbar = DebugToolbarExtension()
 db = SQLAlchemy()
+
+from flask.ext.migrate import Migrate
+migrate = Migrate()
+
+from flask.ext.debugtoolbar import DebugToolbarExtension
+debug_toolbar = DebugToolbarExtension()
+
+from flask.ext.bcrypt import Bcrypt
+bcrypt = Bcrypt()
+
+from flask.ext.login import LoginManager
+login_manager = LoginManager()
+
+from flask.ext.appconfig import HerokuConfig
+config = HerokuConfig()
