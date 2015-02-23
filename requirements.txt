@@ -9,6 +9,8 @@ MarkupSafe==0.23
 Werkzeug==0.10.1
 Jinja2==2.7.3
 itsdangerous==0.24
+Flask-Bootstrap==3.3.0.1
+
 
 # Database
 Flask-SQLAlchemy==2.0
@@ -34,4 +36,3 @@ Flask-Bcrypt==0.6.2
 # Heroku
 gunicorn==19.2.1
 psycopg2==2.6
-
