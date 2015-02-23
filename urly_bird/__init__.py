@@ -1,4 +1,7 @@
 from flask import Flask
+import os
+tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+
 
 from .extensions import (
     db,
@@ -13,7 +16,7 @@ SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/urly_bird.db"
 DEBUG = True
 SECRET_KEY = 'development-key'
 
-app = Flask("URLybird")
+app = Flask("URLybird", template_folder=tmpl_dir)
 app.config.from_object(__name__)
 app.config.from_pyfile('application.cfg', silent=True)
 

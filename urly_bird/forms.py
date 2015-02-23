@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField
-from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms.fields.html5 import EmailField, URLField
+from wtforms.validators import DataRequired, Email, EqualTo, URL
 
 class LoginForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -18,4 +18,4 @@ class RegistrationForm(Form):
     password_verification = PasswordField('Repeat password')
 
 class URLForm(Form):
-    url = StringField('URL', validators=[DataRequired(), URL()])
+    url =  URLField('URL', validators=[DataRequired(), URL()])
