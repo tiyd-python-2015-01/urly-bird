@@ -10,25 +10,23 @@
     </div>
     <ul class="pagination">
     {% for link in links %}
-          <div class="row">
-             <div class=" small-10 columns">
-              <strong> {{link.title}}:</strong> <a href="/urly/{{ link.short }}" target="_blank">/urly/{{ link.short }}</a>
-                {% if link.description %}
-                     <br>{{ link.description }}
-                {% endif %}
-                <form method="POST" action="{{ url_for("delete_link") }}">
-
-                    <input type="hidden" name="link_id" value="{{ link.id }}"/>
-                    <input type="submit" class="text" value="Delete Link "/>
-
-                </form>
-                <a href="{{ url_for("update_link", id=link.id) }}"> Update Link</a>
-
-              <div>
+      <div class="row">
+        <div class=" small-10 columns">
+            <strong> {{link.title}}:</strong>
+             <a href="/urly/{{ link.short }}" target="_blank">
+               /urly/{{ link.short }}</a>
+            {% if link.description %}
+               <br>{{ link.description }}
+            {% endif %}
+            <div class="row">
+            <form method="POST" action="{{ url_for("delete_link") }}">
+              <input type="hidden" name="link_id" value="{{ link.id }}"/>
+              <input type="submit" class="submitlink" value="Delete Link "/>
+            </form><a class="submitlink" href="{{ url_for("update_link", id=link.id) }}">   Update Link</a>
           </div>
-          <div class="row">
-            <hr>
-          </div>
+            <div class="row">
+             <hr>
+            </div>
     {% endfor %}
     </ul>
   {% else %}

@@ -1,0 +1,17 @@
+.submitlink {
+  color: #008CBA;
+  background-color: transparent;
+  font-size: 0.75rem;
+  text-decoration: underline;
+  border: none;
+  cursor: pointer;
+  cursor: hand;}
+
+a.submitlink {
+    color: #008CBA;
+    background-color: transparent;
+    font-size: 0.75rem;
+    text-decoration: underline;
+    border: none;
+    cursor: pointer;
+    cursor: hand;}

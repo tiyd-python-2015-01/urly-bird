@@ -49,3 +49,5 @@ class Clicks(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     link_id = db.Column(db.Integer, db.ForeignKey('links.id'))
     when = db.Column(db.DateTime)
+    IP = db.Column(db.String(255))
+    agent = db.Column(db.String(255))

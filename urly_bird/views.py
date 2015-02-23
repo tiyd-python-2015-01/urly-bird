@@ -111,9 +111,12 @@ def show_link(new_url):
     cl_user = current_user.id
     cl_time = datetime.utcnow()
     cl_link = link.id
+
     new_click = Clicks(user_id=cl_user,
                        link_id = cl_link,
-                       when = cl_time)
+                       when = cl_time,
+                       IP= request.remote_addr,
+                       agent=request.headers.get('User-Agent'))
     db.session.add(new_click)
     db.session.commit()
     return redirect(link.long)
