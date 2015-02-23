@@ -32,6 +32,9 @@ flask-appconfig==0.9.1
 gunicorn==19.2.1
 psycopg2==2.6
 
+## Hashid
+hashids
+
 # Everything the developer needs in addition to the production requirements
 
 Flask-DebugToolbar==0.9.1
