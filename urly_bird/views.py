@@ -14,7 +14,7 @@ from .utils import flash_errors
 def index():
     if not current_user.is_authenticated():
         urls = URL.query.all()
-        return render_template("index.html", urls=reversed(urls[-5::]))
+        return render_template("index.html", urls=reversed(urls[-5::]), domain=request.url_root)
     return redirect(url_for("user"))
 
 
