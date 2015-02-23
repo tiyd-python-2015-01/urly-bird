@@ -40,6 +40,10 @@ padding: 6px;
 font-weight: bold;
 }
 
+a { color: #c06f35; }
+
+a:hover { color: #8c5126; }
+
 input[type=submit] {padding:5px 15px; background:#ccc; border:0 none;
 cursor:pointer;
 -webkit-border-radius: 10px;
@@ -61,39 +65,3 @@ input[type=email]:focus { background: #c06f35; }
 input[type=password] { background: #8c5126; }
 
 input[type=password]:focus { background: #c06f35; }
-
-a { color: #c06f35; }
-
-a:hover { color: #8c5126; }
-
-.mybutton {
-   border-top: 1px solid #d95e59;
-   background: #65d6a3;
-   background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#65d6a3));
-   background: -webkit-linear-gradient(top, #3e779d, #65d6a3);
-   background: -moz-linear-gradient(top, #3e779d, #65d6a3);
-   background: -ms-linear-gradient(top, #3e779d, #65d6a3);
-   background: -o-linear-gradient(top, #3e779d, #65d6a3);
-   padding: 6px 12px;
-   -webkit-border-radius: 8px;
-   -moz-border-radius: 8px;
-   border-radius: 8px;
-   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
-   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
-   box-shadow: rgba(0,0,0,1) 0 1px 0;
-   text-shadow: rgba(0,0,0,.4) 0 1px 0;
-   color: #0a070a;
-   font-size: 15px;
-   font-family: Georgia, serif;
-   text-decoration: none;
-   vertical-align: middle;
-   }
-.mybutton:hover {
-   border-top-color: #782828;
-   background: #782828;
-   color: #ccc;
-   }
-.mybutton:active {
-   border-top-color: #1b435e;
-   background: #1b435e;
-   }

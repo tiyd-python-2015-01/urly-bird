@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <fieldset>
+    <h1>All Bookmarks</h1>
+  {% for links in link_list %}
+    <li>{{ links.text }}
+      <a class='button round success' href='/b/{{ links.short }}'>127.0.0.1:5000/b/{{ links.short }}</a><br>
+  {% endfor %}
+  </fieldset>
+
+{% endblock %}

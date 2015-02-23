@@ -2,7 +2,7 @@ from flask import render_template, redirect, flash, url_for, request
 from flask.ext.login import login_user, login_required
 from flask.ext.login import logout_user, current_user
 from . import app, db
-from .forms import LoginForm, RegistrationForm, AddLink
+from .forms import LoginForm, RegistrationForm, AddLink, EditLink
 from .models import User, Links
 import random
 from sqlalchemy import desc
@@ -101,16 +101,19 @@ def add_link():
 
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_bookmark(id):
     current = Links.query.get(id)
-    form = AddLink(obj=current)
+    form = EditLink(obj=current)
     if form.validate_on_submit():
         form.populate_obj(current)
         db.session.commit()
         flash('Bookmark Updated')
         return redirect(url_for('home_view'))
     else:
-        return render_template('editlink.html', form=form, id=id)
+        flash_errors(form)
+    return render_template('editlink.html', form=form,
+                            update_url=url_for('edit_bookmark', id=current.id))
 
 
 
@@ -118,7 +121,7 @@ def short():
     chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ0123456789'
     tag = ''.join(random.sample(chars, 6))
     short = Links.query.filter_by(short=tag).first()
-    if short6:
+    if short:
         return short()
     else:
         return tag

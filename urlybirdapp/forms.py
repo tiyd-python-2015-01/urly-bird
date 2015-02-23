@@ -20,3 +20,7 @@ class RegistrationForm(Form):
 class AddLink(Form):
     url = StringField('URL', validators=[URL()])
     text = StringField('Short Description')
+
+class EditLink(Form):
+    url = StringField('URL', validators=[URL()])
+    text = StringField('Short Description')
