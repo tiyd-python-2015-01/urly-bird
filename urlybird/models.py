@@ -45,12 +45,27 @@ class BookmarkUser(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     item_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'))
-    clicks = db.Column(db.Integer, default=0, nullable=False)
 
     bookmark = db.relationship('Bookmark',
                                backref=db.backref('BookmarkUser',
                                lazy='dynamic'))
     user = db.relationship('User')
 
+    def get_clicks(self):
+        return len(Click.query.filter_by(item_id=self.item_id).all())
+
+    clicks = property(get_clicks)
+
     def __repr__(self):
         return "<User {} | Item {}>".format(self.user_id, self.item_id)
+
+class Click(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    item_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return "<Item {} | User {} | Time {}>".format(self.item_id,
+                                                      self.user_id,
+                                                      self.timestamp)

@@ -4,7 +4,8 @@ from flask.ext.login import login_required, current_user
 
 from .app import app, db
 from .forms import LoginForm, RegistrationForm, AddBookmark
-from .models import Bookmark, User, BookmarkUser
+from .models import Bookmark, User, BookmarkUser, Click
+from datetime import datetime
 from sqlalchemy import desc
 import random
 
@@ -19,7 +20,7 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-    top_bookmarks = BookmarkUser.query.order_by(desc(BookmarkUser.clicks)).all()
+    top_bookmarks = BookmarkUser.query.order_by(desc(BookmarkUser.id)).all()
     return render_template("index.html", bookmarks=top_bookmarks[:10])
 
 @app.route("/dashboard", methods=['GET', 'POST'])
@@ -104,12 +105,10 @@ def add_bookmark():
 
 @app.route('/b/<short_url>')
 def url_redirect(short_url):
-    print(short_url)
     correct_url = Bookmark.query.filter_by(short_url=short_url).first()
     if correct_url:
         bookmark_user = BookmarkUser.query.filter_by(item_id=correct_url.id).first()
-        bookmark_user.clicks = bookmark_user.clicks + 1
-        db.session.commit()
+        add_click(correct_url.id)
         return redirect(correct_url.url)
     else:
         return redirect(url_for('/'))
@@ -122,3 +121,11 @@ def shorten_url(a_url):
         return shorten_url(a_url)
     else:
         return shortened_url
+
+def add_click(bookmark_id):
+    click = Click(item_id=bookmark_id,
+                  user_id=current_user.id,
+                  timestamp=datetime.utcnow())
+    print(click)
+    db.session.add(click)
+    db.session.commit()
