@@ -1,5 +1,7 @@
-from .app import db
+from .extensions import db
 from flask.ext.login import UserMixin
+import bcrypt
+
 """Add your models here."""
 
 
@@ -33,8 +35,8 @@ class Link(db.Model):
     """form to add link
         association with user"""
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    url = db.Column(db.String(255), nullable= False)
-    shortlink = db.Column(db.String(255), unique=True, nullable = False)
-    title = db.Column(db.String(255), unique=True, nullable= False)
+    url = db.Column(db.String(255), nullable=False)
+    shortlink = db.Column(db.String(255), unique=True, nullable=False)
+    title = db.Column(db.String(255), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User')
