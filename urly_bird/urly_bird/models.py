@@ -40,4 +40,6 @@ class Link(db.Model):
     shortlink = db.Column(db.String(255), unique=True, nullable=False)
     title = db.Column(db.String(255), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User')
+    date = db.Column(db.DateTime())
+    links = db.relationship('User',
+                            backref=db.backref('submitted', lazy='dynamic'))
