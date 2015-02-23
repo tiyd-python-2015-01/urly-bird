@@ -3,8 +3,8 @@
 {% block body %}
 <form action="{{ url_for('login') }}">
   {{ new_login.hidden_tag() }}
-  <div> {{ new_login.email }} </div>
-  <div> {{ new_login.password }} </div>
+  <div>Email: {{ new_login.email }} </div>
+  <div>Password: {{ new_login.password }} </div>
   <div> <input class="button" type="submit" value="Log in"/> </div>
 </form>
 {% endblock %}

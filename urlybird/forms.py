@@ -7,6 +7,8 @@ from wtforms.validators import DataRequired, url, Email, EqualTo
 class UrlForm(Form):
     orig_url = URLField('orig_url', validators=[DataRequired(), url()])
     title = StringField('title')
+    summary = StringField('summary')
+    
 
 class Login(Form):
     email = EmailField('Email', validators=[DataRequired(), Email()])
@@ -18,7 +20,7 @@ class RegisterUser(Form):
     email = EmailField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password',
                              validators=[DataRequired(),
-                             EqualTo('password_verification',
+                             EqualTo('password_verify',
                              message="Passwords must match")])
     password_verify = PasswordField('Repeat Password',
                                     validators=[DataRequired()])

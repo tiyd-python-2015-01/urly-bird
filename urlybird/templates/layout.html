@@ -6,6 +6,19 @@
     </title>
   </head>
   <body>
+    <nav>
+      {% if current_user.is_active() %}
+      <a href="{{ url_for('logout') }}">Log out</a>
+      {% else %}
+      <a href="{{ url_for('login') }}">Log in</a>
+      <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </nav>
+    {% for message in get_flashed_messages() %}
+      <div class="tools-alert flash">
+        {{ message }}
+      </div>
+    {% endfor %}
     {% block body %}
     {% endblock %}
   </body>
