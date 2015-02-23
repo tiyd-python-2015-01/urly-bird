@@ -34,6 +34,14 @@ class Bookmark(db.Model):
     title = db.Column(db.String(255), unique=True, nullable= False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     sub_date = db.Column(db.DateTime)
-    click_count = db.Column(db.Integer)
 
+    user = db.relationship('User')
+
+class Click(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    click_date = db.Column(db.DateTime)
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    bookmark = db.relationship('Bookmark')
     user = db.relationship('User')

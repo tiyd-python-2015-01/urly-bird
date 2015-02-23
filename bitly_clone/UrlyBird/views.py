@@ -3,7 +3,7 @@ from flask.ext.login import login_user , login_required, current_user
 from flask.ext.login import logout_user
 from . import app, db
 from .forms import LoginForm, RegistrationForm, ShortenLink
-from .models import User, Bookmark
+from .models import User, Bookmark, Click
 from hashids import Hashids
 from random import randint
 from datetime import datetime
@@ -53,7 +53,7 @@ def shorten_link():
                             shortlink =  shortener(),
                             user = current_user,
                             sub_date = datetime.utcnow(),
-                            click_count = 0)
+                            )
         db.session.add(bookmark)
         db.session.commit()
         flash("Link added")
@@ -85,8 +85,6 @@ def register():
     return render_template("register.html", form=form)
 
 
-
-
 @app.route("/logoff", methods = ["GET"])
 def logoff():
     logout_user()
@@ -95,7 +93,10 @@ def logoff():
 @app.route('/<shortlink>', methods = ["GET"])
 def go_to_bookmark(shortlink):
     the_link = Bookmark.query.filter_by(shortlink=shortlink).first()
-    the_link.click_count += 1
+    click = Click(bookmark = the_link,
+                  click_date = datetime.utcnow(),
+                  user = current_user)
+    db.session.add(click)
     db.session.commit()
     return redirect("http://"+the_link.url, code = 301)
 
@@ -105,3 +106,20 @@ def rm_bookmark():
     db.session.delete(link)
     db.session.commit()
     return redirect(url_for("shorten_link"))
+
+
+@app.route("/user_page/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_link(id):
+    link = Bookmark.query.get(id)
+    form = ShortenLink(obj=link)
+    if form.validate_on_submit():
+        form.populate_obj(link)
+        db.session.commit()
+        flash("The link has been updated.")
+        return redirect(url_for("shorten link"))
+
+    return render_template("edit.html",
+                           form=form,
+                           post_url=url_for("edit_link", id=link.id),
+                           button="Update Link")

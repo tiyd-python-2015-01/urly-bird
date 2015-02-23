@@ -25,6 +25,10 @@
     <div class="user_link">
       <b>{{ link.title }} </b> &nbsp <a href = {{url_for("go_to_bookmark",
                       shortlink = link.shortlink)}}>{{link.shortlink}}</a>
+                      &nbsp 
+                      <a href = {{url_for("edit_link",
+                      id = link.id)}}>Edit!</a>
+
                       <form action="{{ url_for('rm_bookmark') }}" method=post class=delete-movie>
                       <input class = "submit_link" type=hidden value="{{ link.shortlink }}"name="link_to_delete"></input>
                       <input class="submit_link" type=submit value  = "delete" input/>
