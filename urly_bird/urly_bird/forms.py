@@ -4,7 +4,6 @@ from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 
-
 class LoginForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])

@@ -1,15 +1,10 @@
 from flask import render_template, flash, redirect, request, url_for
-from .extensions import login_manager, db
+from .extensions import db
 from . import app, models
 from .utils import flash_errors
 from .forms import RegistrationForm, LoginForm
 
 """Add your views here."""
-
-
-@login_manager.user_loader
-def load_user(userid):
-    return models.User.get(userid)
 
 
 @app.route("/logout", methods=["GET"])
