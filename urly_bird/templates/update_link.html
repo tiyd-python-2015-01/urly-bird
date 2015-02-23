@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{% if current_user.is_authenticated() %}
+    <form method="POST" action="{{ url_for("add_link") }}">
+        {{ form.hidden_tag() }}
+
+        <div class="row">
+          <div class="large-12 columns">
+            Title {{ form.title(size=40) }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+            URL {{ form.long(size=255) }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+            Description {{ form.description(size=400) }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+          <input class ="button tiny" type="submit" value="Update Link">
+        </div>
+      </div>
+    </form>
+{% endif %}
+{% endblock %}

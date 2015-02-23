@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
 
 
 class Links(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     short = db.Column(db.String(255), nullable=False, unique=True)
     long = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(255), nullable = False)

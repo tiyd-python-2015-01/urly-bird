@@ -5,7 +5,7 @@ from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
 
 from .app import app, db,  login_manager
-from .forms import LoginForm, RegistrationForm, LinkAddForm
+from .forms import LoginForm, RegistrationForm, LinkAddForm, LinkUpdateForm
 from .models import User, Links, Clicks
 from .utils import flash_errors
 
@@ -52,6 +52,27 @@ def delete_link():
     links = links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
     return render_template("index.html",links=links)
 
+@app.route("/update_link", methods=["GET", "POST"])
+def update_link():
+    link_id = request.form['link_id']
+    update_link = Links.query.get(link_id)
+    form = LinkUpdateForm()
+    form.long.data = update_link.long
+    form.title.data = update_link.title
+    form.description.data = update_link.description
+    if form.validate_on_submit():
+        update_link.update(dict(long = form.long.data, title= form.title.data , description =form.description.data))
+        #link.long = form.long.data
+        #link.title = form.title.data
+        #link.description=form.description.data
+    #    last_id = db.session.query(db.func.max(Links.id)).scalar()
+    #    if not last_id:
+    #        last_id=0
+    #    link.set_short(last_id+1)
+        db.session.commit()
+        return redirect(url_for("index"))
+    else:
+      return render_template("update_link.html",form=form)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

@@ -25,3 +25,8 @@ class LinkAddForm(Form):
     long = URLField('Long', validators=[DataRequired()])
     title = StringField('Title', validators=[DataRequired()])
     description = StringField('Description')
+
+class LinkUpdateForm(Form):
+    long = URLField('Long', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired()])
+    description = StringField('Description')
