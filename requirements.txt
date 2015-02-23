@@ -28,3 +28,4 @@ Flask-DebugToolbar==0.9.1
 ## Testing
 pytest>=2.6.4
 webtest
+hashids
