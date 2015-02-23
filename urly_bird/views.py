@@ -1,11 +1,12 @@
 import re
 import random
+from datetime import datetime
 from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_user, login_required, current_user, logout_user
 from hashids import Hashids
 from .app import app, db
 from .forms import LoginForm, RegistrationForm, URLForm
-from .models import URL, User
+from .models import URL, User, Timestamp
 from .utils import flash_errors
 
 
@@ -101,6 +102,11 @@ def login():
 @app.route('/b/<shorty>')
 def route(shorty):
     url = URL.query.filter_by(short_address=shorty).first()
+    timestamp = Timestamp(url_id=url.id,
+                          timestamp=datetime.utcnow(),
+                          ip_address=request.remote_addr,
+                          user_agent=request.headers.get('User-Agent'))
+    db.session.add(timestamp)
     url.clicks += 1
     db.session.commit()
     return redirect(url.long_address)

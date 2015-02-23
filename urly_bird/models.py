@@ -40,3 +40,10 @@ class URL(db.Model):
     short_address = db.Column(db.String(255))
     owner = db.Column(db.Integer)  #User ID of the owner
     clicks = db.Column(db.Integer) #Number of Clicks for Link Tracking
+
+class Timestamp(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    url_id = db.Column(db.Integer, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    ip_address = db.Column(db.String(60))
+    user_agent = db.Column(db.String(255))
