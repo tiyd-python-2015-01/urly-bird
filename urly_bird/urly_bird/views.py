@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect, request, url_for
 from .extensions import db
-from . import app, models
+from .app import app
+from . import models
 from .utils import flash_errors
 from .forms import RegistrationForm, LoginForm
 

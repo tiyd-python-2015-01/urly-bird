@@ -13,11 +13,12 @@
         <header>
             <h1>Lynx</h1>
         </header>
-    {% for message in get_flashed_messages() %}
-        <div class="flash">
-            {{ message }}
-        </div>
-    {% endfor %}
+
+        {% for message in get_flashed_messages() %}
+            <div class="flash">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endblock %}
 
     {% block body %}{% endblock %}
@@ -28,4 +29,7 @@
         </footer>
     {% endblock %}
 </div>
+
+<script type="text/javascript" href="{{ url_for('static', filename='modernizr.js') }}"></script>
+<script type="text/javascript" href="{{ url_for('static', filename='main.js') }}"></script>
 </body>
