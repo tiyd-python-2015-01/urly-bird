@@ -45,6 +45,7 @@ def all_links():
 
 
 @app.route("/add_link", methods=["GET", "POST"])
+@login_required
 def add_link():
     form = LinkAddForm()
     if form.validate_on_submit():
@@ -73,23 +74,25 @@ def delete_link():
     links = links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
     return render_template("index.html",links=links)
 
-@app.route("/update_link", methods=["GET", "POST"])
-def update_link():
-    link_id = request.form['link_id']
+
+@app.route('/update_link/<link_id>', methods=["GET", "POST"])
+def update_link(link_id):
     update_link = Links.query.get(link_id)
-    form = LinkUpdateForm()
-    form.long.data = update_link.long
-    form.title.data = update_link.title
-    form.description.data = update_link.description
+    form = LinkUpdateForm(obj=update_link)
+    #form.long.data = update_link.long
+    #form.title.data = update_link.title
+    #form.description.data = update_link.description
     if form.validate_on_submit():
-        update_link.long = form.long.data
-        update_link.title = form.title.data
-        update_link.description=form.description.data
+        form.populate_obj(update_link)
+        #update_link.long = form.long.data
+        #update_link.title = form.title.data
+        #update_link.description=form.description.data
+        flash(update_link.description)
         db.session.commit()
         return redirect(url_for("index"))
     else:
         flash_errors(form)
-    return render_template("update_link.html",form=form)
+    return render_template("update_link.html",update_url = url_for("update_link",link_id=link_id),form=form)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

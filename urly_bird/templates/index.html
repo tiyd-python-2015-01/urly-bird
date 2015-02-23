@@ -22,12 +22,8 @@
                     <input type="submit" class="text" value="Delete Link "/>
 
                 </form>
-                <form method="POST" action="{{ url_for("update_link") }}">
+                <a href="/update_link/{{link.id}}"> Update Link</a>
 
-                    <input type="hidden" name="link_id" value="{{ link.id }}"/>
-                    <input type="submit" class="text" value="Update Link"/>
-
-                </form>
               <div>
           </div>
           <div class="row">
