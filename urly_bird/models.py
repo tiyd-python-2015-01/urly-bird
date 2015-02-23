@@ -1,6 +1,8 @@
 from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
 from hashids import Hashids
+from flask import redirect
+from . import app
 
 
 @login_manager.user_loader
@@ -38,4 +40,5 @@ class Link(db.Model):
     def get_short_link(self):
        salt = Hashids(salt="and pepper", min_length=1)
        hash = salt.encode(self.id)
-       self.short_link = 'http://localhost:5000/' + hash
+       self.hash = hash
+       self.short_link = hash

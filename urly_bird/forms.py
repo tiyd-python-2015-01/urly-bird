@@ -16,3 +16,6 @@ class RegistrationForm(Form):
                     EqualTo('password_verification',
                             message="Passwords must match")])
     password_verification = PasswordField('Repeat password')
+
+class URLForm(Form):
+    url = StringField('URL', validators=[DataRequired(), URL()])

@@ -1,5 +1,6 @@
 from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_user, login_required, logout_user
+from urllib.request import urlopen
 
 from . import app, db
 from .forms import LoginForm, RegistrationForm
@@ -72,8 +73,23 @@ def shorten():
         db.session.add(link)
         db.session.commit()
         link.get_short_link()
+        db.session.add(link)
+        db.session.commit()
         print('link'+ link.short_link)
         return render_template("shorten.html", short_link=link.short_link)
-    return render_template("shorten.html", short_link=link.short_link)
+    return render_template("shorten.html")
+
+@app.route('/<hashid>')
+def short_link(hashid):
+    link = Link.query.filter(Link.short_link == hashid).first()
+    print(link)
+    if link:
+        print(redirect(link.original_link))
+        return redirect(link.original_link)
+        #return urlopen(link.original_link)
+    else:
+        flash("Couldn't find link!")
+        return redirect(url_for('index'))
+
 
 
