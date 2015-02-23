@@ -3,9 +3,8 @@ from flask.ext.login import (login_user, login_required, logout_user,
                              current_user)
 from datetime import datetime
 from . import app, db, shortner
-
 from .forms import LoginForm, RegistrationForm, LinkForm
-from .models import User, Link
+from .models import User, Link, Click
 
 
 def flash_errors(form, category="warning"):
@@ -18,14 +17,17 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
-
+    if current_user.is_authenticated():
+        return render_template("index.html")
+    else:
+        return redirect(url_for("show_all"))
 
 @app.route("/add", methods=["GET", "POST"])
+@login_required
 def add():
     form = LinkForm()
     if form.validate_on_submit():
-        submission = Link(original=form.link.data,
+        submission = Link(original=form.original.data,
                           title=form.title.data,
                           description=form.description.data,
                           date=datetime.utcnow(),
@@ -37,6 +39,7 @@ def add():
         db.session.commit()
         return render_template("success.html", shorturl=submission.short)
     else:
+        flash_errors(form)
         return render_template("add_link.html", form=form)
 
 
@@ -86,11 +89,21 @@ def create_user():
 
 @app.route("/<short>")
 def redirect_to(short):
-    url = Link.query.filter_by(short=short).first()
+    url = db.session.query(Link).filter_by(short=short).first()
     if url:
+        if current_user.is_authenticated():
+            click = Click(link=url.id,
+                          date=datetime.utcnow(),
+                          user=current_user.id)
+            db.session.add(click)
+            db.session.commit()
+        else:
+            click = Click(link=url.id,
+                          date=datetime.utcnow(),
+                          user=request.environ['REMOTE_ADDR'])
+            db.session.add(click)
+            db.session.commit()
         url = url.original
-        if url.find("://") == -1:
-            url = "http://" + url
         return redirect(url)
     else:
         flash("URL Not Found.")
@@ -99,6 +112,28 @@ def redirect_to(short):
 
 @app.route("/show_all")
 def show_all():
-    all_links = Link.query.all()
-    all_links.reverse()
+    all_links = db.session.query(Link).order_by(Link.id.desc()).all()
     return render_template("show_all.html", links=all_links)
+
+
+@app.route("/delete/<int:link_id>")
+@login_required
+def delete_item(link_id):
+    record = Link.query.get(link_id)
+    db.session.delete(record)
+    db.session.commit()
+    return redirect(url_for("index"))
+
+
+@app.route("/edit_link/<int:link_id>", methods=["GET", "POST"])
+@login_required
+def edit_link(link_id):
+    record = Link.query.get(link_id)
+    form = LinkForm(obj=record)
+    if form.validate_on_submit():
+        form.populate_obj(record)
+        db.session.commit()
+        return redirect(url_for("index"))
+    else:
+        return render_template("edit_link.html", form=form,
+                               post_url=url_for("edit_link", link_id=link_id))

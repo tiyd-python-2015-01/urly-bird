@@ -1,14 +1,17 @@
 <!doctype html>
 <head>
-    <title>My Name is Url</title>
+    <title>Urly-Bird Link Shortner</title>
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <div class=page>
-    <h1>My Name is Url:</h1>
+    <h1>Urly-Bird Link Shortner</h1>
 
     <div class=metanav>
         {% if request.path != "/" %}
             <button onclick="location.href='{{url_for('index')}}'">Home</button>
+        {% endif %}
+        {% if request.path != "/show_all" %}
+        <button onclick="location.href='{{ url_for('show_all') }}'">All URLs</button>
         {% endif %}
         {% if current_user.is_authenticated() %}
             <button onclick="location.href='{{url_for('logout')}}'">Log Out</button>
@@ -27,7 +30,4 @@
     {% endfor %}
     {% block body %}
     {% endblock %}
-</div>
-<div class=metanav>
-    <a href="{{ url_for('show_all') }}">See All URLs</a>
 </div>

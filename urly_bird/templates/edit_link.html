@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Please enter a link to shorten:</h1>
-<form method=POST action="{{ url_for('add') }}">
+<h1>Please make changes below:</h1>
+<form method=POST action="{{ post_url }}">
     {{ form.hidden_tag() }}
     <div>{{ form.title.label }} {{ form.title(size=50) }}</div>
     <div>{{ form.original.label }} {{ form.original(size=50)}}</div>

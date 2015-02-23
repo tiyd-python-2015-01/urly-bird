@@ -43,3 +43,15 @@ class Link(db.Model):
     date = db.Column(db.DateTime())
     links = db.relationship('User',
                             backref=db.backref('submitted', lazy='dynamic'))
+    @property
+    def clicks(self):
+        return [click for click in self.clicks]
+
+
+class Click(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.Integer, db.ForeignKey(Link.id))
+    date = db.Column(db.DateTime())
+    user = db.Column(db.String(60))
+    clicks = db.relationship('Link', backref=db.backref('clicked', lazy='dynamic'))
