@@ -8,18 +8,18 @@
 
     <div class=metanav>
         {% if request.path != "/" %}
-        <button onclick="location.href='{{url_for('index')}}'">Home</button>
+            <button onclick="location.href='{{url_for('index')}}'">Home</button>
         {% endif %}
         {% if current_user.is_authenticated() %}
-        <button onclick="location.href='{{url_for('logout')}}'">Log Out</button>
-        <div class=align-right>
-            <h2>Hello, {{ session.username }}</h2>
-        </div>
+            <button onclick="location.href='{{url_for('logout')}}'">Log Out</button>
+            <div class=align-right>
+                <h2>Hello, {{ current_user.name }}</h2>
+            </div>
         {% else %}
-        <button onclick="location.href='{{url_for('login')}}'">Log In</button>
-        <div class=align-right>
-            <a class=metanav href="{{ url_for('create_user') }}">Create New Account</a>
-        </div>
+            <button onclick="location.href='{{url_for('login')}}'">Log In</button>
+            <div class=align-right>
+                <a class=metanav href="{{ url_for('create_user') }}">Create New Account</a>
+            </div>
         {% endif %}
     </div>
     {% for message in get_flashed_messages() %}
@@ -27,4 +27,7 @@
     {% endfor %}
     {% block body %}
     {% endblock %}
+</div>
+<div class=metanav>
+    <a href="{{ url_for('show_all') }}">See All URLs</a>
 </div>

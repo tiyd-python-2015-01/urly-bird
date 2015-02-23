@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+{% if current_user.is_authenticated() %}
+    <h1>Please enter a link to shorten:</h1>
+    <form method=POST action="{{ url_for('add') }}">
+        {{ form.hidden_tag() }}
+        <div>{{ form.title.label }} {{ form.title(size=50) }}</div>
+        <div>{{ form.link.label }} {{ form.link(size=50)}}</div>
+        <div>{{ form.description.label }}{{ form.description(size=72)}}</div>
+        <input type=submit value=Submit>
+    </form>
+{% else %}
+    <h1>Please log in to do anything!</h1>
+{% endif %}
+{% endblock %}

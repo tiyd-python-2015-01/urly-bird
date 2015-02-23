@@ -20,4 +20,6 @@ class RegistrationForm(Form):
 
 
 class LinkForm(Form):
-    link = StringField('Enter Link:', validators=[DataRequired()])
+    title = StringField('Title:', validators=[DataRequired()])
+    link = StringField('Link:', validators=[DataRequired()])
+    description = StringField('Description:')

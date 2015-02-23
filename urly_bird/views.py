@@ -1,9 +1,11 @@
 from flask import render_template, flash, redirect, request, url_for, session
-from flask.ext.login import login_user, login_required, logout_user
-from . import app, db
+from flask.ext.login import (login_user, login_required, logout_user,
+                             current_user)
+from datetime import datetime
+from . import app, db, shortner
 
 from .forms import LoginForm, RegistrationForm, LinkForm
-from .models import User
+from .models import User, Link
 
 
 def flash_errors(form, category="warning"):
@@ -16,8 +18,26 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
+    return render_template("index.html")
+
+
+@app.route("/add", methods=["GET", "POST"])
+def add():
     form = LinkForm()
-    return render_template("index.html", form=form)
+    if form.validate_on_submit():
+        submission = Link(original=form.link.data,
+                          title=form.title.data,
+                          description=form.description.data,
+                          date=datetime.utcnow(),
+                          owner=current_user.id)
+        db.session.add(submission)
+        db.session.flush()
+        submission.short = shortner.encode(submission.id)
+        print(submission.id, submission.short)
+        db.session.commit()
+        return render_template("success.html", shorturl=submission.short)
+    else:
+        return render_template("add_link.html", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -27,7 +47,6 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            session["username"] = user.name
             flash("You were logged in!")
             return redirect(request.args.get("next") or url_for("index"))
         else:
@@ -39,7 +58,6 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
-    session.pop('username', None)
     logout_user()
     return redirect(url_for("index"))
 
@@ -65,7 +83,22 @@ def create_user():
         flash_errors(form)
     return render_template("register.html", form=form)
 
-    
-@app.route("/shorten", methods=["POST"])
-def shorten():
-    pass
+
+@app.route("/<short>")
+def redirect_to(short):
+    url = Link.query.filter_by(short=short).first()
+    if url:
+        url = url.original
+        if url.find("://") == -1:
+            url = "http://" + url
+        return redirect(url)
+    else:
+        flash("URL Not Found.")
+        return redirect(url_for("index"))
+
+
+@app.route("/show_all")
+def show_all():
+    all_links = Link.query.all()
+    all_links.reverse()
+    return render_template("show_all.html", links=all_links)
