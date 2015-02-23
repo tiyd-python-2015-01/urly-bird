@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 
 from . import app, db
 from .forms import LoginForm, RegistrationForm, Newlink
-from .models import User, Links, UserLinks
+from .models import User, Links
 import random
 
 
@@ -77,10 +77,10 @@ def add_link():
             chopped = chopper(url)
             link = Links(url=form.url.data,
                         shortlink=chopped,
-                        description=form.description.data)
+                        description=form.description.data,
+                        user_id=current_user.id)
             db.session.add(link)
             db.session.commit()
-            userlink = UserLinks()
             flash("You added a new choppedURL.")
             return redirect(url_for("index"))
     else:
@@ -92,9 +92,7 @@ def add_link():
 
 
 def chopper(anyurl):
-    alpha = list('abcdefghijklmnopqrstuvwxyz\
-                  ABCDEFGHIJKLMNOPQRSTUVWXYZ\
-                  1234567890')
+    alpha = list('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
     shortlink = ''.join(random.sample(alpha, 5))
     existing = Links.query.filter_by(shortlink=shortlink).first()
     if shortlink == existing:

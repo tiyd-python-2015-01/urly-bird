@@ -1,9 +1,21 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <h2>All Chops</h2>
 
-    <!-- {% set block_count = 3 %}
+  {% if current_user.is_authenticated() %}
+
+  <h2>Your Chops</h2>
+  <div class="row"
+    <div class="large-8 columns">
+      <ul>
+        {% for link in current_user.links %}
+        <li> {{ link.}}
+
+    <!--
+
+
+
+    {% set block_count = 3 %}
 
     <ul class="blocks-{{ block_count }}">
         {% for link in links %}
@@ -28,7 +40,7 @@
                 {% endif %}
             </li>
         {% endfor %}
-    </ul> -->
+    </ul>
 
-
+ -->
 {% endblock %}
