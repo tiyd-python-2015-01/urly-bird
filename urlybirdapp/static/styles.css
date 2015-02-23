@@ -52,6 +52,8 @@ border-radius: 10px;
 
 input[type=submit]:hover { background: #8c5126; }
 
+input { background: #8c5126; }
+
 input[type=text] { background: #8c5126; }
 
 input[type=text]:focus { background: #c06f35; }
@@ -63,8 +65,3 @@ input[type=email]:focus { background: #c06f35; }
 input[type=password] { background: #8c5126; }
 
 input[type=password]:focus { background: #c06f35; }
-
-.mybuttons { border: 3px solid #28380f;
-width: 80%;
-background: #9ed053;
-padding: 6px; }
