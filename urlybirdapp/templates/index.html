@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<fieldset>
+  <h1>All Bookmarks</h1>
+  {% for links in link_list %}
+    <li>127.0.0.1:5000/b/{{ links.short }} {{ links.text }}
+      <a href='/b/{{ links.short }}'>Go Here</a><br>
+  {% endfor %}
+</fieldset>
+
+{% endblock %}

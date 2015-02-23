@@ -1,0 +1,65 @@
+h2 { font-family: fantasy; font-size: 200%; }
+
+.formfont { font-family: fantasy; font-size: 200%; }
+
+.top-bar-section li a:not(.button):hover {
+    background: #9bc186 !important;
+}
+
+.top-bar-section li:no(.button) { color: #c06f35; }
+
+li { font-family: sans-serif; font-size: 150%; }
+
+body {
+   position: relative;
+}
+body:after {
+    content : "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("/static/img/13.png");
+    width: 100%;
+    height: 100%;
+    opacity : 0.50;
+    z-index: -1;
+}
+
+.flash li { font-family: fantasy; font-size: 200%; background-color: #9bc186; }
+
+fieldset {
+border: 3px solid #28380f;
+width: 80%;
+background: #9ed053;
+padding: 6px;
+}
+fieldset legend {
+background: #CCA383;
+padding: 6px;
+font-weight: bold;
+}
+
+a { color: #c06f35; }
+
+a:hover { color: #8c5126; }
+
+input[type=submit] {padding:5px 15px; background:#ccc; border:0 none;
+cursor:pointer;
+-webkit-border-radius: 10px;
+border-radius: 10px;
+}
+
+input[type=submit]:hover { background: #8c5126; }
+
+input[type=text] { background: #8c5126; }
+
+input[type=text]:focus { background: #c06f35; }
+
+input[type=email] { background: #8c5126; }
+
+input[type=email]:focus { background: #c06f35; }
+
+input[type=password] { background: #8c5126; }
+
+input[type=password]:focus { background: #c06f35; }
