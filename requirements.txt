@@ -45,3 +45,7 @@ pytest>=2.6.4
 webtest
 
 hashids
+
+static3==0.5.1
+
+requests==2.3.0

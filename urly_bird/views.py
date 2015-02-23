@@ -3,7 +3,7 @@ from datetime import datetime
 
 from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
-
+import requests
 from .app import app, db,  login_manager
 from .forms import LoginForm, RegistrationForm, LinkAddForm, LinkUpdateForm
 from .models import User, Links, Clicks
