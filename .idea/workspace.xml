@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="66719bf3-b47c-42c0-a102-6566b71eb5b0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/models.py" afterPath="$PROJECT_DIR$/urly_bird/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/views.py" afterPath="$PROJECT_DIR$/urly_bird/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/templates/user.html" afterPath="$PROJECT_DIR$/urly_bird/templates/user.html" />
     </list>
     <ignored path="urly-bird.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -72,11 +71,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/urly_bird/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.93562233" vertical-offset="1071" max-vertical-offset="1845">
-              <caret line="115" column="66" selection-start-line="115" selection-start-column="66" selection-end-line="115" selection-end-column="66" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="405" max-vertical-offset="1845">
+              <caret line="110" column="23" selection-start-line="110" selection-start-column="23" selection-end-line="110" selection-end-column="23" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -84,11 +83,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="user.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="user.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/urly_bird/templates/user.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="330" max-vertical-offset="855">
-              <caret line="22" column="19" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
+            <state vertical-scroll-proportion="0.5777778" vertical-offset="180" max-vertical-offset="855">
+              <caret line="38" column="57" selection-start-line="38" selection-start-column="57" selection-end-line="38" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -148,7 +147,6 @@
         <option value="$PROJECT_DIR$/urly_bird/templates/index.html" />
         <option value="$PROJECT_DIR$/urly_bird/templates/login.html" />
         <option value="$PROJECT_DIR$/urly_bird/templates/register.html" />
-        <option value="$PROJECT_DIR$/urly_bird/templates/user.html" />
         <option value="$PROJECT_DIR$/urly_bird/templates/layout.html" />
         <option value="$PROJECT_DIR$/urly_bird/forms.py" />
         <option value="$PROJECT_DIR$/urly_bird/app.py" />
@@ -157,6 +155,7 @@
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/urly_bird/models.py" />
         <option value="$PROJECT_DIR$/urly_bird/views.py" />
+        <option value="$PROJECT_DIR$/urly_bird/templates/user.html" />
       </list>
     </option>
   </component>
@@ -258,6 +257,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="urly_bird" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="urly-bird" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="urly-bird" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="urly_bird" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -888,14 +905,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/urly_bird/templates/user.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="330" max-vertical-offset="855">
-          <caret line="22" column="19" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/urly_bird/app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="405">
@@ -924,11 +933,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/urly_bird/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.93562233" vertical-offset="1071" max-vertical-offset="1845">
-          <caret line="115" column="66" selection-start-line="115" selection-start-column="66" selection-end-line="115" selection-end-column="66" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="405" max-vertical-offset="1845">
+          <caret line="110" column="23" selection-start-line="110" selection-start-column="23" selection-end-line="110" selection-end-column="23" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/urly_bird/templates/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5777778" vertical-offset="180" max-vertical-offset="855">
+          <caret line="38" column="57" selection-start-line="38" selection-start-column="57" selection-end-line="38" selection-end-column="57" />
+          <folding />
         </state>
       </provider>
     </entry>
