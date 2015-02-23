@@ -8,9 +8,9 @@ class UrlForm(Form):
     orig_url = URLField('orig_url', validators=[DataRequired(), url()])
     title = StringField('title')
     summary = StringField('summary')
-    
 
-class Login(Form):
+
+class LoginForm(Form):
     email = EmailField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
 
