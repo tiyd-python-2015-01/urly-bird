@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-
+#from flask_wtf.csrf import CsrfProtect
 from .extensions import (
    db,
    migrate,
@@ -13,6 +13,7 @@ DEBUG = True
 SECRET_KEY = 'development-key'
 
 app = Flask(__name__, instance_relative_config=True)
+#CsrfProtect(app)
 app.config.from_object(__name__)
 app.config.from_pyfile('application.cfg', silent=True)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False

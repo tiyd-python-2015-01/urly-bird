@@ -2,9 +2,8 @@
 
 {% block body %}
 {% if current_user.is_authenticated() %}
-    <form method="POST" action="{{ url_for("add_link") }}">
-        {{ form.hidden_tag() }}
-
+    <form method="POST" action="{{ url_for("update_link") }}">
+      {{ form.hidden_tag() }}
         <div class="row">
           <div class="large-12 columns">
             Title {{ form.title(size=40) }}

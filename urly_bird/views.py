@@ -41,7 +41,7 @@ def links():
 @app.route("/all_links")
 def all_links():
     links = Links.query.order_by(Links.id.desc()).all()
-    return render_template("index.html",links=links)
+    return render_template("all_links.html",links=links)
 
 @app.route("/delete_link", methods=["GET", "POST"])
 def delete_link():
@@ -61,18 +61,14 @@ def update_link():
     form.title.data = update_link.title
     form.description.data = update_link.description
     if form.validate_on_submit():
-        update_link.update(dict(long = form.long.data, title= form.title.data , description =form.description.data))
-        #link.long = form.long.data
-        #link.title = form.title.data
-        #link.description=form.description.data
-    #    last_id = db.session.query(db.func.max(Links.id)).scalar()
-    #    if not last_id:
-    #        last_id=0
-    #    link.set_short(last_id+1)
+        update_link.long = form.long.data
+        update_link.title = form.title.data
+        update_link.description=form.description.data
         db.session.commit()
         return redirect(url_for("index"))
     else:
-      return render_template("update_link.html",form=form)
+        flash_errors(form)
+    return render_template("update_link.html",form=form)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -139,9 +135,6 @@ def add_link():
         new_link = Links(long=form.long.data,
                    title=form.title.data,
                    description=form.description.data)
-
-
-
         last_id = db.session.query(db.func.max(Links.id)).scalar()
         if not last_id:
             last_id=0
