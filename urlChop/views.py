@@ -75,19 +75,18 @@ def add_link():
             flash("You already have a link made for that URL")
         else:
             chopped = chopper(url)
-            link = Links(user = current_user.id,
-                        url=form.url.data,
+            link = Links(url=form.url.data,
                         shortlink=chopped,
                         description=form.description.data)
             db.session.add(link)
             db.session.commit()
-            #login_user(user)
+            userlink = UserLinks()
             flash("You added a new choppedURL.")
             return redirect(url_for("index"))
     else:
         flash_errors(form)
 
-    render_template("new_chop.html", form=form)
+    return render_template("new_chop.html", form=form)
 
     #return redirect(url_for('index'))
 

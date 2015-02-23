@@ -48,7 +48,7 @@ class UserLinks(db.Model):
     links_id = db.Column(db.Integer, db.ForeignKey('links.id'))
     #clicks = db.Column(db.Integer, default=0, nullable=False)
 
-    user = db.relationship('User', backref=db.backref('all_links', lazy='dynamic'))
+    user = db.relationship('User', backref=db.backref('UserLinks', lazy='dynamic'))
     link = db.relationship('Links')
 
 
@@ -60,6 +60,5 @@ class UserLinks(db.Model):
 #     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 #     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 #     book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
-#
 #     user = db.relationship('User', backref=db.backref('favorites', lazy='dynamic'))
 #     book = db.relationship('Book')
