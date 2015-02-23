@@ -5,6 +5,8 @@ from . import app, db
 from .forms import LoginForm, RegistrationForm, BookmarkForm, BookForm
 from .models import Book, User, Bookmark
 
+from hashids import Hashids
+
 
 def flash_errors(form, category="warning"):
     '''Flash all errors for a form.'''
@@ -21,17 +23,16 @@ def index():
 @app.route("/book", methods=["GET", "POST"])
 def book():
     form = BookForm()
-    if form.validate_on_submit():
-        book = Book(title=form.title.data,
-                    description=description.title.data,
-                    url=url.title.data)
-        db.session.add(book)
-        db.session.commit()
-        flash("Your book was created.")
-    else:
-        flash("Your book could not be created.")
-    books = Book.query.all()
-    return render_template("book.html", books=books)
+    book = Book(title=form.title.data,
+                description=form.description.data,
+                url=form.url.data)
+    db.session.add(book)
+    db.session.commit()
+    flash("Your book was created.")
+    # else:
+    #     flash("Your book could not be created.")
+    # books = Book.query.all()
+    # return render_template("book.html", books=books)
 
 
 @app.route("/bookmark", methods=["GET", "POST"])
