@@ -19,3 +19,6 @@ login_manager = LoginManager()
 
 from flask.ext.bootstrap import Bootstrap
 bootstrap = Bootstrap()
+
+from flask.ext.appconfig import HerokuConfig
+config = HerokuConfig()

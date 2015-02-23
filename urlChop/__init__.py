@@ -6,18 +6,19 @@ from .extensions import (
     debug_toolbar,
     bcrypt,
     login_manager,
-    bootstrap
+    bootstrap,
+    config
 )
 
 SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/urlchop.db"
 DEBUG = True
-SECRET_KEY = 'development-key'
+SECRET_KEY = 'SUPERDUPERSECRET'
 
-app = Flask(__name__, instance_relative_config=True)
+app = Flask("urlChop")
 app.config.from_object(__name__)
 #app.config.from_pyfile('application.cfg', silent=True)
 
-
+config.init_app(app)#this has to be the first one
 db.init_app(app)
 debug_toolbar.init_app(app)
 migrate.init_app(app, db)
