@@ -24,5 +24,3 @@ Flask-DebugToolbar==0.9.1
 # Extensions
 flask-bcrypt
 flask-login
-
-sqalchemy
