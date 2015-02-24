@@ -19,7 +19,7 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-    return redirect(url_for("shorten.html"))
+    return render_template('layout.html')
 
 @app.route("/your_links")
 def your_links():
