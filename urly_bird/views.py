@@ -111,6 +111,31 @@ def route(shorty):
     db.session.commit()
     return redirect(url.long_address)
 
+@app.route('/e/<shorty>', methods=['GET','POST'])
+@login_required
+def edit(shorty):
+    url = URL.query.filter_by(short_address=shorty).first()
+    form = URLForm(title=url.name, description=url.description, address=url.long_address)
+    if url and url.owner == current_user.id:
+        if request.method == 'GET':
+            return render_template("link.html", url=url, form=form)
+        elif request.method == 'POST':
+            url.name = form.title.data
+            url.long_address = form.address.data
+            url.description = form.description.data
+            db.session.commit()
+            flash("Saved!")
+    # Anything that fails the above if statements falls through to return index.html
+    return redirect(url_for("index"))
+
+@app.route('/d/<shorty>')
+def delete(shorty):
+    url = URL.query.filter_by(short_address=shorty).first()
+    if url:
+        db.session.delete(url)
+        db.session.commit()
+    return redirect(url_for("index"))
+
 
 def edit_address(address):
     if address.data and not re.match(r'^(http://)', address.data):
