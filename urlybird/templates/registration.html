@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <form action="{{ url_for('register') }}" method="POST" class="show" >
+    <form action="{{ url_for('register') }}" method="POST" class="show">
         {{ form.hidden_tag() }}
         <div>
             {{ form.name.label }} {{ form.name(size=20) }}
@@ -11,7 +11,7 @@
             {{ form.email.label }} {{ form.email(size=20) }}
         </div>
         <div>
-            {{ form.password.label }} {{ form.password(size=20)}}
+            {{ form.password.label }} {{ form.password(size=20) }}
         </div>
         <div>
             {{ form.password_verification.label }} {{ form.password_verification(size=20) }}

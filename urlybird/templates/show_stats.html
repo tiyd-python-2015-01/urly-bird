@@ -1,0 +1,7 @@
+{% extends 'layout.html' %}
+{% block body %}
+    {%  for click in clicks %}
+    <li>{{ click.ip_address }}</li>
+    <li>{{ click.click_agent }}</li>
+    {% endfor %}
+{% endblock %}

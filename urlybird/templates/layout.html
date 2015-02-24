@@ -16,18 +16,18 @@
 <body>
 <div id="wrapper">
     {% block header %}
-    <header>
-    </header>
-    {% for message in get_flashed_messages() %}
-    <div class="flash">
-        {{ message }}
-    </div>
-    {% endfor %}
+        <header>
+        </header>
+        {% for message in get_flashed_messages() %}
+            <div class="flash">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endblock %}
     {% block body %}{% endblock %}
     {% block footer %}
-    <footer>
-    </footer>
+        <footer>
+        </footer>
     {% endblock %}
 </div>
 </body>

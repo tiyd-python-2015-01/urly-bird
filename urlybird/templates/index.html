@@ -1,14 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-{% if current_user.is_authenticated() %}
- <h2>Hi! {{ current_user.name }}</h2>
-{% else %}
-<h2>Please login!</h2>
-{% endif %}
+    {% if current_user.is_authenticated() %}
+        <h2>Hi! {{ current_user.name }}</h2>
+    {% else %}
+        <h2>Please login!</h2>
+    {% endif %}
     {% for link in links %}
-    <li>
-    {{ link }}
-    </li>
+        <h5>{{ link.description }}</h5>
+        <li><a href='{{ base_url }}{{ link }}'>{{ base_url }}{{ link }}</a></li>
     {% endfor %}
 {% endblock %}

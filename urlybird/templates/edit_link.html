@@ -1,12 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <form method="POST" action="{{ url_for('create_link') }}">
+    <form method="POST" action="{{ update_url }}">
         {{ form.hidden_tag() }}
         <div>
             {{ form.description.label }} {{ form.description(size=40) }}
             {{ form.long_link.label }} {{ form.long_link(size=40) }}
         </div>
-        <input type="submit" value="create link" class="small button round">
+        <input type="submit" value="Edit Link" class="small button round">
     </form>
 {% endblock %}

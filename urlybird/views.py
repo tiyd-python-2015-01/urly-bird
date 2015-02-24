@@ -2,7 +2,8 @@ from flask import render_template, flash, request, url_for, redirect
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from .forms import LoginForm, RegisterForm, CreateLinkForm, CustomLinkForm
 from . import app, db
-from .models import User, Link, Custom
+from .models import User, Link, Custom, Click
+from sqlalchemy import desc
 
 
 def flash_errors(form, category="warning"):
@@ -15,7 +16,8 @@ def flash_errors(form, category="warning"):
 @app.route('/')
 def index():
     links = Link.query.order_by(Link.id).all()
-    return render_template('index.html', links=links)
+
+    return render_template('index.html', links=links, base_url=request.url_root)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -30,6 +32,7 @@ def login():
         else:
             flash("That user name or password is not correct.")
     flash_errors(form)
+
     return render_template('login.html', form=form)
 
 
@@ -51,13 +54,34 @@ def register():
             return redirect(url_for("index"))
     else:
         flash_errors(form)
+
     return render_template("registration.html", form=form)
 
 
-@app.route('/<small_link>')
+@app.route('/<small_link>', methods=["GET"])
 def redirect_link(small_link):
     link = Link.query.filter(Link.short_link == small_link).first()
+    user = current_user
     big_link = link.long_link
+    if user.is_active():
+        click = Click(ip_address=request.remote_addr,
+                      click_agent=request.headers.get('User-Agent'),
+                      link_id=link.id,
+                      user_id=user.id)
+        db.session.add(click)
+        db.session.commit()
+        return redirect(big_link)
+
+    else:
+        click = Click(ip_address=request.remote_addr,
+                      click_agent=request.headers.get('User-Agent'),
+                      link_id=link.id)
+        db.session.add(click)
+        db.session.commit()
+        return redirect(big_link)
+
+
+
     return redirect(big_link)
 
 
@@ -66,6 +90,7 @@ def redirect_link(small_link):
 def logout():
     logout_user()
     flash("You have been logged out")
+
     return redirect(url_for('index'))
 
 
@@ -82,6 +107,7 @@ def create_link():
         return redirect(url_for('create_link'))
     else:
         flash_errors(form)
+
     return render_template("create_link.html", form=form)
 
 
@@ -89,27 +115,31 @@ def create_link():
 @login_required
 def show_links():
     user = current_user.id
-    links = Link.query.filter(Link.user_id == user).all()
-    return render_template('show_links.html', links=links)
+    links = Link.query.filter(Link.user_id == user).order_by(Link.id.desc())
+
+    return render_template('show_links.html', links=links, base_url=request.url_root)
 
 
-@app.route('/change_link/<small_link>')
+@app.route('/change_link/<small_link>', methods=["GET", "POST"])
 @login_required
 def customize_link(small_link):
     form = CustomLinkForm()
-    old_link = Link.query.filter(Link.short_link == small_link).first().short_link
+    old_link = Link.query.filter(Link.short_link == small_link).first()
     if form.validate_on_submit():
-        new_link = Custom(link=old_link, new_link=form.custom_link.data)
+        new_link = Custom(link=old_link.short_link, new_link=form.custom_link.data)
         db.session.add(new_link)
         db.session.commit()
         flash("You've customized your link!")
         return redirect(url_for('show_links'))
     else:
         flash_errors(form)
-    return render_template("custom_link.html", form=form)
+
+    return render_template("custom_link.html", form=form,
+                           update_url=url_for('customize_link',
+                                              small_link=old_link.short_link))
 
 
-@app.route('/delete_link/<small_link>')
+@app.route('/delete_link/<small_link>', methods=["GET"])
 @login_required
 def delete_link(small_link):
     link = Link.query.filter(Link.short_link == small_link).first()
@@ -132,8 +162,13 @@ def edit_link(small_link):
     else:
         flash_errors(form)
 
-    return render_template("edit_link.html", form=form)
+    return render_template("edit_link.html", form=form,
+                           update_url=url_for('edit_link',
+                                              small_link=note_link.short_link))
 
-
-
-
+@app.route('/show_link_stats', methods=["GET"])
+@login_required
+def show_stats():
+    user = current_user
+    clicks = Click.query.filter(Click.user_id == user.id).all()
+    return render_template('show_stats.html', clicks=clicks)

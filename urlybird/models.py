@@ -13,9 +13,11 @@ def load_user(id):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False, unique=True)
-    email = db.Column(db.String(255),  nullable=False)
+    email = db.Column(db.String(255), nullable=False)
     encrypted_password = db.Column(db.String(60))
     links = db.relationship('Link', backref='user', lazy='dynamic')
+    clicks = db.relationship('Click', backref='user', lazy='dynamic')
+
 
     def get_password(self):
         return getattr(self, "_password", None)
@@ -45,14 +47,14 @@ class Link(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     description = db.Column(db.String(255))
     custom_links = db.relationship('Custom', backref='link', lazy='dynamic')
-    click_counter = db.relationship('Click', backref='link', lazy='dynamic')
+    clicks = db.relationship('Click', backref='link', lazy='dynamic')
 
 
     def set_short_link(self):
         self.short_link = hashid.encode(datetime.now().microsecond, random.randint(0, 100000))
 
     def __repr__(self):
-        return url_for('index')+"{}".format(self.short_link)
+        return "{}".format(self.short_link)
 
 
 class Custom(db.Model):
@@ -66,8 +68,10 @@ class Custom(db.Model):
 
 class Click(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    clicks = db.Column(db.Integer, nullable=False)
-    click_link = db.Column(db.String(255), db.ForeignKey('link.short_link'))
+    ip_address = db.Column(db.String(255))
+    click_agent = db.Column(db.String(255))
+    link_id = db.Column(db.Integer, db.ForeignKey('link.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 
