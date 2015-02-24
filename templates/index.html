@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
+<div class="large-12 columns">
   <fieldset>
     <h1>All Bookmarks</h1>
   {% for links in link_list %}
@@ -10,5 +10,5 @@
       Clicks: {{ links.clicks }}
   {% endfor %}
   </fieldset>
-
+</div>
 {% endblock %}
