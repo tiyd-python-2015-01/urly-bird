@@ -1,0 +1,1 @@
+Prevents npm execution if newer than package.json

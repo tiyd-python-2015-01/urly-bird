@@ -1,0 +1,1 @@
+Prevents bower execution if newer than bower.json

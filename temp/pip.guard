@@ -1,0 +1,1 @@
+Prevents pip execution if newer than requirements.txt

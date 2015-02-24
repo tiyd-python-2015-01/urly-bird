@@ -1,0 +1,12 @@
+{
+  "name": "nprogress",
+  "repo": "lipis/nprogress",
+  "description": "Clone of the awesome NProgress written in Less",
+  "keywords": [
+    "progress",
+    "bar",
+    "spinner"
+  ],
+  "license": "MIT",
+  "main": ["nprogress.js", "nprogress.less", "variables.less"]
+}
