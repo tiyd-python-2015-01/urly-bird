@@ -85,6 +85,23 @@ Besides just recording each click of a bookmark, record the IP address and User-
 
 Complete all hard mode tasks not completed from days 1 and 2.
 
+
+## Day 4
+
+For the rest of these tasks, you will need a good amount of click data. Create fake data for this. Numpy and Faker are useful libraries for creating your fake data.
+
+Add a stats page to each link where you can see the traffic for that link for the last 30 days in a line chart.
+
+Add an overall stats page for each user where you can see a table of your links by popularity and their number
+of clicks over the last 30 days.
+
+### Hard Mode
+
+1. For your individual link stats pages, make a table of where the clicks for your links are coming from by country. Bonus -- display this on a map.
+
+2. Add an option to the individual and group stats pages where you can see stats for the last week, last 30 days, last year, or all time.
+
+
 ## Additional Resources
 
 * [Flask Skeleton](https://github.com/tiyd-python-2015-01/cookiecutter-flask). Use this at your own risk. It explains how to use it in the README.
