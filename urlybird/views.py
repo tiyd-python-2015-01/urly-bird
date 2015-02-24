@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for, request
 from flask.ext.login import login_user, logout_user
 from flask.ext.login import login_required, current_user
 
@@ -18,8 +18,9 @@ def flash_errors(form, category="warning"):
                   field).label.text, error), category)
 
 
-@app.route("/")
-def index():
+@app.route("/", defaults={'page': 1})
+@app.route('/<int:page>')
+def index(page):
     top_bookmarks = BookmarkUser.query.order_by(desc(BookmarkUser.id))[:10]
     return render_template("index.html", bookmarks=top_bookmarks)
 
@@ -156,6 +157,7 @@ def shorten_url(a_url):
         return shortened_url
 
 def add_click(bookmark_id):
+    print(request.headers.get('User-Agent'))
     if current_user.is_active():
         user = current_user.id
     else:
@@ -163,6 +165,8 @@ def add_click(bookmark_id):
 
     click = Click(item_id=bookmark_id,
                   user_id=user,
-                  timestamp=datetime.utcnow())
+                  timestamp=datetime.utcnow(),
+                  user_ip_address=request.remote_addr,
+                  user_agent=request.headers.get('User-Agent'))
     db.session.add(click)
     db.session.commit()

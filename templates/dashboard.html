@@ -24,15 +24,15 @@
           <div class="row">
             <div class="large-8 columns">
               <ul class="vcard">
-                <li>Name: {{ bookmark.bookmark.title }}</li>
+                <li>Name: {{ bookmark.bookmark.title }} </li> 
                 {% if bookmark.bookmark.description %}
                 <li>Description: {{ bookmark.bookmark.description }}</li>
                 {% endif %}
                 <li>Long URL: <a href="{{ bookmark.bookmark.url }}">{{ bookmark.bookmark.url }}</a></li>
                 <li>Short URL: <a href="/b/{{ bookmark.bookmark.short_url }}">/b/{{ bookmark.bookmark.short_url }}</a></li>
                 <li>Click Count: {{ bookmark.clicks }}</li>
-                  <a href='/dashboard/r/{{ bookmark.id }}'>Remove</a>
-                  <a href='/dashboard/e/{{ bookmark.id }}'>Edit</a>
+                  <a href='/dashboard/r/{{ bookmark.id }}'><img width='15' src='/static/delete.png'></a>
+                  <a href='/dashboard/e/{{ bookmark.id }}'><img width='15' src='/static/edit.png'></a>
                 </form>
               </ul>
             </div>

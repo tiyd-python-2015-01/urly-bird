@@ -64,6 +64,8 @@ class Click(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime)
+    user_ip_address = db.Column(db.Integer)
+    user_agent = db.Column(db.String(255))
 
     def __repr__(self):
         return "<Item {} | User {} | Time {}>".format(self.item_id,
