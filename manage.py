@@ -6,6 +6,8 @@ from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 
 from urlybird.app import app, db
+from urlybird.generate_seed_data import create_user, create_bookmarks
+from urlybird.generate_seed_data import user_to_bookmark, click_creation
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
@@ -33,6 +35,26 @@ def test():
     exit_code = pytest.main([TEST_PATH, '--verbose'])
     return exit_code
 
+@manager.command
+def seed(num_users=3):
+    """Seed database."""
+    total_bookmarks = 10*num_users
+    create_bookmarks(total_bookmarks)
+    create_user(0)
+    for counter in range(1, num_users+1):
+        create_user()
+        user_to_bookmark(counter, num=total_bookmarks)
+    clicks_added = click_creation(user_count=num_users)
+    print('Users: {} Bookmarks: {} Clicks: {}'.format(num_users,
+                                                     total_bookmarks,
+                                                     clicks_added))
+
+@manager.command
+def seed2():
+    """Seed database."""
+    total_bookmarks = 10
+    user_to_bookmark(user_id=4, num=total_bookmarks)
+    print('Bookmarks: {}'.format(total_bookmarks))
 
 if __name__ == '__main__':
     manager.run()

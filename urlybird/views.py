@@ -165,7 +165,7 @@ def add_click(bookmark_id):
 
     click = Click(item_id=bookmark_id,
                   user_id=user,
-                  timestamp=datetime.utcnow(),
+                  timestamp=datetime.now(),
                   user_ip_address=request.remote_addr,
                   user_agent=request.headers.get('User-Agent'))
     db.session.add(click)
