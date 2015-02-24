@@ -16,7 +16,11 @@
     {{ form.summary.label }} {{ form.summary(size=100) }}
   <input type="submit" value="Create">
 </form>
-
+{% for message in get_flashed_messages() %}
+<div class="flash">
+  {{ message }}
+</div>
+{% endfor %}
 <div>
   <br>
   <br>

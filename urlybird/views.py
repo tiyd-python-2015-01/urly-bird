@@ -22,8 +22,15 @@ def index():
     bookmark_list = Bookmark.query.all()
     return render_template("index.html", bookmark_list=reversed(bookmark_list))
 
+@app.route("/logged_in")
+@login_required
+def logged_in():
+    bookmark_list = Bookmark.query.filter_by(user = current_user).all()
+    return render_template("logged_in.html", bookmark_list=reversed(bookmark_list))
+
 
 @app.route("/bookmark", methods=["GET", "POST"])
+@login_required
 def bookmark():
     form = BookmarkForm()
     bookmark_list = Bookmark.query.all()
@@ -36,7 +43,8 @@ def bookmark():
                     user_id=current_user.id)
         db.session.add(bookmark)
         db.session.commit()
-        return redirect(url_for("index"))
+        return redirect(url_for("logged_in"))
+    flash_errors(form)
     return render_template("bookmark.html", form=form)
 
 def hasher():
@@ -53,7 +61,7 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash("Logged in successfully.")
-            return redirect(request.args.get("next") or url_for("bookmark"))
+            return redirect(request.args.get("next") or url_for("logged_in"))
         else:
             flash("That email or password is not correct.")
 
@@ -82,10 +90,10 @@ def register():
             db.session.commit()
             login_user(user)
             flash("You have been registered and logged in.")
-            return redirect(url_for("index"))
+            return redirect(url_for("logged_in"))
     else:
         flash_errors(form)
-
+    return render_template("register.html", form=form)
 
 @app.route('/<shorturl>', methods = ["GET"])
 def go_to_bookmark(shorturl):
@@ -96,5 +104,3 @@ def go_to_bookmark(shorturl):
     db.session.add(click)
     db.session.commit()
     return redirect(a_link.longurl, code = 301)
-
-    return render_template("register.html", form=form)

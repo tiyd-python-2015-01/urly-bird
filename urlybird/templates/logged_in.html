@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<div>
+  <br>
+  <a href ="{{ url_for('bookmark')}}"><h1>Add a bookmark!</h1></a>
+</div>
 
-<h2>All links</h2>
+<h2>Your links</h2>
 
 {% for bookmark in bookmark_list %}
 <div class="bookmark">
@@ -21,9 +25,6 @@
   <br>
 </div>
 {% endfor %}
-
-
-
 
 
 {% endblock %}
