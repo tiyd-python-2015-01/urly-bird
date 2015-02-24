@@ -3,6 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 from .forms import LoginForm, RegisterForm, CreateLinkForm, CustomLinkForm
 from . import app, db
 from .models import User, Link, Custom, Click
+from datetime import datetime
 from sqlalchemy import desc
 
 
@@ -61,26 +62,30 @@ def register():
 @app.route('/<small_link>', methods=["GET"])
 def redirect_link(small_link):
     link = Link.query.filter(Link.short_link == small_link).first()
+    link_owner = Link.query.filter(User.id == link.user_id).first()
     user = current_user
     big_link = link.long_link
     if user.is_active():
         click = Click(ip_address=request.remote_addr,
                       click_agent=request.headers.get('User-Agent'),
+                      time_clicked=datetime.utcnow(),
                       link_id=link.id,
-                      user_id=user.id)
+                      user_id=link_owner.id,
+                      clicker_id=user.id)
         db.session.add(click)
         db.session.commit()
         return redirect(big_link)
 
-    else:
+    elif user.is_anonymous:
         click = Click(ip_address=request.remote_addr,
                       click_agent=request.headers.get('User-Agent'),
-                      link_id=link.id)
+                      time_clicked=datetime.utcnow(),
+                      link_id=link.id,
+                      user_id=link_owner.id,
+                      clicker_id=0)
         db.session.add(click)
         db.session.commit()
         return redirect(big_link)
-
-
 
     return redirect(big_link)
 
