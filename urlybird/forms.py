@@ -5,9 +5,9 @@ from wtforms.validators import DataRequired, url, Email, EqualTo
 
 
 class UrlForm(Form):
-    orig_url = URLField('orig_url', validators=[DataRequired(), url()])
+    longurl = URLField('longurl', validators=[DataRequired(), url()])
     title = StringField('title')
-    summary = StringField('summary')
+    description = StringField('description')
 
 
 class LoginForm(Form):

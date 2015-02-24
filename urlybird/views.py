@@ -13,9 +13,18 @@ def flash_errors(form, category="Warning"):
             flash("{0} - {1}".format(getattr(form, field).label.text, error), category)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     form = UrlForm()
+    if form.validate_on_submit():
+        url = BookmarkedUrl.query.filter_by(longurl=form.longurl.data).first()
+        if url:
+            flash("That URL has already been shortened!")
+        else:
+            url = BookmarkedUrl(**form.data)
+            db.session.add(url)
+            db.session.commit()
+        return redirect(url_for('view_link', link_id=url.id))
     return render_template('index.html', form=form)
 
 
@@ -61,25 +70,14 @@ def register():
                             form=form)
 
 
-@app.route('/add', methods=['POST'])
-def add_url():
-    hashids = Hashids()
-
-    form = UrlForm()
-    if form.validate_on_submit():
-        url = BookmarkedUrl(form.text.data)
-        short_url = hashids(form.text.data)
-        db.session.add(url)
-        db.session.commit()
-    return redirect(url_for('index'))
-
-
-@app.route('/shortened', methods=['POST'])
-def disp_short():
+@app.route('/view/<link_id>', methods=['GET'])
+def view_link(link_id):
+    url = BookmarkedURL.query.git(link_id)
     return render_template('shortened.html', url=url)
 
 
 @app.route('/go/<shorturl>')
 def send_to_url(shorturl):
-    long_url = BookmarkedURL.query.get(shorturl)
+    bookmark = BookmarkedURL.query.filter_by(shorturl)
+    long_url = bookmark.longurl
     return redirect(long_url)
