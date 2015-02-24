@@ -1,13 +1,16 @@
-from flask import render_template, flash, redirect, request, url_for, request
+from flask import render_template, flash, redirect, request
+from flask import url_for, request, send_file
 from flask.ext.login import login_user, logout_user
 from flask.ext.login import login_required, current_user
 
 from .app import app, db
 from .forms import LoginForm, RegistrationForm, AddBookmark
 from .models import Bookmark, User, BookmarkUser, Click
+import matplotlib.pyplot as plt
 from datetime import datetime
 from sqlalchemy import desc, and_
 import random
+from io import BytesIO
 
 
 def flash_errors(form, category="warning"):
@@ -146,6 +149,27 @@ def edit_bookmark(int_id):
         return render_template("edit.html",
                                form=form,
                                edited_object=edited_object)
+
+@app.route('/dashboard/c/<int:int_id>', methods=['POST', 'GET'])
+@login_required
+def chart(int_id):
+    bookmarkuser = BookmarkUser.query.get_or_404(int_id)
+    return render_template("chart.html", bookmarkuser=bookmarkuser)
+
+@app.route('/fig/<int:int_id>')
+def fig(int_id):
+    bookmarkuser = BookmarkUser.query.get_or_404(int_id)
+    click_data = bookmarkuser.clicks_by_day()
+    dates = [c[0] for c in click_data]
+    num_clicks = [c[1] for c in click_data]
+
+    fig = BytesIO()
+    plt.plot_date(x=dates, y=num_clicks, fmt="-")
+    plt.savefig(fig)
+    plt.clf()
+    fig.seek(0)
+    return send_file(fig, mimetype="image/png")
+
 
 def shorten_url(a_url):
     alphabet = list('abcdefghijklmnopqrstuvwxyz1234567890')

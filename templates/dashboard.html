@@ -24,7 +24,7 @@
           <div class="row">
             <div class="large-8 columns">
               <ul class="vcard">
-                <li>Name: {{ bookmark.bookmark.title }} </li> 
+                <li>Name: {{ bookmark.bookmark.title }} </li>
                 {% if bookmark.bookmark.description %}
                 <li>Description: {{ bookmark.bookmark.description }}</li>
                 {% endif %}
@@ -33,6 +33,7 @@
                 <li>Click Count: {{ bookmark.clicks }}</li>
                   <a href='/dashboard/r/{{ bookmark.id }}'><img width='15' src='/static/delete.png'></a>
                   <a href='/dashboard/e/{{ bookmark.id }}'><img width='15' src='/static/edit.png'></a>
+                  <a href='/dashboard/c/{{ bookmark.id }}'><img width='15' src='/static/chart.png'></a>
                 </form>
               </ul>
             </div>

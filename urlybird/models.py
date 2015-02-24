@@ -1,6 +1,7 @@
 from .app import db
 from .extensions import bcrypt, login_manager
 from flask.ext.login import UserMixin
+from sqlalchemy import func
 
 
 @login_manager.user_loader
@@ -55,6 +56,12 @@ class BookmarkUser(db.Model):
         return len(Click.query.filter_by(item_id=self.item_id).all())
 
     clicks = property(get_clicks)
+
+    def clicks_by_day(self):
+        click_date = func.cast(Click.timestamp, db.Date)
+        return db.session.query(click_date, func.count(Click.id)). \
+            group_by(click_date).filter_by(item_id=self.bookmark.id). \
+            order_by(click_date).all()
 
     def __repr__(self):
         return "<User {} | Item {}>".format(self.user_id, self.item_id)
