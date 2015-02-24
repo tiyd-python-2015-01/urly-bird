@@ -13,7 +13,7 @@ SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/urly_bird.db"
 DEBUG = True
 SECRET_KEY = 'development-key'
 
-app = Flask("URLybird")
+app = Flask("urly_bird")
 app.config.from_object(__name__)
 app.config.from_pyfile('application.cfg', silent=True)
 

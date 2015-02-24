@@ -4,8 +4,10 @@
 
     <form method="POST" action={{ url_for('shorten') }}>
         {{ form.url.label }}: {{ form.url }}
+        {{ form.description.label }}: {{ form.description}}
         <input type="submit" value="shorten" />
     </form>
-    <p>Your link is http://localhost:5000/{{ short_link }}</p>
+    <p>Your hash id is: {{ short_link }}</p>
+    <p>Go to http://localhost:5000/{{ short_link }}</p>
 
 {% endblock %}

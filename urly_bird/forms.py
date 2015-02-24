@@ -19,3 +19,8 @@ class RegistrationForm(Form):
 
 class URLForm(Form):
     url =  URLField('URL', validators=[DataRequired(), URL()])
+    description = StringField('description')
+
+class editURL(Form):
+    original_link =  URLField('original_link', validators=[DataRequired(), URL()])
+    description = StringField('description')

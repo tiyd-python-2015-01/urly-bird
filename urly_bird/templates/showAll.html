@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<ul>
+  {% for link in links %}
+    <a href="/link/{{ link.id }}"><input type="button" value="edit"></a>
+    <a href="/delete/{{ link.id }}" }}><input type="button" value="delete"></a>
+    <li>{{ link.original_link }} http://localhost:5000/{{ link.short_link }} {{ link.description }}</li>
+  {% endfor %}
+{% endblock %}
+</ul>

@@ -1,11 +1,13 @@
 from flask import render_template, flash, redirect, request, url_for
-from flask.ext.login import login_user, login_required, logout_user
+from flask.ext.login import login_user, login_required, logout_user, current_user
 from urllib.request import urlopen
+from datetime import datetime
+from sqlalchemy import desc
 
 
 from . import app, db
-from .forms import LoginForm, RegistrationForm
-from .models import User, Link
+from .forms import LoginForm, RegistrationForm, URLForm, editURL
+from .models import User, Link, Click
 
 
 def flash_errors(form, category="warning"):
@@ -17,8 +19,12 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-    form = LoginForm()
-    return render_template("index.html", form=form)
+    return redirect(url_for("shorten.html"))
+
+@app.route("/your_links")
+def your_links():
+    links = current_user.links.order_by(desc(Link.date)).all()
+    return render_template('showAll.html', links=links)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -67,30 +73,64 @@ def logout():
     return redirect(url_for('index'))
 
 @app.route('/shorten', methods=['GET', 'POST'])
+@login_required
 def shorten():
+    form = URLForm()
     if request.method == 'POST':
-        url_input = request.form['url']
+        url_input = form.url.data
         link = Link(original_link = url_input)
+        link.description = form.description.data
+        link.date = datetime.now()
+        link.user = current_user
         db.session.add(link)
         db.session.commit()
         link.get_short_link()
-        db.session.add(link)
         db.session.commit()
-        print('link'+ link.short_link)
-        return render_template("shorten.html", short_link=link.short_link)
-    return render_template("shorten.html")
+        return render_template("shorten.html", short_link=link.short_link, form=form)
+    return render_template("shorten.html", form=form)
 
 @app.route('/<hashid>')
+@login_required
 def short_link(hashid):
     link = Link.query.filter(Link.short_link == hashid).first()
-    print(link)
     if link:
-        print(redirect(link.original_link))
+        click = Click(user_id=current_user.id,
+                      link_id=link.id,
+                      date = datetime.now())
+        db.session.add(click)
+        db.session.commit()
         return redirect(link.original_link)
-        #return urlopen(link.original_link)
     else:
         flash("Couldn't find link!")
         return redirect(url_for('index'))
 
+@app.route('/show_all')
+@login_required
+def show_all():
+    links = Link.query.order_by(desc(Link.date)).all()
+    return render_template('showAll.html', links=links)
+
+@app.route('/link/<int:id>', methods=["GET", "POST"])
+@login_required
+def edit_link(id):
+    link = Link.query.get(id)
+    form = editURL(obj=link)
+    if form.validate_on_submit():
+        form.populate_obj(link)
+        db.session.commit()
+        flash("URLybird updated your link")
+        return redirect(url_for("your_links"))
+    return render_template("editLink.html",
+                           form=form,
+                           post_url=url_for("edit_link", id=link.id),
+                           short_link=link.short_link)
+
+@app.route("/delete/<int:id>", methods=['GET', 'POST'])
+def delete(id):
+    link = Link.query.get(id)
+    db.session.delete(link)
+    db.session.commit()
+    flash("Link has been deleted")
+    return redirect(url_for("your_links"))
 
 

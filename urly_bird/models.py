@@ -15,6 +15,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), unique=True, nullable=False)
     encrypted_password = db.Column(db.String(60))
     links = db.relationship('Link', backref='user', lazy='dynamic')
+    clicks = db.relationship('Click', backref='user', lazy='dynamic')
+
 
     def get_password(self):
         return getattr(self, "_password", None)
@@ -33,12 +35,24 @@ class User(db.Model, UserMixin):
 
 class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.DateTime)
     original_link = db.Column(db.String(255), nullable=False)
     short_link = db.Column(db.String(255))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    description = db.Column(db.Text)
+    clicks = db.relationship('Click', backref='link', lazy='dynamic')
 
     def get_short_link(self):
        salt = Hashids(salt="and pepper", min_length=1)
        hash = salt.encode(self.id)
        self.hash = hash
        self.short_link = hash
+
+class Click(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    link_id = db.Column(db.Integer, db.ForeignKey('link.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    date = db.Column(db.DateTime)
+
+
+

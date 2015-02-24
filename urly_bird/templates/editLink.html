@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <form method="POST" action={{ url_for('shorten') }}>
+        {{ form.original_link.label }}: {{ form.original_link }}
+        {{ form.description.label }}: {{ form.description }}
+        <input type="submit" value="edit" />
+    </form>
+    <p>Your hash id is: {{ short_link }}</p>
+    <p>Go to http://localhost:5000/{{ short_link }}</p>
+
+{% endblock %}
