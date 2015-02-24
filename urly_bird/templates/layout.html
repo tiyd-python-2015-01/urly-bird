@@ -1,33 +1,55 @@
 <!doctype html>
 <head>
     <title>Urly-Bird Link Shortner</title>
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+    <!--<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">-->
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/foundation.css') }}">
 </head>
-<div class=page>
-    <h1>Urly-Bird Link Shortner</h1>
+<div class="row">
+    <div class="large-14 columns">
+        <nav class="top-bar">
+            <ul class="title-area">
+                <li class="name">
+                    <h1><a href="{{ url_for('index') }}">Urly-Bird Link Shortner</a></h1>
+                </li>
+            </ul>
+            <section class="top-bar-section">
+                <ul class="left">
+                    <li class="divider"></li>
+                    <li class="active"><a href="{{ url_for('show_all') }}">All Links</a></li>
+                    <li class="divider"></li>
+                </ul>
+            {% if current_user.is_authenticated() %}
+                <ul class="right">
+                    <li class="divider"></li>
+                    <li class="active"><a href="{{ url_for('logout') }}">Log Out</a></li>
+                    <li class="divider"></li>
+                </ul>
+                <ul class="left">
+                    <li class="divider"></li>
+                    <li class="active"><a href="{{ url_for('add') }}">Add New Link</a></li>
+                </ul>
 
-    <div class=metanav>
-        {% if request.path != "/" %}
-            <button onclick="location.href='{{url_for('index')}}'">Home</button>
-        {% endif %}
-        {% if request.path != "/show_all" %}
-        <button onclick="location.href='{{ url_for('show_all') }}'">All URLs</button>
-        {% endif %}
+            {% else %}
+                <ul class="right">
+                    <li class="divider"></li>
+                    <li class="active"><a href="{{ url_for('create_user') }}">Register</a></li>
+                    <li class="divider"></li>
+                    <li class="active"><a href="{{ url_for('login') }}">Log In</a></li>
+                    <li class="divider"></li>
+                </ul>
+            {% endif %}
+            </section>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="large-9 columns"></div>
+    <div class="large-3 columns">
         {% if current_user.is_authenticated() %}
-            <button onclick="location.href='{{url_for('logout')}}'">Log Out</button>
-            <div class=align-right>
-                <h2>Hello, {{ current_user.name }}</h2>
-            </div>
-        {% else %}
-            <button onclick="location.href='{{url_for('login')}}'">Log In</button>
-            <div class=align-right>
-                <a class=metanav href="{{ url_for('create_user') }}">Create New Account</a>
-            </div>
+            Welcome Back, {{ current_user.name }}!
         {% endif %}
     </div>
-    {% for message in get_flashed_messages() %}
-        <div class=flash>{{ message }}</div>
-    {% endfor %}
-    {% block body %}
-    {% endblock %}
 </div>
+{% block body %}
+{% endblock %}

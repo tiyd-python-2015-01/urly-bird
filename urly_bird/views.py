@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, request, url_for, session
 from flask.ext.login import (login_user, login_required, logout_user,
                              current_user)
 from datetime import datetime
+from pickle import dumps
 from . import app, db, shortner
 from .forms import LoginForm, RegistrationForm, LinkForm
 from .models import User, Link, Click
@@ -35,9 +36,9 @@ def add():
         db.session.add(submission)
         db.session.flush()
         submission.short = shortner.encode(submission.id)
-        print(submission.id, submission.short)
         db.session.commit()
-        return render_template("success.html", shorturl=submission.short)
+        flash("Link successfully added!")
+        return redirect(url_for("index"))
     else:
         flash_errors(form)
         return render_template("add_link.html", form=form)
@@ -94,13 +95,17 @@ def redirect_to(short):
         if current_user.is_authenticated():
             click = Click(link=url.id,
                           date=datetime.utcnow(),
-                          user=current_user.id)
+                          user=current_user.id,
+                          ip=request.environ['REMOTE_ADDR'],
+                          user_agent=dumps(request.headers.get('User-Agent')))
             db.session.add(click)
             db.session.commit()
         else:
             click = Click(link=url.id,
                           date=datetime.utcnow(),
-                          user=request.environ['REMOTE_ADDR'])
+                          user=-1,
+                          ip = request.environ['REMOTE_ADDR'],
+                          user_agent=dumps(request.headers.get('User-Agent')))
             db.session.add(click)
             db.session.commit()
         url = url.original

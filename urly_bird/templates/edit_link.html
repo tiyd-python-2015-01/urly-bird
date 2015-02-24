@@ -1,11 +1,26 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Please make changes below:</h1>
+<div class="row">
+    <div class="large-7 large-centered columns"><h2>Please make changes below:</h2></div>
+</div>
 <form method=POST action="{{ post_url }}">
     {{ form.hidden_tag() }}
-    <div>{{ form.title.label }} {{ form.title(size=50) }}</div>
-    <div>{{ form.original.label }} {{ form.original(size=50)}}</div>
-    <div>{{ form.description.label }}{{ form.description(size=72)}}</div>
-    <input type=submit value=Submit>
+    <div class="row">
+        <div class="large-1 columns">{{ form.title.label }}</div>
+        <div class="large-11 columns">{{ form.title(size=10) }}</div>
+    </div>
+    <div class="row">
+        <div class="large-1 columns">{{ form.original.label }}</div>
+        <div class="large-11 columns">{{ form.original(size=50)}}</div>
+    </div>
+    <div class="row">
+        <div class="large-1 columns">{{ form.description.label }}</div>
+        <div class="large-11 columns">{{ form.description(size=72)}}</div>
+    </div>
+    <div class="row">
+        <div class="large-1 large-centered columns">
+            <input type=submit value=Submit>
+        </div>
+    </div
 </form>
 {% endblock %}

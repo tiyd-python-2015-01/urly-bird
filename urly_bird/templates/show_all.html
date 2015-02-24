@@ -1,9 +1,17 @@
 {% extends "layout.html" %}
 {% block body %}
-<h2>All submitted links:</h2>
-{% for link in links %}
-    <div>{{ link.title }}: <a href="http://127.0.0.1:5000/{{ link.short }}" title="{{ link.description }}">
-        http://127.0.0.1:5000/{{ link.short }}</a><div>
-{% endfor %}
-<button onclick="location.href='{{url_for('add')}}'">Add New Link</button>
+    <div class="row">
+        <div class="large-3 columns"></div>
+        <div class="large-6  large-centered columns">
+            <h2>All submitted links:</h2>
+        </div>
+        <div class="large-3 columns"></div>
+    </div>
+    {% for link in links %}
+        <div class="row">
+            <div class="large-6 large-centered columns">{{ link.title }}:
+            <a href="http://127.0.0.1:5000/{{ link.short }}" title="{{ link.description }}">
+            http://127.0.0.1:5000/{{ link.short }}</a></div>
+        </div>
+    {% endfor %}
 {% endblock %}

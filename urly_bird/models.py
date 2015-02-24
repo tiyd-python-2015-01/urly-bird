@@ -53,5 +53,8 @@ class Click(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     link = db.Column(db.Integer, db.ForeignKey(Link.id))
     date = db.Column(db.DateTime())
-    user = db.Column(db.String(60))
-    clicks = db.relationship('Link', backref=db.backref('clicked', lazy='dynamic'))
+    user = db.Column(db.Integer)
+    ip = db.Column(db.String(15))
+    user_agent = db.Column(db.Text())
+    clicks = db.relationship('Link',
+                             backref=db.backref('clicked', lazy='dynamic'))
