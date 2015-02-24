@@ -31,7 +31,8 @@
                 <li>Long URL: <a href="{{ bookmark.bookmark.url }}">{{ bookmark.bookmark.url }}</a></li>
                 <li>Short URL: <a href="/b/{{ bookmark.bookmark.short_url }}">/b/{{ bookmark.bookmark.short_url }}</a></li>
                 <li>Click Count: {{ bookmark.clicks }}</li>
-                  <a href='/r/{{ bookmark.id }}'>Remove</a>
+                  <a href='/dashboard/r/{{ bookmark.id }}'>Remove</a>
+                  <a href='/dashboard/e/{{ bookmark.id }}'>Edit</a>
                 </form>
               </ul>
             </div>

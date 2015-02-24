@@ -77,6 +77,7 @@ def register():
     return render_template("register.html", form=form)
 
 @app.route('/dashboard/add_bookmark', methods=['POST'])
+@login_required
 def add_bookmark():
     form = AddBookmark()
     if form.validate_on_submit():
@@ -116,15 +117,34 @@ def url_redirect(short_url):
     else:
         return redirect(url_for('/'))
 
-@app.route('/r/<int:int_id>', methods=["GET"])
+@app.route('/dashboard/r/<int:int_id>', methods=["GET"])
+@login_required
 def delete_bookmark(int_id):
     deleted_object = BookmarkUser.query.filter_by(id=int_id).first()
-    print('heyyyyyyyyy {}'.format(deleted_object))
     db.session.delete(deleted_object)
     db.session.commit()
     flash("You successfully removed that link")
     return redirect(url_for('dashboard'))
 
+@app.route('/dashboard/e/<int:int_id>', methods=['POST', 'GET'])
+@login_required
+def edit_bookmark(int_id):
+    form = AddBookmark()
+    edited_object = BookmarkUser.query.filter_by(id=int_id).first()
+
+    if form.validate_on_submit():
+        edited_object.bookmark.title = form.title.data
+        edited_object.bookmark.url = form.url.data
+        edited_object.bookmark.short_url = shorten_url(form.url.data)
+        edited_object.bookmark.description = form.description.data
+        db.session.commit()
+        flash("You successfully updated your bookmark")
+        return redirect(url_for('dashboard'))
+    else:
+        flash_errors(form)
+        return render_template("edit.html",
+                               form=form,
+                               edited_object=edited_object)
 
 def shorten_url(a_url):
     alphabet = list('abcdefghijklmnopqrstuvwxyz1234567890')

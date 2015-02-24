@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <div class='row'>
+
+        <div class="large-8 columns">
+          <fieldset>
+            <legend>Edit Your Bookmark</legend>
+
+              {% if get_flashed_messages() %}
+                  {% for message in get_flashed_messages() %}
+                  <div data-alert class="alert-box">
+                    {{ message }}
+                  </div>
+                  {% endfor %}
+              {% endif %}
+            <form  method='POST' id="edit_bookmark" action="{{ url_for("edit_bookmark", int_id=edited_object.id ) }}">
+                {{ form.hidden_tag() }}
+            <label>{{ form.title.label }}
+              <input name='title' type="text" value="{{ edited_object.bookmark.title }}" />
+            </label>
+            <label>{{ form.description.label }}
+              <input name='description' type="text" value="{{ edited_object.bookmark.description }}" />
+            </label>
+            <label>{{ form.url.label }}
+              <input name='url' type="text" value="{{ edited_object.bookmark.url }}" />
+            </label>
+            <button type="submit" class='button tiny'>Update This Bookmark</button>
+          </fieldset>
+        </div>
+      </form>
+    </div>
+
+{% endblock %}
