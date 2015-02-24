@@ -40,6 +40,22 @@ class Links(db.Model):
     short = db.Column(db.String(6), nullable=False, unique=True)
     user = db.relationship('User', backref=db.backref('links', lazy='dynamic'))
 
+    def link_clicks(self):
+        return len(Click.query.filter_by(link_id=self.id).all())
+
+    clicks = property(link_clicks)
 
     def __repr__(self):
         return "URL {}".format(self.url)
+
+
+class Click(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    link_id = db.Column(db.Integer, db.ForeignKey('links.id'))
+    timestamp = db.Column(db.DateTime)
+    ip = db.Column(db.String(255))
+    user_agent = db.Column(db.String(255))
+
+    def __repr__(self):
+        return "Clicks to Date: {}".format(self.count)

@@ -3,10 +3,10 @@ from flask.ext.login import login_user, login_required
 from flask.ext.login import logout_user, current_user
 from . import app, db
 from .forms import LoginForm, RegistrationForm, AddLink, EditLink
-from .models import User, Links
+from .models import User, Links, Click
 import random
 from sqlalchemy import desc
-
+from datetime import datetime
 
 def flash_errors(form, category="warning"):
     '''Flash all errors for a form.'''
@@ -116,6 +116,14 @@ def edit_bookmark(id):
                             update_url=url_for('edit_bookmark', id=current.id))
 
 
+@app.route('/delete/<int:id>', methods=['GET'])
+def delete_bookmark(id):
+    current = Links.query.get(id)
+    db.session.delete(current)
+    db.session.commit()
+    flash('Bookmark Deleted!!')
+    return redirect(url_for('home_view'))
+
 
 def short():
     chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ0123456789'
@@ -131,4 +139,20 @@ def short():
 def redirect_tag(tag):
     short = tag
     actual = Links.query.filter_by(short=short).first()
+    if current_user.is_authenticated():
+        click = Click(user_id=current_user.id,
+                      link_id=actual.id,
+                      timestamp=datetime.utcnow(),
+                      ip=request.remote_addr,
+                      user_agent=request.headers.get('User-Agent'))
+        db.session.add(click)
+        db.session.commit()
+    else:
+        click = Click(user_id = 0,
+                      link_id=actual.id,
+                      timestamp=datetime.utcnow(),
+                      ip=request.remote_addr,
+                      user_agent=request.headers.get('User-Agent'))
+        db.session.add(click)
+        db.session.commit()
     return redirect(actual.url)

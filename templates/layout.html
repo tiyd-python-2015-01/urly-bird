@@ -20,6 +20,10 @@
         <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
       </ul>
       <section class="top-bar-section">
+        {% if current_user.is_authenticated() %}
+        <ul class='left'>
+          <a class='button round success' href='/addlink'>Add New Link</a>
+        {% endif %}
         <ul class="right">
           <li class="has-dropdown">
             <div>
