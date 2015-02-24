@@ -1,16 +1,32 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<div>
+  <br>
+    <a href ="{{ url_for('bookmark')}}"><h1>Add a bookmark!</h1></a>
+</div>
 
 <h2>All links</h2>
 
 {% for bookmark in bookmark_list %}
 <div class="bookmark">
+  {{ bookmark.title }}
   <a href="{{ bookmark.longurl }}">{{ bookmark.title }}</a>
+  <a href="{{ url_for('go_to_bookmark', shorturl=bookmark.shorturl)}}">{{ bookmark.shorturl }}</a>
+</div>
+<div>
+  {{bookmark.shorturl}}
+</div>
+<div>
   {% if bookmark.summary %}
-  <br/>
+  <br>
   {{ bookmark.summary }}
   {% endif %}
+  {{ bookmark.user_id }}
+</div>
+
+<div>
+  <br>
 </div>
 {% endfor %}
 

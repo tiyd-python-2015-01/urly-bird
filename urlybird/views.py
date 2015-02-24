@@ -3,9 +3,11 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 
 from . import app, db
 from .forms import LoginForm, RegistrationForm, BookmarkForm
-from .models import User, Bookmark
+from .models import User, Bookmark, Click
 
 from hashids import Hashids
+import random
+from datetime import datetime
 
 
 def flash_errors(form, category="warning"):
@@ -18,7 +20,7 @@ def flash_errors(form, category="warning"):
 @app.route("/")
 def index():
     bookmark_list = Bookmark.query.all()
-    return render_template("index.html", bookmark_list=bookmark_list)
+    return render_template("index.html", bookmark_list=reversed(bookmark_list))
 
 
 @app.route("/bookmark", methods=["GET", "POST"])
@@ -26,16 +28,22 @@ def bookmark():
     form = BookmarkForm()
     bookmark_list = Bookmark.query.all()
     if form.validate_on_submit():
-        short_bookmark = "short"
+        short_bookmark = hasher()
         bookmark = Bookmark(longurl=form.longurl.data,
                     shorturl=short_bookmark,
                     title=form.title.data,
-                    summary=form.summary.data)
+                    summary=form.summary.data,
+                    user_id=current_user.id)
         db.session.add(bookmark)
         db.session.commit()
-        return redirect(url_for("bookmark"))
-    return render_template("bookmark.html", form=form, bookmark_list=bookmark_list)
+        return redirect(url_for("index"))
+    return render_template("bookmark.html", form=form)
 
+def hasher():
+    hashids = Hashids(salt='salty salt')
+    x = random.randint(100000, 999999)
+    y = hashids.encrypt(x)
+    return y
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -77,5 +85,16 @@ def register():
             return redirect(url_for("index"))
     else:
         flash_errors(form)
+
+
+@app.route('/<shorturl>', methods = ["GET"])
+def go_to_bookmark(shorturl):
+    a_link = Bookmark.query.filter_by(shorturl=shorturl).first()
+    click = Click(bookmark = a_link,
+                  click_date = datetime.utcnow(),
+                  user = current_user)
+    db.session.add(click)
+    db.session.commit()
+    return redirect(a_link.longurl, code = 301)
 
     return render_template("register.html", form=form)

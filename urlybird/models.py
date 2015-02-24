@@ -1,5 +1,6 @@
 from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
+from datetime import datetime
 
 
 @login_manager.user_loader
@@ -33,9 +34,17 @@ class Bookmark(db.Model):
     shorturl = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     summary = db.Column(db.String(255))
-    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    #user = db.relationship('User',
-    #    backref=db.backref('bookmarks', lazy='dynamic'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User',
+        backref=db.backref('bookmarks', lazy='dynamic'))
 
     def __repr__(self):
         return "<Bookmark {}>".format(self.shorturl)
+
+class Click(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    click_date = db.Column(db.DateTime)
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    bookmark = db.relationship('Bookmark')
+    user = db.relationship('User')

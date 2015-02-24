@@ -15,10 +15,9 @@ SECRET_KEY = 'development-key'
 
 
 app = Flask("urlybird")
-#app = Flask(__name__)
 app.config.from_object(__name__)
 
-# Heroku
+
 config.init_app(app)
 
 db.init_app(app)

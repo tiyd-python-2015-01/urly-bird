@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<br>
+<br>
 <form method="POST" action="{{ url_for('bookmark') }}">
   {{ form.hidden_tag() }}
   <div>
@@ -15,14 +17,9 @@
   <input type="submit" value="Create">
 </form>
 
-{% for bookmark in bookmark_list %}
-<div class="bookmark">
-  <a href="{{ bookmark.longurl }}">{{ bookmark.title }}</a>
-  {% if bookmark.summary %}
-  <br/>
-  {{ bookmark.summary }}
-  {% endif %}
+<div>
+  <br>
+  <br>
+  <a href ="{{ url_for('index')}}">Nevermind, return to the index.</a>
 </div>
-{% endfor %}
-
 {% endblock %}
