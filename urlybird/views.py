@@ -23,6 +23,8 @@ def index():
         else:
             url = BookmarkedUrl(**form.data)
             db.session.add(url)
+            db.session.flush()
+            url.set_shorturl()
             db.session.commit()
         return redirect(url_for('view_link', link_id=url.id))
     return render_template('index.html', form=form)
@@ -72,12 +74,12 @@ def register():
 
 @app.route('/view/<link_id>', methods=['GET'])
 def view_link(link_id):
-    url = BookmarkedURL.query.git(link_id)
+    url = BookmarkedUrl.query.get(link_id)
     return render_template('shortened.html', url=url)
 
 
 @app.route('/go/<shorturl>')
 def send_to_url(shorturl):
-    bookmark = BookmarkedURL.query.filter_by(shorturl)
+    bookmark = BookmarkedUrl.query.filter_by(shorturl=shorturl).first()
     long_url = bookmark.longurl
     return redirect(long_url)

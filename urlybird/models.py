@@ -12,18 +12,15 @@ def load_user(id):
 class BookmarkedUrl(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     longurl = db.Column(db.String(255), nullable=False, unique=True)
-    shorturl = db.Column(db.String(255), nullable=False, unique=True)
+    shorturl = db.Column(db.String(255), unique=True)
     title = db.Column(db.String(255))
     description = db.Column(db.String(255))
 
-    def __init__(self, longurl, title, description):
-        self.longurl = longurl
-        self.title = title
-        self.description = description
-        self.shorturl = hasher.encode(self.id)
+    def set_shorturl(self):
+         self.shorturl = hasher.encode(self.id)
 
     def __repr__(self):
-        return "<Url: {}>".format(self.url)
+        return "<Url: {}>".format(self.longurl)
 
 
 class User(db.Model, UserMixin):
