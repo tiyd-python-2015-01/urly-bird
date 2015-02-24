@@ -1,12 +1,18 @@
 from flask import render_template, flash, redirect, request, url_for
 from .extensions import db
-from .app import app
+from .app import app, login_manager
 from . import models
 from .utils import flash_errors
 from .forms import RegistrationForm, LoginForm
-from flask.ext.login import login_user, logout_user, LoginManager, login_required
+from flask.ext.login import (login_user, login_required, logout_user,
+                             current_user)
 
 """Add your views here."""
+
+
+@login_manager.user_loader
+def load_user(userid):
+    return models.User(userid)
 
 
 @app.route("/logout", methods=["GET"])
@@ -32,8 +38,8 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = models.User.query.filter_by(email=form.email.data)
-        if user and user.check_password(form.password.data):
+        user = models.User.query.filter_by(email=form.email.data).first()
+        if user and models.User.check_password(password=form.password.data):
             login_user(user)
             flash("Logged in successfully.")
             return redirect(request.args.get("next") or url_for("index"))
@@ -48,7 +54,7 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = models.User.query.filter_by(email=form.email.data)
+        user = models.User.query.filter_by(email=form.email.data).first()
         if user:
             flash("E-mail address already in use.")
         else:
@@ -58,9 +64,9 @@ def register():
             db.session.add(user)
             db.session.commit()
             login_user(user)
-            db.session["username"] = user.name
+            # db.session["username"] = user
             flash("Registration Successful!  You have been logged in.")
-            return redirect(url_for("/"))
+            return redirect(url_for("index"))
     else:
         flash_errors(form)
     return render_template("register.html", form=form)
