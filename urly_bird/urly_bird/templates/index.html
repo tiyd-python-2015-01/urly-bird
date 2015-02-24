@@ -1,12 +1,16 @@
 <!DOCTYPE HTML>
 {% extends "layout.html" %}
 
-<html>
-    <head>
-        <title>{{ "Lynx" }}</title>
-    </head>
-      <body>
-        <h1>Hello, {{ user.name }}!</h1>
-      </body>
-</html>
-
+{% extends "layout.html" %}
+{% block body %}
+{% if current_user.is_authenticated() %}
+    <h2>Your links:</h2>
+    {% for link in current_user.links %}
+        <div>{{ link.title }}: <a href="http://127.0.0.1:5000/{{ link.short }}" title="{{ link.description }}">
+            http://127.0.0.1:5000/{{ link.short }}</a><div>
+    {% endfor %}
+    <button onclick="location.href='{{url_for('add')}}'">Add New Link</button>
+{% else %}
+    <h1>Log in</h1>
+{% endif %}
+{% endblock %}

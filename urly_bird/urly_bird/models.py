@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
         self._password = password
         self.encrypted_password = bcrypt.generate_password_hash(password)
 
-    password = property(get_password, set_password)
+    password = property(None, set_password)
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.encrypted_password, password)

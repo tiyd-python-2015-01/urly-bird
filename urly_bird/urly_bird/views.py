@@ -4,8 +4,7 @@ from .app import app
 from . import models
 from .utils import flash_errors
 from .forms import RegistrationForm, LoginForm
-from flask.ext.login import (login_user, login_required, logout_user,
-                             current_user)
+from flask.ext.login import login_user, login_required, logout_user, current_user
 
 """Add your views here."""
 
@@ -25,7 +24,7 @@ def home():
 @app.route("/index", methods=["POST"])
 @login_required
 def index():
-    return render_template("layout.html", form=form)
+    return render_template("layout.html")
 
 
 
@@ -46,7 +45,7 @@ def login():
 
 
 @app.route("/register", methods=["GET", "POST"])
-def create_user():
+def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = models.User.query.filter_by(email=form.email.data)
@@ -59,7 +58,7 @@ def create_user():
             db.session.add(user)
             db.session.commit()
             login_user(user)
-            session["username"] = user.name
+            db.session["username"] = user.name
             flash("Registration Successful!  You have been logged in.")
             return redirect(url_for("/"))
     else:
