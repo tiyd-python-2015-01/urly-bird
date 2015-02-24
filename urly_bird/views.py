@@ -65,13 +65,13 @@ def add_link():
     return render_template("add_link.html", form=form)
 
 
-@app.route("/delete_link", methods=["GET", "POST"])
-def delete_link():
-    link_id = request.form['link_id']
+@app.route("/delete_link/<int:id>", methods=["GET", "POST"])
+def delete_link(id):
+    link_id = id
     link = Links.query.get(link_id)
     db.session.delete(link)
     db.session.commit()
-    links = links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
+    links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
     return render_template("index.html",links=links)
 
 
@@ -101,6 +101,7 @@ def login():
             return render_template("index.html",links=links)
         else:
             flash("That email or password is not correct.")
+            return redirect(url_for("register"))
     flash_errors(form)
     return render_template("login.html", form=form)
 
@@ -127,6 +128,9 @@ def logout():
     logout_user()
     return redirect(url_for("index"))
 
+@app.route("/test", methods=["GET", "POST"])
+def test():
+    return render_template("test.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
