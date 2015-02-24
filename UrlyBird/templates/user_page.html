@@ -16,25 +16,28 @@
   {{ form.hidden_tag() }}
   <div>
     {{form.title.label }} {{ form.title(size=20) }}
-    {{ form.address.label }} {{ form.address(size=30) }}
+    {{ form.url.label }} {{ form.url(size=30) }}
   </div>
   <input class="submit_link" type="submit" value="Shorten">
 </form>
 <h3>Your links</h3>
 {% for link in links %}
-    <div class="user_link">
+    <div float:right class="user_link" >
       <b>{{ link.title }} </b> &nbsp <a href = {{url_for("go_to_bookmark",
                       shortlink = link.shortlink)}}>{{link.shortlink}}</a>
                       &nbsp
-                      <a href = {{url_for("edit_link",
-                      id = link.id)}}>Edit!</a>
 
-                      <form action="{{ url_for('rm_bookmark') }}" method=post class=delete->
-                      <input class = "submit_link" type=hidden value="{{ link.shortlink }}"name="link_to_delete"></input>
-                      <input class="submit_link" type=submit value  = "delete" input/>
+                      <form action = {{url_for("edit_link", id = link.id)}}>
+                      <input class="button" type=submit value="edit" input/>
+                      </form>
+
+                      <form action="{{ url_for('rm_bookmark') }}"
+                      method=post class=delete->
+                      <input class = "button" type=hidden value=
+                      "{{ link.shortlink }}"name="link_to_delete"></input>
+                      <input class="button" type=submit value  = "delete" input/>
+
                       </br></br>
-
-
                       </form>
     </div>
 {% endfor %}

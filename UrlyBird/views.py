@@ -48,7 +48,7 @@ def shorten_link():
     form = ShortenLink()
     links = Bookmark.query.filter_by(user = current_user).all()
     if form.validate_on_submit():
-        bookmark = Bookmark(url = form.address.data,
+        bookmark = Bookmark(url = form.url.data,
                             title = form.title.data,
                             shortlink =  shortener(),
                             user = current_user,
@@ -115,9 +115,10 @@ def edit_link(id):
     form = ShortenLink(obj=link)
     if form.validate_on_submit():
         form.populate_obj(link)
+        db.session.add(link)
         db.session.commit()
         flash("The link has been updated.")
-        return redirect(url_for("shorten link"))
+        return redirect(url_for("shorten_link"))
 
     return render_template("edit.html",
                            form=form,

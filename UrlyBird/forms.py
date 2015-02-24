@@ -22,4 +22,4 @@ class RegistrationForm(Form):
 
 class ShortenLink(Form):
     title = StringField('Title', validators=[DataRequired()])
-    address = StringField("URL", validators=[DataRequired()])
+    url = StringField("URL", validators=[DataRequired()])

@@ -13,8 +13,13 @@
 <h3>User Page</h3>
 
 <div>
-  {{form.title.label }} {{ form.title(size=20) }}
-  {{ form.address.label }} {{ form.address(size=30)}}
-  <input class="submit_link" type=submit value  = "delete" input/>
+  <form method="POST" action= "{{ post_url }}" >
+  {{form.hidden_tag()}}
+  {{ form.url.label }} {{ form.url(size=30)}}
+  {{form.title.label }} {{ form.title(size=30) }}
+
+
+    <input type="submit" class="btn btn-blue" value="{{ button }}">
+  </form>
 </div>
 {% endblock %}
