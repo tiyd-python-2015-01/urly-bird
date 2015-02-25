@@ -15,7 +15,6 @@ def create_user(user_id=1):
         user = User(id=0, email=email, name=name, password=password)
     else:
         user = User(email=email, name=name, password=password)
-    print('user created: {}'.format(user))
     db.session.add(user)
     db.session.commit()
 
@@ -33,19 +32,18 @@ def create_bookmarks(num=30):
         db.session.add(bookmark)
     db.session.commit()
 
-def user_to_bookmark(user_id, num=10):
-    for counter in range(1, num+1):
+def user_to_bookmark(user_id, bookmark_user_num=10, bookmark_count=30 ):
+    for counter in range(1, bookmark_user_num+1):
         bookmark_user = BookmarkUser(user_id=user_id,
-                                     item_id=random.randint(1,num))
+                                     item_id=random.randint(1,bookmark_count))
         db.session.add(bookmark_user)
     db.session.commit()
 
 
-def click_creation(user_count):
+def click_creation(user_count, click_count=1000):
     fake=Factory.create()
-
     for num in range(0,user_count+1):
-        for count in range(0,10):
+        for count in range(0,click_count):
             item_id = random.randint(1,30)
             timestamp = fake.date_time_between(start_date="-30d",
                                                end_date="now")
@@ -56,4 +54,9 @@ def click_creation(user_count):
                           user_agent =fake.user_agent())
             db.session.add(click)
     db.session.commit()
-    return user_count * 10
+    return user_count * click_count
+
+def create_specified_user(email, password, name):
+    user = User(email=email, name=name, password=password)
+    db.session.add(user)
+    db.session.commit()

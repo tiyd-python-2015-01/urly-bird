@@ -7,7 +7,7 @@
         <div class="large-8 columns">
           <fieldset>
             <legend>{{ bookmarkuser.bookmark.title }} Bookmark Trend</legend>
-            <img src="{{ url_for('fig', int_id = bookmarkuser.bookmark.id) }}" alt="{{ bookmarkuser.bookmark.title }}" height="100">
+            <img src="{{ url_for('fig', int_id = bookmarkuser.bookmark.id) }}" alt="{{ bookmarkuser.bookmark.title }}">
             <a href='/dashboard'><button type="submit" class='button tiny'>Dashboard</button></a>
           </fieldset>
         </div>
