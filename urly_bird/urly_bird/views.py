@@ -1,25 +1,19 @@
-from flask import render_template, flash, redirect, request, url_for
-from .extensions import db
-from . import app, login_manager
-from . import models
+from flask import render_template, flash, request, url_for, redirect
+from flask.ext.login import login_user, logout_user, login_required, current_user
+from .forms import LoginForm, RegistrationForm#, CreateLinkForm
+from . import app, db
 from .utils import flash_errors
-from .forms import RegistrationForm, LoginForm
-from flask.ext.login import (login_user, login_required, logout_user,
-                             current_user)
+from .models import User, Link
 
 """Add your views here."""
 
-
-@login_manager.user_loader
-def load_user(userid):
-    return models.User(userid)
 
 
 @app.route("/logout", methods=["GET"])
 @login_required
 def logout():
     logout_user()
-    return redirect("login.html")
+    return redirect("/login")
 
 
 @app.route("/")
@@ -38,8 +32,8 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = models.User.query.filter_by(email=form.email.data).first()
-        if user and models.User.check_password(password=form.password.data):
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and User.check_password(password=form.password.data):
             login_user(user)
             flash("Logged in successfully.")
             return redirect(request.args.get("next") or url_for("index"))
@@ -54,19 +48,19 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = models.User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(name=form.name.data).first()
         if user:
-            flash("E-mail address already in use.")
+            flash("A user with that user name already exists.")
         else:
-            user = models.User(name=form.name.data,
+            user = User(name=form.name.data,
                         email=form.email.data,
                         password=form.password.data)
             db.session.add(user)
             db.session.commit()
             login_user(user)
-            # db.session["username"] = user
-            flash("Registration Successful!  You have been logged in.")
+            flash("You have been registered and logged in.")
             return redirect(url_for("index"))
     else:
         flash_errors(form)
+
     return render_template("register.html", form=form)

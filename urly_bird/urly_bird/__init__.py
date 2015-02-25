@@ -23,5 +23,5 @@ migrate.init_app(app, db)
 bcrypt.init_app(app)
 login_manager.init_app(app)
 
-from . import views, models
 
+from . import views, models
