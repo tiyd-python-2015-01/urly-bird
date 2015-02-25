@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1>{{ link.title }}</h1>
+    <h3>Clicks</h3>
+    <img src="{{ url_for("link_clicks_chart", id=link.id) }}" />
+{% endblock %}

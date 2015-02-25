@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class ="small-12 columns">
+ <div class="row">
+    <h3>Link: {{ link.title }}</h3>
+    <h4>Clicks</h4>
+      {% for click in link.clicks %}
+      {{click.when}}<br>
+      {% endfor %}
+{% endblock %}

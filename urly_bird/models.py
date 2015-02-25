@@ -1,6 +1,7 @@
 from .app import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
 from hashids import Hashids
+from sqlalchemy import func
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -41,6 +42,12 @@ class Links(db.Model):
         hashids = Hashids()
         self.short = hashids.encode(id)
 
+    def clicks_by_day(self):
+        click_date = func.cast(Clicks.when, db.Date)
+        return db.session.query(click_date, func.count(Clicks.id)). \
+            group_by(click_date).filter_by(link_id=self.id). \
+            order_by(click_date).all()
+
     def __repr__(self):
         return "<Urly-bird {}>".format(self.short)
 
@@ -51,3 +58,5 @@ class Clicks(db.Model):
     when = db.Column(db.DateTime)
     IP = db.Column(db.String(255))
     agent = db.Column(db.String(255))
+
+    link = db.relationship("Links", backref="clicks")

@@ -25,6 +25,7 @@
        <ul>
         <li><a class ="submitlink" href="{{ url_for("delete_link", id=link.id) }}">   Delete Link</a></li>
         <li><a class = "submitlink" href="{{ url_for("update_link", id=link.id) }}">   Update Link</a></li>
+        <li><a class = "submitlink" href={{url_for("link_clicks", id=link.id)}}>Click Data</a></li>
        </ul>
       </div>
      </div>

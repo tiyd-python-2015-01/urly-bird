@@ -45,6 +45,7 @@ pytest>=2.6.4
 webtest
 
 hashids
+matplotlib
 
 static3==0.5.1
 

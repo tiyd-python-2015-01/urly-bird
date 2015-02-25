@@ -9,6 +9,7 @@ from .forms import LoginForm, RegistrationForm, LinkAddForm, LinkUpdateForm
 from .models import User, Links, Clicks
 from .utils import flash_errors
 
+import matplotlib.pyplot as plt
 
 def flash_errors(form, category="warning"):
     '''Flash all errors for a form.'''
@@ -90,6 +91,7 @@ def update_link(id):
                             update_url = url_for("update_link",id=update_link.id),
                             form=form)
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -112,11 +114,10 @@ def show_link(new_url):
     cl_user = current_user.id
     cl_time = datetime.utcnow()
     cl_link = link.id
-
     new_click = Clicks(user_id=cl_user,
-                       link_id = cl_link,
-                       when = cl_time,
-                       IP= request.remote_addr,
+                       link_id=cl_link,
+                       when=cl_time,
+                       IP=request.remote_addr,
                        agent=request.headers.get('User-Agent'))
     db.session.add(new_click)
     db.session.commit()
@@ -128,9 +129,6 @@ def logout():
     logout_user()
     return redirect(url_for("index"))
 
-@app.route("/test", methods=["GET", "POST"])
-def test():
-    return render_template("test.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -150,5 +148,30 @@ def register():
             return redirect(url_for("index"))
     else:
         flash_errors(form)
-
     return render_template("register.html", form=form)
+
+@app.route("/link_clicks/<int:id>")
+def link_clicks(id):
+    link = Links.query.get_or_404(id)
+    click_data = link.clicks_by_day()
+    dates = [c[0] for c in click_data]
+    num_clicks = [c[1] for c in click_data]
+    plt.plot_date(x=dates, y=num_clicks,fmt='-')
+    plt.savefig("/tmp/link_data.png")
+    return render_template("link_data.html",
+                           link=link)
+
+
+#@app.route("/book/<int:id>_clicks.png")
+#def book_clicks_chart(id):
+#    book = Book.query.get_or_404(id)
+#    click_data = book.clicks_by_day()
+#    dates = [c[0] for c in click_data]
+#    num_clicks = [c[1] for c in click_data]
+#
+#    fig = BytesIO()
+#    plt.plot_date(x=dates, y=num_clicks, fmt="-")
+#    plt.savefig(fig)
+#    plt.clf()
+#    fig.seek(0)
+#    return send_file(fig, mimetype="image/png")
