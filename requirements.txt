@@ -38,7 +38,13 @@ flask-appconfig==0.9.1
 gunicorn==19.2.1
 psycopg2==2.6
 
-
-## Testing
+# Testing
 pytest>=2.6.4
 webtest
+
+# Faker
+fake-factory
+
+#Stats
+numpy
+matplotlib

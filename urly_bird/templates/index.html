@@ -6,11 +6,16 @@
         <div class="row">
             <div class="small-1 columns"></div>
             <div class="small-8 columns">
-                <div>
-                    <h5>{{ url.name }}</h5>
-                </div>
-                <div>
-                    <a href="{{ domain }}b/{{ url.short_address }}">{{ domain }}b/{{ url.short_address }}</a>
+                <div class="panel">
+                    <div>
+                        <h5>{{ url.name }}</h5>
+                    </div>
+                    <div>
+                        <a href="{{ domain }}b/{{ url.short_address }}">{{ domain }}b/{{ url.short_address }}</a>
+                    </div>
+                    <div>
+                        <a href="{{ domain }}s/{{ url.short_address }}" class="button">Statistics</a>
+                    </div>
                 </div>
             </div>
             <div class="small-3 columns"></div>

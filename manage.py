@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 import os
 
-from flask.ext.script import Manager, Shell, Server
+
+from flask.ext.script import Manager, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 
 from urly_bird.app import app, db
+import seeds
+
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
@@ -33,6 +36,18 @@ def test():
     exit_code = pytest.main([TEST_PATH, '--verbose'])
     return exit_code
 
+@manager.command
+def seed_all():
+    seeds.seed_all(db)
+@manager.command
+def seed_users():
+    seeds.seed_users(db)
+@manager.command
+def seed_urls():
+    seeds.seed_urls(db)
+@manager.command
+def seed_timestamps():
+    seeds.seed_timestamps(db)
 
 if __name__ == '__main__':
     manager.run()

@@ -1,14 +1,15 @@
 import re
 import random
+from io import BytesIO
 from datetime import datetime
-from flask import render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for, send_file
 from flask.ext.login import login_user, login_required, current_user, logout_user
 from hashids import Hashids
 from .app import app, db
 from .forms import LoginForm, RegistrationForm, URLForm
 from .models import URL, User, Timestamp
 from .utils import flash_errors
-
+from .stats import create_plot
 
 @app.route("/")
 def index():
@@ -45,8 +46,7 @@ def user():
             while len(URL.query.filter_by(short_address=hashed_id).all()) > 0:
                 salt = "seasalt{}".format(random.randint())
                 hashed_id = Hashids(salt=salt, min_length=4).encode(hashed_url.id)
-            short_address = hashed_id
-            hashed_url.short_address = short_address
+            hashed_url.short_address = hashed_id
             db.session.commit()
             flash("URL added!")
             return redirect(url_for("index"))
@@ -127,6 +127,14 @@ def edit(shorty):
             flash("Saved!")
     # Anything that fails the above if statements falls through to return index.html
     return redirect(url_for("index"))
+
+@app.route('/s/<shorty>')
+def stats(shorty):
+    url = URL.query.filter_by(short_address=shorty).first_or_404()
+    fig = create_plot(url.id)
+    return send_file(fig, mimetype="image/png")
+
+
 
 @app.route('/d/<shorty>')
 def delete(shorty):

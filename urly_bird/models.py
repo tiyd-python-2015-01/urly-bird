@@ -1,7 +1,8 @@
 from .app import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
+from sqlalchemy import func
+from collections import Counter
 
-"""Add your models here."""
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -47,3 +48,11 @@ class Timestamp(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False)
     ip_address = db.Column(db.String(60))
     user_agent = db.Column(db.String(255))
+
+    def clicks_per_day(self):
+        dates = []
+        for stamp in db.session.query(Timestamp).filter_by(url_id=self.url_id).all():
+            date = stamp.timestamp.strftime('%Y-%m-%d')
+            dates.append(date)
+        date_counts = Counter(dates)
+        return date_counts
