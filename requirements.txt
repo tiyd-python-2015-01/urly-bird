@@ -9,3 +9,7 @@ flask-appconfig==0.9.1
 ## Heroku
 gunicorn==19.2.1
 psycopg2==2.6
+
+## Charting
+matplotlib
+seaborn

@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for, send_file
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
 from . import app, db
@@ -8,6 +8,9 @@ from .models import User, Bookmark, Click
 from hashids import Hashids
 import random
 from datetime import datetime
+from io import BytesIO
+import matplotlib.pyplot as plt
+
 
 
 def flash_errors(form, category="warning"):
@@ -99,8 +102,27 @@ def register():
 def go_to_bookmark(shorturl):
     a_link = Bookmark.query.filter_by(shorturl=shorturl).first()
     click = Click(bookmark = a_link,
-                  click_date = datetime.utcnow(),
+                  click_date = datetime.now(),
                   user = current_user)
     db.session.add(click)
     db.session.commit()
     return redirect(a_link.longurl, code = 301)
+
+@app.route("/bookmark/<int:id>/data")
+def bookmark_data(id):
+    bookmark =  Bookmark.query.get_or_404(id)
+    return render_template("bookmark_data.html", bookmark=bookmark)
+
+@app.route("/bookmark/<int:id>_clicks.png")
+def bookmark_clicks_chart(id):
+    bookmark = Bookmark.query.get_or_404(id)
+    click_data = bookmark.clicks_by_day()
+    dates = [c[0] for c in click_data]
+    num_clicks = [c[1] for c in click_data]
+
+    fig = BytesIO()
+    plt.plot_date(x=dates, y=num_clicks, fmt="-")
+    plt.savefig(fig)
+    plt.clf()
+    fig.seek(0)
+    return send_file(fig, mimetype="image/png")

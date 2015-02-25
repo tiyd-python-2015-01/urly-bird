@@ -20,7 +20,9 @@
   {{ bookmark.summary }}
   {% endif %}
 </div>
-
+<div>
+  <a href="{{ url_for('bookmark_data', id=bookmark.id)}}">Click Data</a>
+</div>
 <div>
   <br>
 </div>
