@@ -126,3 +126,8 @@ def bookmark_clicks_chart(id):
     plt.clf()
     fig.seek(0)
     return send_file(fig, mimetype="image/png")
+
+@app.route("/user/<int:id>/data")
+def user_data(id):
+    user =  User.query.get_or_404(id)
+    return render_template("user_data.html", user=user)

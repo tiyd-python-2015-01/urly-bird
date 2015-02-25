@@ -5,6 +5,12 @@
   <h2>{{ bookmark.shorturl }}</h2>
 
   <h3>Clicks</h3>
-  {{ bookmark.clicks }}
+  {% for click in bookmark.clicks %}
+
+  {{ click.click_date }}
+
+  {% endfor %}
+
+
   <img src="{{ url_for('bookmark_clicks_chart', id=bookmark.id) }}"
 {% endblock %}

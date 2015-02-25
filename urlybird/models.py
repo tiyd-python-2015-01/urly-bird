@@ -26,6 +26,12 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.encrypted_password, password)
 
+    def clicks_by_day(self):
+        click_date = func.cast(Click.click_date, db.Date)
+        return db.session.query(click_date, func.count(Click.id)). \
+            group_by(click_date).filter_by(bookmark_id=self.id). \
+            order_by(click_date).all()
+
     def __repr__(self):
         return "<User {}>".format(self.email)
 
