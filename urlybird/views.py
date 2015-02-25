@@ -150,6 +150,12 @@ def edit_bookmark(int_id):
                                form=form,
                                edited_object=edited_object)
 
+@app.route('/dashboard/click_stats', methods=['GET'])
+@login_required
+def click_stats():
+    bookmarks = BookmarkUser.query.filter_by(user_id=current_user.id).all()
+    return render_template("click_table.html", bookmarks=bookmarks)
+
 @app.route('/dashboard/c/<int:int_id>', methods=['POST', 'GET'])
 @login_required
 def chart(int_id):

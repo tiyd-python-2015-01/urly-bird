@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class='row'>
+  <div class="large-8 columns">
+    <h1>Bookmark Trend</h1>
+    <fieldset>
+    <legend>30 Day Raw Data</legend>
+      <table>
+        <thead>
+          <tr>
+            <th>Bookmark</th>
+            <th>URL</th>
+            <th>Click Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bookmark in bookmarks %}
+          <tr>
+            <td>{{ bookmark.bookmark.title }}</td>
+            <td>{{ bookmark.bookmark.url }}</td>
+            <td>{{ bookmark.clicks }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </fieldset>
+  </div>
+</div>
+
+{% endblock %}
