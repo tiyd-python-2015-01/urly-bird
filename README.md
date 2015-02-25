@@ -102,6 +102,15 @@ of clicks over the last 30 days.
 2. Add an option to the individual and group stats pages where you can see stats for the last week, last 30 days, last year, or all time.
 
 
+## Day 5
+
+Finish up everything from days 1-4 first.
+
+Then refactor your application to use [Flask blueprints](http://flask.pocoo.org/docs/0.10/blueprints/).
+
+Lastly, add an API to your application allowing users to view and create bookmarks with JSON.
+
+
 ## Additional Resources
 
 * [Flask Skeleton](https://github.com/tiyd-python-2015-01/cookiecutter-flask). Use this at your own risk. It explains how to use it in the README.
