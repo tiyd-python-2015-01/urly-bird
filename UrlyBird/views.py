@@ -10,7 +10,9 @@ from datetime import datetime
 from sqlalchemy import desc
 from io import BytesIO
 import matplotlib.pyplot as plt
-
+import plotly.plotly as py
+from plotly.graph_objs import *
+py.sign_in("dknewell1", "x0oz9ikryp")
 
 hashids = Hashids(salt = "a nice salt")
 
@@ -131,22 +133,19 @@ def edit_link(id):
 
 @app.route("/link_data/<int:id>", methods=["GET", "POST"])
 def show_data(id):
-    clicks = Click.query.filter_by(bookmark_id = id).all()
-    bookmark = Bookmark.query.filter_by(id = id).first()
-    return render_template("show_data.html", clicks = clicks, bookmark = bookmark)
-
-
-@app.route("/link_data/<int:id>_clicks.png")
-def book_clicks_chart(id):
-
+    # clicks = Click.query.filter_by(bookmark_id = id).all()
+    # bookmark = Bookmark.query.filter_by(id = id).first()
+    # click_data = bookmark.clicks_by_day()
+    # return render_template("show_data.html", clicks = clicks, bookmark = bookmark,
+    #                         click_data)
     bookmark = Bookmark.query.filter_by(id = id).first()
     click_data = bookmark.clicks_by_day()
     dates = [c[0] for c in click_data]
     num_clicks = [c[1] for c in click_data]
-
-    fig = BytesIO()
-    plt.plot(x=dates, y=num_clicks, fmt="-")
-    plt.savefig(fig)
-    plt.clf()
-    fig.seek(0)
-    return send_file(fig, mimetype="image/png")
+    date_labels = [d.strftime("%b %d") for d in dates]
+    click_chart = Scatter(
+    x=date_labels,
+    y=num_clicks)
+    data = Data([click_chart])
+    chart_url = py.plot(data, auto_open=False)
+    return render_template('show_data.html', chart_url=chart_url, bookmark = bookmark)

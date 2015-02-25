@@ -3,7 +3,6 @@
 {% block body %}
 <br></br>
 <h1>Data for {{bookmark.title}} link</h1>
-{{clicks}}
 {{click_data}}
-<img src="{{ url_for("book_clicks_chart", id = bookmark.id) }}" />
+<iframe width="550" height="550" frameborder="0" seamless="seamless" scrolling="no" src="{{ chart_url }}"></iframe>
 {% endblock %}

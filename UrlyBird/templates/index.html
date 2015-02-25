@@ -7,7 +7,6 @@
     <div class="links">
       <h2>{{ link.title }} </h2> &nbsp <a href = {{url_for("go_to_bookmark",
                       shortlink = link.shortlink)}}>{{link.shortlink}}</a>
-                      &nbsp clicks today &nbsp{{link.click_count}}
                       </br></br>
     </div>
 {% endfor %}
