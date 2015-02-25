@@ -3,5 +3,6 @@
     {%  for click in clicks %}
     <li>{{ click.ip_address }}</li>
     <li>{{ click.click_agent }}</li>
+        <li>{{ click.time_clicked }}</li>
     {% endfor %}
 {% endblock %}

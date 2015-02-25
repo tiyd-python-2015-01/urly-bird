@@ -2,7 +2,7 @@ from flask import Flask
 from hashids import Hashids
 from .extensions import db, migrate, debug_toolbar, bcrypt, login_manager, config
 
-SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/urly_bird.db"
+SQLALCHEMY_DATABASE_URI = "postgres://localhost/urlybird"
 DEBUG = True
 SECRET_KEY = 'development-key'
 

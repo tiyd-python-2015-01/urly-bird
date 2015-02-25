@@ -5,6 +5,10 @@ from . import app, db
 from .models import User, Link, Custom, Click
 from datetime import datetime
 from sqlalchemy import desc
+import plotly.plotly as py
+from plotly.graph_objs import*
+
+py.sign_in('bodandly', 'plmh01cnfk')
 
 
 def flash_errors(form, category="warning"):
@@ -68,7 +72,7 @@ def redirect_link(small_link):
     if user.is_active():
         click = Click(ip_address=request.remote_addr,
                       click_agent=request.headers.get('User-Agent'),
-                      time_clicked=datetime.utcnow(),
+                      time_clicked=datetime.now(),
                       link_id=link.id,
                       user_id=link_owner.id,
                       clicker_id=user.id)
@@ -79,7 +83,7 @@ def redirect_link(small_link):
     elif user.is_anonymous:
         click = Click(ip_address=request.remote_addr,
                       click_agent=request.headers.get('User-Agent'),
-                      time_clicked=datetime.utcnow(),
+                      time_clicked=datetime.now(),
                       link_id=link.id,
                       user_id=link_owner.id,
                       clicker_id=0)
@@ -177,3 +181,17 @@ def show_stats():
     user = current_user
     clicks = Click.query.filter(Click.user_id == user.id).all()
     return render_template('show_stats.html', clicks=clicks)
+
+@app.route('/show_chart/<small_link>')
+def make_clicks_chart(small_link):
+    chart_link = Link.query.filter(Link.short_link == small_link).first()
+    click_data = chart_link.clicks_by_day()
+    dates = [c[0] for c in click_data]
+    num_clicks = [c[1] for c in click_data]
+    date_labels = [d.strftime("%b %d") for d in dates]
+    click_chart = Scatter(
+    x=date_labels,
+    y=num_clicks)
+    data = Data([click_chart])
+    chart_url = py.plot(data)
+    return render_template('chart_data.html', chart_url=chart_url)
