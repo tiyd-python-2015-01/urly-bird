@@ -8,7 +8,6 @@ from ..models import Bookmark, User, BookmarkUser, Click
 from ..extensions import db
 from datetime import datetime
 from sqlalchemy import desc, and_
-import random
 from .bookmarks import flash_errors
 
 

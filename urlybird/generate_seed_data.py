@@ -1,5 +1,4 @@
 from faker import Factory
-from .views.bookmarks import shorten_url
 from .models import Bookmark, User, BookmarkUser, Click
 import random
 from urlybird.app import db
@@ -27,8 +26,7 @@ def create_bookmarks(num=30):
         url = fake.url()
         bookmark = Bookmark(title=title,
                             description=description,
-                            url=url,
-                            short_url=shorten_url(url))
+                            url=url)
         db.session.add(bookmark)
     db.session.commit()
 

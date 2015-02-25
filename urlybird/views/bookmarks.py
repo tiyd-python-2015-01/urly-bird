@@ -8,7 +8,6 @@ from ..extensions import db
 import matplotlib.pyplot as plt
 from datetime import datetime
 from sqlalchemy import desc, and_
-import random
 from io import BytesIO
 
 
@@ -27,22 +26,18 @@ def add_bookmark():
     form = AddBookmark()
     if form.validate_on_submit():
         url_list = BookmarkUser.query.filter_by(user_id=current_user.id).all()
-
-        url = [item.id for item in url_list if item.item_id==form.url.data]
+        url = [item for item in url_list if item.bookmark.url==form.url.data]
 
         if url:
             flash("You've already shortened that URL!")
         else:
-            shortened_url = shorten_url(url)
             bookmark = Bookmark(title=form.title.data,
                                 url=form.url.data,
-                                short_url=shortened_url,
                                 description=form.description.data)
             db.session.add(bookmark)
             db.session.commit()
-            bookmark_id = Bookmark.query.filter_by(short_url=shortened_url).first()
             user_bookmark = BookmarkUser(user_id=current_user.id,
-                                          item_id=bookmark_id.id)
+                                          item_id=bookmark.id)
             db.session.add(user_bookmark)
             db.session.commit()
             flash("You successfully added a link")
@@ -53,13 +48,14 @@ def add_bookmark():
 
 @bookmarks.route('/b/<short_url>')
 def url_redirect(short_url):
+    print(short_url)
     correct_url = Bookmark.query.filter_by(short_url=short_url).first()
     if correct_url:
         bookmark_user = BookmarkUser.query.filter_by(item_id=correct_url.id).first()
         add_click(correct_url.id)
         return redirect(correct_url.url)
     else:
-        return redirect(url_for('users./'))
+        return redirect(url_for('users.index'))
 
 @bookmarks.route('/dashboard/r/<int:int_id>', methods=["GET"])
 @login_required
@@ -111,15 +107,6 @@ def fig(int_id):
     num_clicks = [c[1] for c in click_data]
     return create_chart(dates, num_clicks)
 
-
-def shorten_url(a_url):
-    alphabet = list('abcdefghijklmnopqrstuvwxyz1234567890')
-    shortened_url = ''.join(random.sample(alphabet, 6))
-    existing_url = Bookmark.query.filter_by(short_url=shortened_url).first()
-    if shortened_url == existing_url:
-        return shorten_url(a_url)
-    else:
-        return shortened_url
 
 def add_click(bookmark_id):
     print(request.headers.get('User-Agent'))

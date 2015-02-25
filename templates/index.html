@@ -18,7 +18,7 @@
                 <li>Description: {{ bookmark.bookmark.description }}</li>
                 {% endif %}
                 <li>Long URL: <a href="{{ bookmark.bookmark.url }}">{{ bookmark.bookmark.url }}</a></li>
-                <li>Short URL: <a href="/b/{{ bookmark.bookmark.short_url }}">/b/{{ bookmark.bookmark.short_url }}</a></li>
+                <li>Short URL: <a href="/b/{{ bookmark.bookmark.short_url }}">{{ bookmark.bookmark.short_url }}</a></li>
                 <li>Click Count: {{ bookmark.clicks }}</li>
               </ul>
             </div>

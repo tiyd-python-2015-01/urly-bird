@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask.ext.wtf import CsrfProtect
 
 from .extensions import (
     db,
@@ -17,6 +18,7 @@ from .views.api import api
 SQLALCHEMY_DATABASE_URI = "postgres://localhost/urly_bird"
 DEBUG = True
 SECRET_KEY = 'development-key'
+DEBUG_TB_INTERCEPT_REDIRECTS = False
 
 def create_app():
     app = Flask('urly_bird')

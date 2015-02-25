@@ -2,6 +2,7 @@ from .app import db
 from .extensions import bcrypt, login_manager
 from flask.ext.login import UserMixin
 from sqlalchemy import func
+import random
 
 
 @login_manager.user_loader
@@ -13,8 +14,26 @@ class Bookmark(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255), nullable=False, unique=False)
     url = db.Column(db.String(255), nullable=False, unique=False)
-    short_url = db.Column(db.String(10), nullable=False, unique=True)
     description = db.Column(db.String(255), nullable=True, unique=False)
+
+
+    def shorten_url(self):
+        alphabet = list('abcdefghijklmnopqrstuvwxyz1234567890')
+        shortened_url = ''.join(random.sample(alphabet, 6))
+        existing_url = Bookmark.query.filter_by(short_url=shortened_url).first()
+        if existing_url:
+            return shorten_url(self)
+        else:
+            return shortened_url
+
+    def to_dict(self):
+        return {"id": self.id,
+                "title": self.title,
+                "url": self.url,
+                "short_url": self.short_url,
+                "description": self.description}
+
+    short_url = db.Column(db.String(255), unique=True, default=shorten_url)
 
     def __repr__(self):
         return "<URL {}>".format(self.url)
@@ -62,6 +81,13 @@ class BookmarkUser(db.Model):
         return db.session.query(click_date, func.count(Click.id)). \
             group_by(click_date).filter_by(item_id=self.bookmark.id). \
             order_by(click_date).all()
+
+    def to_dict(self):
+        return {"id": self.bookmark.id,
+                "title": self.bookmark.title,
+                "url": self.bookmark.url,
+                "short_url": self.bookmark.short_url,
+                "description": self.bookmark.description}
 
     def __repr__(self):
         return "<User {} | Item {}>".format(self.user_id, self.item_id)
