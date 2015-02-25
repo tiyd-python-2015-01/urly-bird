@@ -10,7 +10,7 @@ from .extensions import (
 )
 
 SQLALCHEMY_DATABASE_URI = "postgres://localhost/urly_bird"
-DEBUG = False
+DEBUG = True
 SECRET_KEY = 'development-key'
 
 app = Flask('urly_bird')

@@ -41,3 +41,6 @@ Flask-Script
 
 # Seed Data
 fake-factory
+
+# Plot data
+matplotlib
