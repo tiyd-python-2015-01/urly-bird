@@ -8,7 +8,7 @@ import datetime
 def seed_all(db):
     seed_users(db)
     seed_urls(db)
-
+    seed_timestamps(db)
 
 def seed_users(db):
     users_added = 0
