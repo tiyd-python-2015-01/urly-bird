@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for, send_file
 from flask.ext.login import login_user, login_required, logout_user, current_user
 from urllib.request import urlopen
 from datetime import datetime
@@ -151,8 +151,28 @@ def get_clicks():
 @app.route("/link/<int:id>/graph")
 def click_graph():
     link = Link.query.get_or_404(id)
-    click_data
+    click_data = link.clicks_by_day
+    dates = [c[0] for c in click_data]
+    num_clicks = [c[1] for c in click_data]
     plt.plot_date()
+
+@app.route("/link/<int:id>/data")
+def click_data(id):
+    link = Link.query.get_or_404(id)
+    return render_template("data.html", link=link)
+
+@app.route("/link/<int:id>_clicks.png")
+def link_clicks_chart(id):
+    link = Link.query.get_or_404(id)
+    click_data = link.clicks_by_day
+    dates = [c[0] for c in click_data]
+    num_clicks = [c[1] for c in click_data]
+    fig = StringIO()
+    plt.plot_date(x=dates, y=click_data, fmt="-")
+    plt.savefig(fig)
+    fig.seek(0)
+    return send_file(fig, mimetype="image/png")
+
 
 
 
