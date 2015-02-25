@@ -3,6 +3,8 @@ from flask.ext.login import login_user, login_required, logout_user, current_use
 from urllib.request import urlopen
 from datetime import datetime
 from sqlalchemy import desc
+import matplotlib.pyplot as plt
+from io import StringIO
 
 
 from . import app, db
@@ -24,6 +26,7 @@ def index():
 @app.route("/your_links")
 def your_links():
     links = current_user.links.order_by(desc(Link.date)).all()
+
     return render_template('showAll.html', links=links)
 
 
@@ -126,11 +129,30 @@ def edit_link(id):
                            short_link=link.short_link)
 
 @app.route("/delete/<int:id>", methods=['GET', 'POST'])
+@login_required
 def delete(id):
     link = Link.query.get(id)
     db.session.delete(link)
     db.session.commit()
     flash("Link has been deleted")
     return redirect(url_for("your_links"))
+
+@app.route("/clicks")
+@login_required
+def get_clicks():
+    user = current_user.id
+    link_list = []
+    clicks = Click.query.filter(Click.user_id == user).all()
+    for click in clicks:
+        link = Link.query.filter(Link.id == click.id).first()
+        link_list.append(link)
+    return render_template('clicks.html', clicks=clicks)
+
+@app.route("/link/<int:id>/graph")
+def click_graph():
+    link = Link.query.get_or_404(id)
+    click_data
+    plt.plot_date()
+
 
 

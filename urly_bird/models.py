@@ -3,6 +3,7 @@ from flask.ext.login import UserMixin
 from hashids import Hashids
 from flask import redirect
 from . import app
+from sqlalchemy import func
 
 
 @login_manager.user_loader
@@ -47,6 +48,12 @@ class Link(db.Model):
        hash = salt.encode(self.id)
        self.hash = hash
        self.short_link = hash
+
+    @property
+    def clicks_by_day(self):
+        click_date = func.cast(Click.date, db.Date)
+        db.session.query(click_date, func.count(Click.id)).group_by(click_date).order_by(click_date).all()
+
 
 class Click(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

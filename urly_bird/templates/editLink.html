@@ -3,11 +3,18 @@
 {% block body %}
 
     <form method="POST" action={{ url_for('shorten') }}>
-        {{ form.original_link.label }}: {{ form.original_link }}
-        {{ form.description.label }}: {{ form.description }}
-        <input type="submit" value="edit" />
+    <div class="row">
+        <div class="small-10 columns">
+        {{ form.original_link.label }} {{ form.original_link }}
+        </div>
+    </div>
+    <div class="row">
+      <div class="small-10 columns">
+        {{ form.description.label }} {{ form.description}}
+        </div>
+    </div>
+        <input class='round button' type="submit" value="edit" />
     </form>
     <p>Your hash id is: {{ short_link }}</p>
-    <p>Go to http://localhost:5000/{{ short_link }}</p>
 
 {% endblock %}

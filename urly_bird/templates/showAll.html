@@ -8,6 +8,7 @@
     <a href={{ link.original_link }}>{{ link.original_link }}</a>
     <p><a href="http://localhost:5000/{{ link.short_link }}">http://localhost:5000/{{ link.short_link }}</a></p>
     <p>{{ link.description }}</p>
+    <p>click counter: {{ link.clicks.count() }}</p>
     <p></p><a href="/link/{{ link.id }}"><input type="button" value="edit"></a>
     <a href="/delete/{{ link.id }}" }}><input type="button" value="delete"></a></p>
   </div>
