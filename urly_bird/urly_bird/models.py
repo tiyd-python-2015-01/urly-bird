@@ -1,4 +1,4 @@
-from .app import db, bcrypt, login_manager
+from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
 
 
