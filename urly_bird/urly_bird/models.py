@@ -1,5 +1,5 @@
 from . import db, bcrypt, login_manager, hashid
-from flask.ext.login import UserMixin
+import flask.ext.login as fel
 from datetime import datetime
 import random
 
@@ -8,11 +8,12 @@ def load_user(id):
     return User.query.get(id)
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, fel.UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     encrypted_password = db.Column(db.String(60))
+    links = db.relationship('Link', backref='user', lazy='dynamic')
 
     def get_password(self):
         return getattr(self, "_password", None)
@@ -21,14 +22,14 @@ class User(db.Model, UserMixin):
         self._password = password
         self.encrypted_password = bcrypt.generate_password_hash(password)
 
-    password = property(None, set_password)
+    password = property(get_password, set_password)
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.encrypted_password, password)
 
-    @property
-    def links(self):
-        return [link.shortlink for link in self.link]
+    # @property
+    # def links(self):
+    #     return [link.shortlink for link in self.link]
 
     def __repr__(self):
         return "<User {}>".format(self.email)
