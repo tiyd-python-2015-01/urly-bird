@@ -3,7 +3,7 @@
 {% block body %}
 
     <div class='row'>
-      <form  method='GET' action="{{ url_for("dashboard") }}">
+      <form  method='GET' action="{{ url_for("users.dashboard") }}">
         {{ form.hidden_tag() }}
         <div class="large-8 columns">
         <fieldset>
@@ -49,7 +49,7 @@
 
 
     <div class='row'>
-      <form  method='POST' id="add_bookmark" action="{{ url_for("add_bookmark") }}">
+      <form  method='POST' id="add_bookmark" action="{{ url_for("bookmarks.add_bookmark") }}">
         {{ form.hidden_tag() }}
         <div class="large-8 columns">
           <fieldset>

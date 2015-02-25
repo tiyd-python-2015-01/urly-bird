@@ -15,7 +15,7 @@
                   </div>
                   {% endfor %}
               {% endif %}
-            <form  method='POST' id="edit_bookmark" action="{{ url_for("edit_bookmark", int_id=edited_object.id ) }}">
+            <form  method='POST' id="edit_bookmark" action="{{ url_for("bookmarks.edit_bookmark", int_id=edited_object.id ) }}">
                 {{ form.hidden_tag() }}
             <label>{{ form.title.label }}
               <input name='title' type="text" value="{{ edited_object.bookmark.title }}" />

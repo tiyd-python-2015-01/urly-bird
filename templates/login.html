@@ -10,7 +10,7 @@
 {% endif %}
 
 <div class='row'>
-  <form method="POST" action="{{ url_for("login") }}">
+  <form method="POST" action="{{ url_for("users.login") }}">
     {{ form.hidden_tag() }}
     <div class="large-8 columns">
       <fieldset>

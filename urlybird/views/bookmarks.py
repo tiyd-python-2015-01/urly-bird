@@ -1,17 +1,18 @@
-from flask import render_template, flash, redirect, request
+from flask import render_template, flash, redirect, request, Blueprint
 from flask import url_for, request, send_file
-from flask.ext.login import login_user, logout_user
 from flask.ext.login import login_required, current_user
 
-from .app import app, db
-from .forms import LoginForm, RegistrationForm, AddBookmark
-from .models import Bookmark, User, BookmarkUser, Click
+from ..forms import LoginForm, RegistrationForm, AddBookmark
+from ..models import Bookmark, User, BookmarkUser, Click
+from ..extensions import db
 import matplotlib.pyplot as plt
 from datetime import datetime
 from sqlalchemy import desc, and_
 import random
 from io import BytesIO
 
+
+bookmarks = Blueprint('bookmarks', __name__)
 
 def flash_errors(form, category="warning"):
     '''Flash all errors for a form.'''
@@ -20,67 +21,7 @@ def flash_errors(form, category="warning"):
             flash("{0} - {1}".format(getattr(form,
                   field).label.text, error), category)
 
-
-@app.route("/", defaults={'page': 1})
-@app.route('/<int:page>')
-def index(page):
-    top_bookmarks = BookmarkUser.query.order_by(desc(BookmarkUser.id))[:10]
-    return render_template("index.html", bookmarks=top_bookmarks)
-
-@app.route("/dashboard", methods=['GET', 'POST'])
-@login_required
-def dashboard():
-    form = AddBookmark()
-    user = current_user.name.capitalize()
-    bookmarks = BookmarkUser.query.filter_by(user_id=current_user.id).all()
-    return render_template("dashboard.html",
-                           bookmarks=bookmarks,
-                           form=form,
-                           user=user)
-
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            return redirect(url_for("dashboard"))
-        else:
-            flash("That email or password is not correct.")
-
-    flash_errors(form)
-    return render_template("login.html", form=form)
-
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            flash("A user with that email address already exists.")
-        else:
-            user = User(name=form.name.data,
-                        email=form.email.data,
-                        password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            flash("You have been registered and logged in.")
-            return redirect(url_for("dashboard"))
-    else:
-        flash_errors(form)
-
-    return render_template("register.html", form=form)
-
-@app.route('/dashboard/add_bookmark', methods=['POST'])
+@bookmarks.route('/dashboard/add_bookmark', methods=['POST'])
 @login_required
 def add_bookmark():
     form = AddBookmark()
@@ -105,13 +46,12 @@ def add_bookmark():
             db.session.add(user_bookmark)
             db.session.commit()
             flash("You successfully added a link")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('users.dashboard'))
     else:
         flash_errors(form)
+    return redirect(url_for('users.dashboard'))
 
-    return redirect(url_for('dashboard'))
-
-@app.route('/b/<short_url>')
+@bookmarks.route('/b/<short_url>')
 def url_redirect(short_url):
     correct_url = Bookmark.query.filter_by(short_url=short_url).first()
     if correct_url:
@@ -119,18 +59,18 @@ def url_redirect(short_url):
         add_click(correct_url.id)
         return redirect(correct_url.url)
     else:
-        return redirect(url_for('/'))
+        return redirect(url_for('users./'))
 
-@app.route('/dashboard/r/<int:int_id>', methods=["GET"])
+@bookmarks.route('/dashboard/r/<int:int_id>', methods=["GET"])
 @login_required
 def delete_bookmark(int_id):
     deleted_object = BookmarkUser.query.filter_by(id=int_id).first()
     db.session.delete(deleted_object)
     db.session.commit()
     flash("You successfully removed that link")
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('users.dashboard'))
 
-@app.route('/dashboard/e/<int:int_id>', methods=['POST', 'GET'])
+@bookmarks.route('/dashboard/e/<int:int_id>', methods=['POST', 'GET'])
 @login_required
 def edit_bookmark(int_id):
     form = AddBookmark()
@@ -143,26 +83,26 @@ def edit_bookmark(int_id):
         edited_object.bookmark.description = form.description.data
         db.session.commit()
         flash("You successfully updated your bookmark")
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('users.dashboard'))
     else:
         flash_errors(form)
         return render_template("edit.html",
                                form=form,
                                edited_object=edited_object)
 
-@app.route('/dashboard/click_stats', methods=['GET'])
+@bookmarks.route('/dashboard/click_stats', methods=['GET'])
 @login_required
 def click_stats():
     bookmarks = BookmarkUser.query.filter_by(user_id=current_user.id).all()
     return render_template("click_table.html", bookmarks=bookmarks)
 
-@app.route('/dashboard/c/<int:int_id>', methods=['POST', 'GET'])
+@bookmarks.route('/dashboard/c/<int:int_id>', methods=['POST', 'GET'])
 @login_required
 def chart(int_id):
     bookmarkuser = BookmarkUser.query.get_or_404(int_id)
     return render_template("chart.html", bookmarkuser=bookmarkuser)
 
-@app.route('/fig/<int:int_id>')
+@bookmarks.route('/fig/<int:int_id>')
 @login_required
 def fig(int_id):
     bookmarkuser = BookmarkUser.query.get_or_404(int_id)

@@ -1,5 +1,5 @@
 from faker import Factory
-from .views import shorten_url
+from .views.bookmarks import shorten_url
 from .models import Bookmark, User, BookmarkUser, Click
 import random
 from urlybird.app import db
