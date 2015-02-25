@@ -7,7 +7,7 @@
         <div class="small-1 columns"></div>
         <div class="small-8 columns">
           <table>
-            <form method="POST" action='{{ url_for("login")}}'>
+            <form method="POST" action='{{ url_for("users.login")}}'>
               {{ form.hidden_tag() }}
               <div>
                 {{ form.email.label }} {{ form.email(size=20) }}

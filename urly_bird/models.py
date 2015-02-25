@@ -1,6 +1,6 @@
-from .app import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
-from sqlalchemy import func
+
+from . import db, bcrypt, login_manager
 from collections import Counter
 
 
@@ -40,7 +40,8 @@ class URL(db.Model):
     long_address = db.Column(db.String(255))
     short_address = db.Column(db.String(255))
     owner = db.Column(db.Integer)  #User ID of the owner
-    clicks = db.Column(db.Integer) #Number of Clicks for Link Tracking
+    clicks = db.Column(db.Integer) #Obsolete
+
 
 class Timestamp(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

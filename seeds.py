@@ -2,7 +2,7 @@ import csv
 from hashids import Hashids
 from faker import Factory
 from random import randint
-from urly_bird.app import db, models
+from urly_bird import models
 import datetime
 
 def seed_all(db):
@@ -31,6 +31,7 @@ def seed_users(db):
 def seed_urls(db):
     urls_added = 0
     urls_updated = 0
+    print("open urls")
     with open('seed_urls.csv') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -48,7 +49,8 @@ def seed_urls(db):
             hashed_id = Hashids(salt=salt, min_length=4).encode(hashed_url.id)
             hashed_url.short_address = hashed_id
         db.session.commit()
-
+        print("Session commited")
+    print("Quit")
 
 def seed_timestamps(db):
     #  create list of timestamps and ip_addresses and assign them to url_ids

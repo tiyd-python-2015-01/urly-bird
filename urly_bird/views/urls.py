@@ -1,27 +1,28 @@
-import re
-import random
-from io import BytesIO
 from datetime import datetime
-from flask import render_template, flash, redirect, request, url_for, send_file
-from flask.ext.login import login_user, login_required, current_user, logout_user
+import random
+from flask import Blueprint, request, render_template, redirect, flash, url_for, send_file
+from flask.ext.login import current_user, login_required
 from hashids import Hashids
-from .app import app, db
-from .forms import LoginForm, RegistrationForm, URLForm
-from .models import URL, User, Timestamp
-from .utils import flash_errors
-from .stats import create_plot
 
-@app.route("/")
+from urly_bird.forms import URLForm
+from urly_bird.models import URL, Timestamp
+
+from ..extensions import db
+from urly_bird.stats import create_plot
+
+urls = Blueprint("urls", __name__)
+
+
+@urls.route("/")
 def index():
     if not current_user.is_authenticated():
         urls = URL.query.all()
         return render_template("index.html", urls=reversed(urls[-5::]), domain=request.url_root)
-    return redirect(url_for("user"))
+    return redirect(url_for("sites"))
 
-
-@app.route("/user", methods=['GET', 'POST'])
+@urls.route("/sites", methods=['GET', 'POST'])
 @login_required
-def user():
+def sites():
     url_list = URL.query.filter_by(owner=current_user.id)
     form = URLForm()
     #edit_address(form.address)
@@ -55,51 +56,7 @@ def user():
     return render_template("user.html", form=form, urls=url_list, domain=request.url_root)
 
 
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            flash("A user with that email address already exists.")
-        else:
-            user = User(name=form.name.data,
-                        email=form.email.data,
-                        password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            flash("You have been registered and logged in.")
-            return redirect(url_for("index"))
-    else:
-        flash_errors(form)
-    return render_template("register.html", form=form)
-
-
-@app.route("/logout", methods=['GET', 'POST'])
-@login_required
-def logout():
-    print("Logged Out")
-    logout_user()
-    return redirect("/")
-
-
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            flash("Logged in successfully.")
-            return redirect(request.args.get("next") or url_for("index"))
-        else:
-            flash("Email or password is incorrect")
-    flash_errors(form)
-    return render_template("login.html", form=form)
-
-
-@app.route('/b/<shorty>')
+@urls.route('/b/<shorty>')
 def route(shorty):
     url = URL.query.filter_by(short_address=shorty).first()
     timestamp = Timestamp(url_id=url.id,
@@ -107,11 +64,10 @@ def route(shorty):
                           ip_address=request.remote_addr,
                           user_agent=request.headers.get('User-Agent'))
     db.session.add(timestamp)
-    url.clicks += 1
     db.session.commit()
     return redirect(url.long_address)
 
-@app.route('/e/<shorty>', methods=['GET','POST'])
+@urls.route('/e/<shorty>', methods=['GET','POST'])
 @login_required
 def edit(shorty):
     url = URL.query.filter_by(short_address=shorty).first()
@@ -128,7 +84,7 @@ def edit(shorty):
     # Anything that fails the above if statements falls through to return index.html
     return redirect(url_for("index"))
 
-@app.route('/s/<shorty>')
+@urls.route('/s/<shorty>')
 def stats(shorty):
     url = URL.query.filter_by(short_address=shorty).first_or_404()
     fig = create_plot(url.id)
@@ -136,7 +92,7 @@ def stats(shorty):
 
 
 
-@app.route('/d/<shorty>')
+@urls.route('/d/<shorty>')
 def delete(shorty):
     url = URL.query.filter_by(short_address=shorty).first()
     if url:
