@@ -1,6 +1,7 @@
-from . import db, bcrypt, login_manager
+from . import db, bcrypt, login_manager, hashid
 from flask.ext.login import UserMixin
-
+from datetime import datetime
+import random
 
 @login_manager.user_loader
 def load_user(id):
@@ -43,3 +44,8 @@ class Link(db.Model):
     date = db.Column(db.DateTime())
     links = db.relationship('User',
                             backref=db.backref('submitted', lazy='dynamic'))
+    def set_short_link(self):
+        self.short_link = hashid.encode(datetime.now().microsecond, random.randint(0, 100000))
+
+    def __repr__(self):
+        return url_for('index')+"{}".format(self.short_link)

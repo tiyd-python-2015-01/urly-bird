@@ -1,4 +1,5 @@
 from flask import Flask
+from hashids import Hashids
 from .extensions import (
     db,
     migrate,
@@ -23,5 +24,6 @@ migrate.init_app(app, db)
 bcrypt.init_app(app)
 login_manager.init_app(app)
 
+hashid = Hashids(salt=app.config['SECRET_KEY'])
 
 from . import views, models
