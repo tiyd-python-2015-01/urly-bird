@@ -5,13 +5,14 @@ from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 
-from urlybird.app import app, db
+from urlybird.app import create_app, db, models
 from urlybird.generate_seed_data import create_user, create_bookmarks, create_specified_user
 from urlybird.generate_seed_data import user_to_bookmark, click_creation
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
 
+app = create_app()
 manager = Manager(app)
 manager.add_command('server', Server())
 manager.add_command('db', MigrateCommand)
