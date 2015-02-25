@@ -114,4 +114,8 @@ Lastly, add an API to your application allowing users to view and create bookmar
 ## Additional Resources
 
 * [Flask Skeleton](https://github.com/tiyd-python-2015-01/cookiecutter-flask). Use this at your own risk. It explains how to use it in the README.
+<<<<<<< HEAD
 * [Hashids](http://hashids.org/python/). These may be useful for creating short URLs.
+=======
+* [Hashids](http://hashids.org/python/). These may be useful for creating short URLs.
+>>>>>>> 8e6999742050c07a4cd80b18b59431d9dc99ee66

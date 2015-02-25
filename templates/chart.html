@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <div class='row'>
+
+        <div class="large-8 columns">
+          <h1>{{ bookmarkuser.bookmark.title }} Bookmark Trend</h1>
+          <fieldset>
+            <legend>30 Day Progression</legend>
+            <img src="{{ url_for('bookmarks.fig', int_id = bookmarkuser.bookmark.id) }}" alt="{{ bookmarkuser.bookmark.title }}">
+          </fieldset>
+          <a href='/dashboard'><button type="submit" class='button tiny'>Back To Dashboard</button></a>
+        </div>
+    </div>
+
+{% endblock %}
