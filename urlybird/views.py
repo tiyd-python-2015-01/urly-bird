@@ -157,18 +157,13 @@ def chart(int_id):
     return render_template("chart.html", bookmarkuser=bookmarkuser)
 
 @app.route('/fig/<int:int_id>')
+@login_required
 def fig(int_id):
     bookmarkuser = BookmarkUser.query.get_or_404(int_id)
     click_data = bookmarkuser.clicks_by_day()
     dates = [c[0] for c in click_data]
     num_clicks = [c[1] for c in click_data]
-
-    fig = BytesIO()
-    plt.plot_date(x=dates, y=num_clicks, fmt="-")
-    plt.savefig(fig)
-    plt.clf()
-    fig.seek(0)
-    return send_file(fig, mimetype="image/png")
+    return create_chart(dates, num_clicks)
 
 
 def shorten_url(a_url):
@@ -194,3 +189,16 @@ def add_click(bookmark_id):
                   user_agent=request.headers.get('User-Agent'))
     db.session.add(click)
     db.session.commit()
+
+def create_chart(dates, num_clicks):
+    fig = BytesIO()
+    plt.plot_date(x=dates, y=num_clicks, fmt="-", c='#007095')
+    # plt.figure(figsize=(9,5))
+    plt.xticks(rotation=40, fontsize=8, color='#007095')
+    plt.title('Click Count Per Day', color='#007095')
+    plt.grid(True)
+    plt.yticks(fontsize=8, color='#007095')
+    plt.savefig(fig)
+    plt.clf()
+    fig.seek(0)
+    return send_file(fig, mimetype="image/png")

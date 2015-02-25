@@ -8,8 +8,8 @@
           <fieldset>
             <legend>{{ bookmarkuser.bookmark.title }} Bookmark Trend</legend>
             <img src="{{ url_for('fig', int_id = bookmarkuser.bookmark.id) }}" alt="{{ bookmarkuser.bookmark.title }}">
-            <a href='/dashboard'><button type="submit" class='button tiny'>Dashboard</button></a>
           </fieldset>
+          <a href='/dashboard'><button type="submit" class='button tiny'>Back To Dashboard</button></a>
         </div>
       </form>
     </div>

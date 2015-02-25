@@ -19,11 +19,12 @@
             {% endif %}
           {% endif %}
 
-          {% for bookmark in bookmarks %}
-          {% if bookmark.bookmark.title %}
+
           <div class="row">
             <div class="large-8 columns">
-              <ul class="vcard">
+              {% for bookmark in bookmarks %}
+              {% if bookmark.bookmark.title %}
+              <ul class="vcard" >
                 <li>Name: {{ bookmark.bookmark.title }} </li>
                 {% if bookmark.bookmark.description %}
                 <li>Description: {{ bookmark.bookmark.description }}</li>
@@ -36,10 +37,11 @@
                   <a href='/dashboard/c/{{ bookmark.id }}'><img width='15' src='/static/chart.png'></a>
                 </form>
               </ul>
+              {% endif %}
+              {% endfor %}
             </div>
           </div>
-          {% endif %}
-          {% endfor %}
+
           </fieldset>
         </div>
       </form>
