@@ -6,8 +6,27 @@
     <h3>Link: {{ link.title }}</h3>
     <h4>Clicks</h4>
     <img src="{{ url_for("link_clicks_chart", id=link.id) }}" />
-    <img src="{{url_for("country_clicks_chart", id=link.id)}}"/>
+    <table>
+     <thead>
+       <tr>
+         <th width="200">Country</th>
+         <th width="150">Clicks</th>
+       </tr>
+     </thead>
+     <tbody>
 
+      <div class="row">
+    {% for country, num_clicks in countries %}
+      <tr>
+        <td><strong> {{country}}</strong></td>
+        <td>{{num_clicks}}</td>
+      </tr>
+
+    {% endfor %}
+   </div>
+   </div>
+    </tbody>
+   </table>
  </div>
 </div>
 {% endblock %}

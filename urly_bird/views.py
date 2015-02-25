@@ -1,5 +1,6 @@
 from datetime import datetime
-from geoip import geolite2
+from ipwhois import IPWhois
+from ipwhois.utils import get_countries
 """Add your views here."""
 
 from flask import render_template, flash, redirect, request, url_for, send_file
@@ -153,11 +154,27 @@ def register():
     return render_template("register.html", form=form)
 
 
+def get_country(ip):
+    countries = get_countries()
+    obj = IPWhois(ip)
+    results = obj.lookup(False)
+    return countries[results['nets'][0]['country']]
+
 @app.route("/link_clicks/<int:id>")
 def link_clicks(id):
     link = Links.query.get_or_404(id)
+    country_data = link.clicks_by_country()
+
+    #for ip,num_clicks in country_data:
+    #    try:
+    #       country = get_country(ip)
+    #       flash(country)
+    #       fin_list.append((country,num_clicks))
+    #    except:
+    #       pass
+    sorted_list = sorted(country_data, key=lambda tup: tup[1], reverse=True)
     return render_template("link_data.html",
-                           link=link)
+                           link=link, countries=sorted_list)
 
 
 
@@ -167,7 +184,6 @@ def link_clicks_chart(id):
     click_data = link.clicks_by_day()
     dates = [c[0] for c in click_data]
     num_clicks = [c[1] for c in click_data]
-
     fig = BytesIO()  # will store the plot as bytes
     plt.plot_date(x=dates, y=num_clicks, fmt="-")
     plt.savefig(fig)
@@ -175,23 +191,6 @@ def link_clicks_chart(id):
     fig.seek(0) #go back to the beginning
     return send_file(fig, mimetype="image/png")
 
-
-@app.route("/link_clicks/<int:id>_country_clicks.png")
-def country_clicks_chart(id):
-    link = Links.query.get_or_404(id)
-    click_data = link.clicks_by_country()
-    ips = [c[0] for c in click_data]
-    num_clicks = [c[1] for c in click_data]
-    x = range(len(num_clicks))
-    countries = [geolite2.lookup(co).country for co in ips]
-    flash(countries)
-    fig = BytesIO()  # will store the plot as bytes
-    plt.bar(x,num_clicks)
-    plt.xticks(x + 0.5, countries, rotation=90)
-    plt.savefig(fig)
-    plt.clf()
-    fig.seek(0) #go back to the beginning
-    return send_file(fig, mimetype="image/png")
 
 @app.route("/stats")
 def stats():
