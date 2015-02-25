@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+ <div class="row">
+  <div class=" small-12 columns">
+    <h4>Clicks per urly Link in last 30 days</h4>
+  </div>
+ </div>
+
+ <table>
+  <thead>
+    <tr>
+      <th width="200">Link</th>
+      <th width="150">Clicks</th>
+    </tr>
+  </thead>
+  <tbody>
+
+   <div class="row">
+ {% for link, num_clicks in data %}
+   <tr>
+     <td><strong> {{link.title}}:</strong></td>
+     <td>{{num_clicks}}</td>
+   </tr>
+
+ {% endfor %}
+</div>
+</div>
+ </tbody>
+</table>
+
+
+{% endblock %}

@@ -1,15 +1,17 @@
 from datetime import datetime
+from geoip import geolite2
 """Add your views here."""
 
-from flask import render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for, send_file
 from flask.ext.login import login_user, logout_user, login_required, current_user
 import requests
 from .app import app, db,  login_manager
 from .forms import LoginForm, RegistrationForm, LinkAddForm, LinkUpdateForm
 from .models import User, Links, Clicks
 from .utils import flash_errors
-
+from io import BytesIO
 import matplotlib.pyplot as plt
+
 
 def flash_errors(form, category="warning"):
     '''Flash all errors for a form.'''
@@ -150,28 +152,54 @@ def register():
         flash_errors(form)
     return render_template("register.html", form=form)
 
+
 @app.route("/link_clicks/<int:id>")
 def link_clicks(id):
     link = Links.query.get_or_404(id)
-    click_data = link.clicks_by_day()
-    dates = [c[0] for c in click_data]
-    num_clicks = [c[1] for c in click_data]
-    plt.plot_date(x=dates, y=num_clicks,fmt='-')
-    plt.savefig("/tmp/link_data.png")
     return render_template("link_data.html",
                            link=link)
 
 
-#@app.route("/book/<int:id>_clicks.png")
-#def book_clicks_chart(id):
-#    book = Book.query.get_or_404(id)
-#    click_data = book.clicks_by_day()
-#    dates = [c[0] for c in click_data]
-#    num_clicks = [c[1] for c in click_data]
-#
-#    fig = BytesIO()
-#    plt.plot_date(x=dates, y=num_clicks, fmt="-")
-#    plt.savefig(fig)
-#    plt.clf()
-#    fig.seek(0)
-#    return send_file(fig, mimetype="image/png")
+
+@app.route("/link_clicks/<int:id>_clicks.png")
+def link_clicks_chart(id):
+    link = Links.query.get_or_404(id)
+    click_data = link.clicks_by_day()
+    dates = [c[0] for c in click_data]
+    num_clicks = [c[1] for c in click_data]
+
+    fig = BytesIO()  # will store the plot as bytes
+    plt.plot_date(x=dates, y=num_clicks, fmt="-")
+    plt.savefig(fig)
+    plt.clf()
+    fig.seek(0) #go back to the beginning
+    return send_file(fig, mimetype="image/png")
+
+
+@app.route("/link_clicks/<int:id>_country_clicks.png")
+def country_clicks_chart(id):
+    link = Links.query.get_or_404(id)
+    click_data = link.clicks_by_country()
+    ips = [c[0] for c in click_data]
+    num_clicks = [c[1] for c in click_data]
+    x = range(len(num_clicks))
+    countries = [geolite2.lookup(co).country for co in ips]
+    flash(countries)
+    fig = BytesIO()  # will store the plot as bytes
+    plt.bar(x,num_clicks)
+    plt.xticks(x + 0.5, countries, rotation=90)
+    plt.savefig(fig)
+    plt.clf()
+    fig.seek(0) #go back to the beginning
+    return send_file(fig, mimetype="image/png")
+
+@app.route("/stats")
+def stats():
+    links = Links.query.all()
+    pairs=[]
+    for link in links:
+        data = link.clicks_by_day()
+        tot = sum([c[1] for c in data])
+        pairs.append((link,tot))
+    sorted_list = sorted(pairs, key=lambda tup: tup[1], reverse=True)
+    return render_template("stats.html",data=sorted_list)

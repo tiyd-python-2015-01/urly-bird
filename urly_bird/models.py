@@ -3,6 +3,7 @@ from flask.ext.login import UserMixin
 from hashids import Hashids
 from sqlalchemy import func
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
@@ -33,6 +34,8 @@ class Links(db.Model):
     description = db.Column(db.Text)
     user = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    user_links = db.relationship("User", backref="links")
+
     def __init__(self, long, title, description=""):
         self.long = long
         self.title = title
@@ -47,6 +50,12 @@ class Links(db.Model):
         return db.session.query(click_date, func.count(Clicks.id)). \
             group_by(click_date).filter_by(link_id=self.id). \
             order_by(click_date).all()
+
+    def clicks_by_country(self):
+
+        return db.session.query(Clicks.IP, func.count(Clicks.id)). \
+            group_by(Clicks.IP).filter_by(link_id=self.id). \
+            order_by(Clicks.IP).all()
 
     def __repr__(self):
         return "<Urly-bird {}>".format(self.short)

@@ -5,7 +5,9 @@
  <div class="row">
     <h3>Link: {{ link.title }}</h3>
     <h4>Clicks</h4>
-      {% for click in link.clicks %}
-      {{click.when}}<br>
-      {% endfor %}
+    <img src="{{ url_for("link_clicks_chart", id=link.id) }}" />
+    <img src="{{url_for("country_clicks_chart", id=link.id)}}"/>
+
+ </div>
+</div>
 {% endblock %}
