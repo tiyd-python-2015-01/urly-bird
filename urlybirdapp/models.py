@@ -1,5 +1,6 @@
 from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
+from sqlalchemy import func
 
 @login_manager.user_loader
 def load_user(id):
@@ -45,6 +46,13 @@ class Links(db.Model):
 
     clicks = property(link_clicks)
 
+    def clicks_per_day(self):
+        click_date = func.cast(Click.timestamp, db.Date)
+        return db.session.query(click_date, func.count(Click.id)). \
+            group_by(click_date).filter_by(link_id=self.id). \
+            order_by(click_date).all()
+
+
     def __repr__(self):
         return "URL {}".format(self.url)
 
@@ -56,6 +64,8 @@ class Click(db.Model):
     timestamp = db.Column(db.DateTime)
     ip = db.Column(db.String(255))
     user_agent = db.Column(db.String(255))
+
+    link = db.relationship("Links", backref='linkclicks')
 
     def __repr__(self):
         return "Clicks to Date: {}".format(self.count)

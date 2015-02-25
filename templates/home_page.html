@@ -9,9 +9,10 @@
         {% if current_user.links is not none %}
           {% for links in link_list %}
             <li>{{ links.text }}
-                <a class= href='/b/{{ links.short }}'></a>
+                <a class='button round success' href='/b/{{ links.short }}'>Go Here</a>
                 <a class='button round success' href='{{url_for('edit_bookmark', id=links.id) }}'>Edit Bookmark</a>
-                <a class='button round success' href='{{url_for('delete_bookmark', id=links.id) }}'>Delete Bookmark</a><br>
+                <a class='button round success' href='{{url_for('delete_bookmark', id=links.id) }}'>Delete Bookmark</a>
+                Clicks: {{ links.clicks }}
           {% endfor %}
         {% endif %}
       </div>

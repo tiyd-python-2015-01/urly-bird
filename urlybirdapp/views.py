@@ -1,4 +1,4 @@
-from flask import render_template, redirect, flash, url_for, request
+from flask import render_template, redirect, flash, url_for, request, send_file
 from flask.ext.login import login_user, login_required
 from flask.ext.login import logout_user, current_user
 from . import app, db
@@ -7,6 +7,9 @@ from .models import User, Links, Click
 import random
 from sqlalchemy import desc
 from datetime import datetime
+from io import BytesIO
+import matplotlib.pyplot as plt
+
 
 def flash_errors(form, category="warning"):
     '''Flash all errors for a form.'''
@@ -123,6 +126,26 @@ def delete_bookmark(id):
     db.session.commit()
     flash('Bookmark Deleted!!')
     return redirect(url_for('home_view'))
+
+
+@app.route('/<int:id>/data')
+def link_data(id):
+    link = Links.query.get_or_404(id)
+    return render_template('link_data.html', link=link)
+
+@app.route('/link/<int:id>_clicks.png/')
+def link_click_chart(id):
+    link = Links.query.get_or_404(id)
+    link_data = link.clicks_per_day()
+    dates = [c[0] for c in link_data]
+    click_count = [c[1] for c in link_data]
+
+    fig = BytesIO()
+    plt.plot_date(x=dates, y=click_count, fmt='-')
+    plt.savefig(fig)
+    plt.clf()
+    fig.seek(0)
+    return send_file(fig, mimetype='image/png')
 
 
 def short():

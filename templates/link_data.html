@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<fieldset>
+  <h1>{{ link.url }}</h1>
+    <h2>{{ link.text }}</h2>
+
+    <h3>Clicks</h3>
+    <img src="{{ url_for('link_click_chart', id=link.id) }}" />
+  </fieldset>
+{% endblock %}
