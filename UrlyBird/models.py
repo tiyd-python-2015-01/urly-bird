@@ -1,6 +1,7 @@
 from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
 from datetime import datetime
+from sqlalchemy import func
 
 @login_manager.user_loader
 def load_user(id):
@@ -35,6 +36,12 @@ class Bookmark(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     sub_date = db.Column(db.DateTime)
 
+    def clicks_by_day(self):
+        click_date = func.cast(Click.click_date, db.Date)
+        return db.session.query(click_date, func.count(Click.id)). \
+            group_by(click_date).filter_by(bookmark_id = self.id). \
+            order_by(click_date).all()
+
     user = db.relationship('User')
 
 class Click(db.Model):
@@ -42,6 +49,7 @@ class Click(db.Model):
     click_date = db.Column(db.DateTime)
     bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    ip_address = db.Column(db.String(20))
 
-    bookmark = db.relationship('Bookmark')
     user = db.relationship('User')
+    bookmark = db.relationship('Bookmark')

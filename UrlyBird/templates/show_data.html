@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<br></br>
+<h1>Data for {{bookmark.title}} link</h1>
+{{clicks}}
+{{click_data}}
+<img src="{{ url_for("book_clicks_chart", id = bookmark.id) }}" />
+{% endblock %}

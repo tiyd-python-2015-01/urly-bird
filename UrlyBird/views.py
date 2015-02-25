@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for, send_file
 from flask.ext.login import login_user , login_required, current_user
 from flask.ext.login import logout_user
 from . import app, db
@@ -8,6 +8,10 @@ from hashids import Hashids
 from random import randint
 from datetime import datetime
 from sqlalchemy import desc
+from io import BytesIO
+import matplotlib.pyplot as plt
+
+
 hashids = Hashids(salt = "a nice salt")
 
 def shortener():
@@ -124,3 +128,25 @@ def edit_link(id):
                            form=form,
                            post_url=url_for("edit_link", id=link.id),
                            button="Update Link")
+
+@app.route("/link_data/<int:id>", methods=["GET", "POST"])
+def show_data(id):
+    clicks = Click.query.filter_by(bookmark_id = id).all()
+    bookmark = Bookmark.query.filter_by(id = id).first()
+    return render_template("show_data.html", clicks = clicks, bookmark = bookmark)
+
+
+@app.route("/link_data/<int:id>_clicks.png")
+def book_clicks_chart(id):
+
+    bookmark = Bookmark.query.filter_by(id = id).first()
+    click_data = bookmark.clicks_by_day()
+    dates = [c[0] for c in click_data]
+    num_clicks = [c[1] for c in click_data]
+
+    fig = BytesIO()
+    plt.plot(x=dates, y=num_clicks, fmt="-")
+    plt.savefig(fig)
+    plt.clf()
+    fig.seek(0)
+    return send_file(fig, mimetype="image/png")
