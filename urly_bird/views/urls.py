@@ -16,7 +16,7 @@ urls = Blueprint("urls", __name__)
 @urls.route("/")
 def index():
     if not current_user.is_authenticated():
-        urls = URL.query.all()
+        urls = URL.query.order_by("id").all()
         return render_template("index.html", urls=reversed(urls[-5::]), domain=request.url_root)
     return redirect(url_for("urls.sites"))
 
@@ -68,14 +68,15 @@ def route(shorty):
     db.session.commit()
     return redirect(url.long_address)
 
-@urls.route('/e/<shorty>', methods=['GET', ' POST'])
+@urls.route('/e/<shorty>', methods=['GET', 'POST'])
 @login_required
 def edit(shorty):
+    print("Edit")
     url = URL.query.filter_by(short_address=shorty).first()
     form = URLForm(title=url.name, description=url.description, address=url.long_address)
     if url and url.owner == current_user.id:
         if request.method == 'GET':
-            return render_template("link.html", url=url, form=form)
+            return render_template("link.html", url=url, form=form, domain=request.url_root)
         elif request.method == 'POST':
             url.name = form.title.data
             url.long_address = form.address.data

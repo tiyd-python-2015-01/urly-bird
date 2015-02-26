@@ -3,7 +3,7 @@
     <div class="row">
         <div class="small-1 columns"></div>
         <div class="small-8 columns">
-            <form action="/e/{{  url.short_address }}" method="POST">
+            <form action="{{  url_for("urls.edit",shorty=url.short_address) }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div>
                     {{ form.title.label }}{{ form.title(size=20) }}
@@ -16,9 +16,9 @@
                 </div>
                 <div>
                     <input type='submit' value='Save' class="button">
-                    <form action='{{ url_for("urls.index") }}'>
-                        <input type='submit' value='Cancel' class="button">
-                    </form>
+
+                    <a href="{{ url_for("urls.index") }}" class="button">Cancel</a>
+
 
                 </div>
             </form>
