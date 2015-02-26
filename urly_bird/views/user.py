@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, request, url_for, send_file
+from flask import render_template, flash, redirect, request, url_for, Blueprint
 from flask.ext.login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 from sqlalchemy import desc, func
@@ -10,6 +10,8 @@ from . import app, db
 from .forms import LoginForm, RegistrationForm, URLForm, editURL
 from .models import User, Link, Click
 
+user_blueprint = Blueprint('user_blueprint', __name__,
+                           template_folder='templates')
 
 def flash_errors(form, category="warning"):
     '''Flash all errors for a form.'''
@@ -18,18 +20,18 @@ def flash_errors(form, category="warning"):
             flash("{0} - {1}".format(getattr(form, field).label.text, error), category)
 
 
-@app.route("/")
+@user_blueprint.route("/")
 def index():
     return render_template('layout.html')
 
-@app.route("/your_links")
+@user_blueprint.route("/your_links")
 def your_links():
     links = current_user.links.order_by(desc(Link.date)).all()
 
     return render_template('showAll.html', links=links)
 
 
-@app.route("/login", methods=["GET", "POST"])
+@user_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -45,7 +47,7 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route("/register", methods=["GET", "POST"])
+@user_blueprint.route("/register", methods=["GET", "POST"])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -67,14 +69,14 @@ def register():
     return render_template("register.html", form=form)
 
 
-@app.route('/logout', methods=['GET', 'POST'])
+@user_blueprint.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
     flash("You have been logged out")
     return redirect(url_for('index'))
 
-@app.route('/shorten', methods=['GET', 'POST'])
+@user_blueprint.route('/shorten', methods=['GET', 'POST'])
 @login_required
 def shorten():
     form = URLForm()
@@ -91,7 +93,7 @@ def shorten():
         return render_template("shorten.html", short_link=link.short_link, form=form)
     return render_template("shorten.html", form=form)
 
-@app.route('/<hashid>')
+@user_blueprint.route('/<hashid>')
 @login_required
 def short_link(hashid):
     link = Link.query.filter(Link.short_link == hashid).first()
@@ -105,65 +107,6 @@ def short_link(hashid):
     else:
         flash("Couldn't find link!")
         return redirect(url_for('index'))
-
-@app.route('/show_all')
-@login_required
-def show_all():
-    links = Link.query.order_by(desc(Link.date)).all()
-
-    return render_template('showAll.html', links=links)
-
-@app.route('/link/<int:id>', methods=["GET", "POST"])
-@login_required
-def edit_link(id):
-    link = Link.query.get(id)
-    form = editURL(obj=link)
-    if form.validate_on_submit():
-        form.populate_obj(link)
-        db.session.commit()
-        flash("URLybird updated your link")
-        return redirect(url_for("your_links"))
-    return render_template("editLink.html",
-                           form=form,
-                           post_url=url_for("edit_link", id=link.id),
-                           short_link=link.short_link)
-
-@app.route("/delete/<int:id>", methods=['GET', 'POST'])
-@login_required
-def delete(id):
-    link = Link.query.get(id)
-    db.session.delete(link)
-    db.session.commit()
-    flash("Link has been deleted")
-    return redirect(url_for("your_links"))
-
-@app.route("/clicks")
-@login_required
-def get_clicks():
-    user = current_user.id
-    link_list = []
-    clicks = Click.query.filter(Click.user_id == user).all()
-    for click in clicks:
-        link = Link.query.filter(Link.id == click.id).first()
-        link_list.append(link)
-    return render_template('clicks.html', clicks=clicks)
-
-@app.route("/link/<int:id>/data")
-def click_data(id):
-    link = Link.query.get_or_404(id)
-    return render_template("data.html", link=link)
-
-@app.route("/link/<int:id>_clicks.png")
-def link_clicks_chart(id):
-    link = Link.query.get_or_404(id)
-    data = link.clicks_by_day
-    dates = [c[1] for c in data]
-    num_clicks = [c[0] for c in data]
-    fig = BytesIO()
-    plt.plot_date(x=dates, y=num_clicks, fmt="-")
-    plt.savefig(fig)
-    fig.seek(0)
-    return send_file(fig, mimetype="image/png")
 
 
 

@@ -1,4 +1,5 @@
 from flask import Flask
+from urly_bird.views.user import user_blueprint
 
 from .extensions import (
     db,
@@ -16,6 +17,7 @@ SECRET_KEY = 'development-key'
 app = Flask("urly_bird")
 app.config.from_object(__name__)
 app.config.from_pyfile('application.cfg', silent=True)
+app.register_blueprint(user_blueprint)
 
 config.init_app(app)
 db.init_app(app)

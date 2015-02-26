@@ -41,7 +41,7 @@ class Link(db.Model):
     short_link = db.Column(db.String(255))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     description = db.Column(db.Text)
-    clicks = db.relationship('Click', backref='link', lazy='dynamic')
+    clicks = db.relationship('Click', backref='link', lazy='select')
 
     def get_short_link(self):
        salt = Hashids(salt="and pepper", min_length=1)
@@ -52,13 +52,14 @@ class Link(db.Model):
     @property
     def clicks_by_day(self):
         click_date = func.cast(Click.date, db.Date)
-        db.session.query(click_date, func.count(Click.id)).group_by(click_date).order_by(click_date).all()
+        return db.session.query(func.count(Click.id), click_date).group_by(click_date).order_by(click_date).all()
 
 
 class Click(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     link_id = db.Column(db.Integer, db.ForeignKey('link.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    ip = db.Column(db.String(20))
     date = db.Column(db.DateTime)
 
 
