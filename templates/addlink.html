@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="large-12 columns">
+  <fieldset>
+    <h4>Enter New Url:</h4>
+      <form action='{{ url_for('links.add_link') }}' method='POST'>
+        {{ form.hidden_tag() }}
+        <div>
+          {{ form.url.label }} {{ form.url(size=100) }}<br>
+          {{ form.text.label }} {{ form.text(size=100) }}
+        </div>
+        <div>
+          <input type='Submit' value='Add Link'>
+        </div>
+      </form>
+    </fieldset>
+</div>
+{% endblock %}

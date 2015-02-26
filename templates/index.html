@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="large-12 columns">
+  <fieldset>
+    <h1>All Bookmarks</h1>
+  {% for links in link_list %}
+    <li>{{ links.text }}
+      <a class='button round success' href='/b/{{ links.short }}'>Go Here</a>
+      <a class='button round success' href='/{{ links.id }}/data'>Link Stats</a>
+      Clicks: {{ links.clicks }}
+  {% endfor %}
+  </fieldset>
+</div>
+{% endblock %}

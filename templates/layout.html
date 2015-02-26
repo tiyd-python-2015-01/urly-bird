@@ -1,0 +1,62 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Urly Bird</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="{{ url_for('static', filename='js/vendor/modernizr.js') }}"></script>
+</head>
+
+<body>
+  <div class="contain-to-grid">
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h2><a href="/">Urly Bird: The Appening</a></h2>
+        </li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+      <section class="top-bar-section">
+        {% if current_user.is_authenticated() %}
+        <ul class='left'>
+          <a class='button round success' href='/addlink'>Add New Link</a>
+        {% endif %}
+        <ul class="right">
+          <li class="has-dropdown">
+            <div>
+              {% if current_user.is_authenticated() %}
+                <a href="/home">{{ current_user.name }}</a>
+              {% else %}
+                <a href="#">Login or Sign Up</a>
+              {% endif %}
+            </div>
+            <ul class="dropdown">
+              {% if current_user.is_authenticated() %}
+                <li><a href='/home/stats'>Your Stats</a></li>
+                <li><a href='/logout'>Logout</a></li>
+              {% else %}
+                <li><a href='/login'>Login</a></li>
+                <li><a href='/register'>Register</a></li>
+              {% endif %}
+            </ul>
+          </li>
+        </ul>
+      </section>
+   </nav>
+ </div>
+<div style="background-color:red;">
+  {% for message in get_flashed_messages() %}
+    {{ message }}
+  {% endfor %}
+</div>
+{% block body %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/vendor/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
+    <script>
+    $(document).foundation();
+    </script>
+  </body>
+</html>

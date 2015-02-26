@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="large-12 columns">
+  <fieldset>
+    <h2>Your Links </h2>
+      <div class='links'>
+        {% if current_user.links is not none %}
+          {% for links in link_list %}
+            <li>{{ links.text }}
+                <a class='button round success' href='/b/{{ links.short }}'>Go Here</a>
+                <a class='button round success' href='{{url_for('links.edit_bookmark', id=links.id) }}'>Edit Bookmark</a>
+                <a class='button round success' href='{{url_for('links.delete_bookmark', id=links.id) }}'>Delete Bookmark</a>
+                Clicks: {{ links.clicks }}
+          {% endfor %}
+        {% endif %}
+      </div>
+  </fieldset>
+</div>
+</div><br>
+
+{% endblock %}
