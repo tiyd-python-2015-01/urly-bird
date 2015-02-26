@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="large-12 columns">
+  <fieldset>
+    <h1>Your Link Stats</h1>
+    {% for link in user_links %}
+        <li>Title:{{ link.text }} Clicks this Month: {{ link.clicks_last_30 }}</li><br>
+    {% endfor %}
+  </fieldset>
+</div>
+
+{% endblock %}

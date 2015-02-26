@@ -1,14 +1,15 @@
-from flask import render_template, redirect, flash, url_for, request, send_file
-from flask.ext.login import login_user, login_required
-from flask.ext.login import logout_user, current_user
-from . import app, db
-from .forms import LoginForm, RegistrationForm, AddLink, EditLink
-from .models import User, Links, Click
 import random
+from flask import Blueprint, render_template, redirect, flash, url_for, request, send_file
+from flask.ext.login import current_user
 from sqlalchemy import desc
+from ..forms import AddLink, EditLink
+from ..models import Links, Click
+from ..extensions import db
 from datetime import datetime
 from io import BytesIO
 import matplotlib.pyplot as plt
+
+links = Blueprint("links", __name__)
 
 
 def flash_errors(form, category="warning"):
@@ -18,67 +19,13 @@ def flash_errors(form, category="warning"):
             flash("{0} - {1}".format(getattr(form, field).label.text, error),
                                                                    category)
 
-
-@app.route('/')
+@links.route('/')
 def index():
     link_list = Links.query.order_by(desc(Links.id)).all()
     return render_template('index.html', link_list=link_list)
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            flash('You were logged in.')
-            return redirect(url_for('home_view'))
-        else:
-            flash('Invalid Password')
-
-    flash_errors(form)
-    return render_template('login.html', form=form)
-
-
-@app.route("/logout", methods=['GET', 'POST'])
-@login_required
-def logout():
-    user = current_user
-    logout_user()
-    flash('You have been logged out.')
-    return redirect(url_for('index'))
-
-@app.route('/home')
-@login_required
-def home_view():
-    links = Links.query.filter_by(user_id=current_user.id).order_by(Links.id.desc())
-    return render_template('home_page.html', link_list=links)
-
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            flash('A user with that email already exists.')
-        else:
-            user = User(name=form.name.data,
-                        email=form.email.data,
-                        password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            flash('Registration successful! You have been logged in.')
-            return redirect(url_for('home_view'))
-    else:
-        flash_errors(form)
-        return render_template('register.html', form=form)
-
-
-@app.route('/addlink', methods=['GET', 'POST'])
-@login_required
+@links.route('/addlink', methods=['GET', 'POST'])
 def add_link():
     user = current_user
     form = AddLink()
@@ -97,14 +44,13 @@ def add_link():
             db.session.add(link)
             db.session.commit()
             flash('New Link Added')
-            return redirect(url_for('home_view'))
+            return redirect(url_for('users.home_view'))
     else:
         flash_errors(form)
         return render_template('addlink.html', form=form)
 
 
-@app.route('/edit/<int:id>', methods=['GET', 'POST'])
-@login_required
+@links.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_bookmark(id):
     current = Links.query.get(id)
     form = EditLink(obj=current)
@@ -112,36 +58,41 @@ def edit_bookmark(id):
         form.populate_obj(current)
         db.session.commit()
         flash('Bookmark Updated')
-        return redirect(url_for('home_view'))
+        return redirect(url_for('users.home_view'))
     else:
         flash_errors(form)
     return render_template('editlink.html', form=form,
-                            update_url=url_for('edit_bookmark', id=current.id))
+                            update_url=url_for('links.edit_bookmark', id=current.id))
 
 
-@app.route('/delete/<int:id>', methods=['GET'])
+@links.route('/delete/<int:id>', methods=['GET'])
 def delete_bookmark(id):
     current = Links.query.get(id)
     db.session.delete(current)
     db.session.commit()
     flash('Bookmark Deleted!!')
-    return redirect(url_for('home_view'))
+    return redirect(url_for('users.home_view'))
 
 
-@app.route('/<int:id>/data')
+@links.route('/<int:id>/data')
 def link_data(id):
     link = Links.query.get_or_404(id)
     return render_template('link_data.html', link=link)
 
-@app.route('/link/<int:id>_clicks.png/')
+@links.route('/link/<int:id>_clicks.png/')
 def link_click_chart(id):
     link = Links.query.get_or_404(id)
     link_data = link.clicks_per_day()
     dates = [c[0] for c in link_data]
     click_count = [c[1] for c in link_data]
+    date_labels = [d.strftime("%b %d") for d in dates]
+    every_other_date_label = [d if i % 2 else ""
+                              for i, d in enumerate(date_labels)]
+
 
     fig = BytesIO()
     plt.plot_date(x=dates, y=click_count, fmt='-')
+    plt.xticks(dates, every_other_date_label, rotation=45, size="x-small")
     plt.savefig(fig)
     plt.clf()
     fig.seek(0)
@@ -158,7 +109,7 @@ def short():
         return tag
 
 
-@app.route('/b/<tag>')
+@links.route('/b/<tag>')
 def redirect_tag(tag):
     short = tag
     actual = Links.query.filter_by(short=short).first()

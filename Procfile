@@ -1,1 +1,1 @@
-web: gunicorn urlybirdapp:app --log-file=-
+web: gunicorn manager:app --log-file=-
