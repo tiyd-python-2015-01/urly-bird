@@ -63,7 +63,7 @@ def create_url():
     form = URLForm(data=data, formdata=None, csrf_enabled=False)
     if form.validate():
 
-        new_url = URL.query.filter_by(long_address=form.address.data).first()
+        new_url = URL.query.filter_by(long_address=form.address.data).filter_by(owner=user_id).first()
         if new_url:
             return json_response(400, {"url": "This url has been taken"})
         else:
@@ -80,12 +80,14 @@ def create_url():
                 hashed_id = Hashids(salt=salt, min_length=4).encode(hashed_url.id)
             hashed_url.short_address = hashed_id
             db.session.commit()
-            return json.dumps(new_url.to_dict()), 201, {"Location": url_for(".url", id=new_url.id)}
+
+            return (json.dumps(new_url.to_dict()), 201, {"Location": url_for(".url", url_id=new_url.id)})
     else:
         return json_response(400, form.errors)
 
 
 @api.route("/urls/<int:url_id>")
 def url(url_id):
+    print("\n\n\n\nhi\n\n\n\n")
     request_url = URL.query.get_or_404(url_id)
     return jsonify(request_url.to_dict())

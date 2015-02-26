@@ -27,27 +27,29 @@
 
     {% for url in urls %}
         <form action="/e/{{ url.short_address }}" method="GET">
-            <div class="row">
-                <div class="small-1 columns"></div>
-                <div class="small-8 columns">
-                    <div>
-                        <h4>{{ url.name.title() }}</h4>
+            <div class="panel">
+                <div class="row">
+                    <div class="small-1 columns"></div>
+                    <div class="small-8 columns">
+                        <div>
+                            <h4>{{ url.name.title() }}</h4>
+                        </div>
+                        <div>
+                            <a href="{{ url.long_address }}">{{ url.long_address }}</a>
+                        </div>
+                        <div>
+                            <a href="{{ domain }}b/{{ url.short_address }}">{{ domain }}b/{{ url.short_address }}</a>
+                        </div>
+                        <div>
+                            {{ url.description }}
+                        </div>
                     </div>
-                    <div>
-                        <a href="{{ url.long_address }}">{{ url.long_address }}</a>
-                    </div>
-                    <div>
-                        <a href="{{ domain }}b/{{ url.short_address }}">{{ domain }}b/{{ url.short_address }}</a>
-                    </div>
-                    <div>
-                        {{ url.description }}
-                    </div>
+                    <div class="small-3 columns"></div>
                 </div>
-                <div class="small-3 columns"></div>
-            </div>
-            <div class="row">
-                <input type="submit" value="Edit" class="button">
-                <a href="{{ domain }}d/{{ url.short_address }}" class="button">Delete</a>
+                <div class="row">
+                    <input type="submit" value="Edit" class="button">
+                    <a href="{{ domain }}d/{{ url.short_address }}" class="button">Delete</a>
+                </div>
             </div>
         </form>
         <p></p>
