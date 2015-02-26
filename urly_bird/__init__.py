@@ -24,7 +24,7 @@ def create_app():
     app.config.from_object(__name__)
     app.register_blueprint(users)
     app.register_blueprint(linksb)
-    app.register_blueprint(api, url_prefix="/api/v1")
+    app.register_blueprint(api, url_prefix="/api/V1")
     config.init_app(app)
     db.init_app(app)
     debug_toolbar.init_app(app)

@@ -3,6 +3,7 @@ from ipwhois import IPWhois
 from ipwhois.utils import get_countries
 from io import BytesIO
 import matplotlib.pyplot as plt
+from bokeh.plotting import figure, output_file, show
 
 """Add your views here."""
 
@@ -130,7 +131,6 @@ def link_clicks_chart(id):
     date_labels = [d.strftime("%b %d") for d in dates]
     every_other_date_label = [d if i % 2 else "" for i, d in enumerate(date_labels)]
     num_clicks = [c[1] for c in click_data]
-    #plt.rc('figure', figsize=(6,4))
     ax = plt.subplot(111)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)

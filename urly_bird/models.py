@@ -46,9 +46,15 @@ class Links(db.Model):
         self.title = title
         self.description = description
 
-    def set_short(self, id):
+    def set_short(self, short_id):
         hashids = Hashids()
-        self.short = hashids.encode(id)
+        self._short_id = short_id
+        self.short = hashids.encode(short_id)
+
+    def get_short(self):
+            return getattr(self, "_short_id", None)
+
+    short_id = property(get_short, set_short)
 
     def clicks_by_day(self, days=30):
         days = timedelta(days=days)
@@ -75,7 +81,7 @@ class Links(db.Model):
             order_by(Clicks.IP).all()
 
     def __repr__(self):
-        return "<Urly-bird {}>".format(self.short)
+        return "<{} : {}>".format(self.short, self.title)
 
 
 class Clicks(db.Model):

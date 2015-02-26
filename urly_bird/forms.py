@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField
-from wtforms.fields.html5 import EmailField, URLField
+from wtforms.fields.html5 import EmailField, URLField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 
@@ -25,6 +25,12 @@ class LinkAddForm(Form):
     long = URLField('Long', validators=[DataRequired()])
     title = StringField('Title', validators=[DataRequired()])
     description = StringField('Description')
+
+class LinkAddFormAPI(Form):
+    long = URLField('Long', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired()])
+    description = StringField('Description')
+    user = IntegerField('User')
 
 class LinkUpdateForm(Form):
     long = URLField('Long', validators=[DataRequired()])
