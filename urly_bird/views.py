@@ -1,8 +1,10 @@
-from flask import render_template, flash, redirect, request, url_for, session
+from flask import (render_template, flash, redirect, request, url_for,
+                   session, send_file)
 from flask.ext.login import (login_user, login_required, logout_user,
                              current_user)
 from datetime import datetime
 from pickle import dumps
+from io import BytesIO
 import matplotlib.pyplot as plt
 from . import app, db, shortner
 from .forms import LoginForm, RegistrationForm, LinkForm
@@ -173,7 +175,7 @@ def make_chart(link):
                    for i, date in enumerate(dates)]
     num_clicks = [item[1] for item in data]
 
-    ax = plt.subplot()
+    ax = plt.subplot(111)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.get_xaxis().tick_bottom()
@@ -183,6 +185,7 @@ def make_chart(link):
     plt.plot_date(x=dates, y=num_clicks, fmt="-")
     plt.xticks(dates, date_labels, rotation=45, size="x-small")
     plt.tight_layout()
+    print(data)
 
 
 @app.route("/link_data<int:link_id>.png")

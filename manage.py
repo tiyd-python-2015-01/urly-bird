@@ -72,17 +72,17 @@ def seed_clicks():
     links = models.Link.query.count()
     users = models.User.query.count()
     fake = Faker()
-    for x in range(10000):
+    for x in range(100000):
         index = randint(1, links)
         link = models.Link.query.get(index)
         new_click = models.Click(link=index,
                                  date=fake.date_time_between(
-                                    start_date='{}d'.format((
-                                        link.date-datetime.utcnow())),
+                                        start_date='{}d'.format(
+                                        (link.date-datetime.utcnow()).days),
                                         end_date='now'),
-                                 user=randint(1, users),
-                                 ip=fake.ipv4(),
-                                 user_agent=fake.user_agent())
+                                        user=randint(1, users),
+                                        ip=fake.ipv4(),
+                                        user_agent=fake.user_agent())
         db.session.add(new_click)
     db.session.commit()
     print("Clicks seeded.")

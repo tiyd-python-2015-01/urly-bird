@@ -9,7 +9,7 @@ from .extensions import (
     config
 )
 
-SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/urly_bird.db"
+SQLALCHEMY_DATABASE_URI = "postgres://localhost/"
 DEBUG = True
 SECRET_KEY = 'development key'
 DEBUG_TB_INTERCEPT_REDIRECTS = False
