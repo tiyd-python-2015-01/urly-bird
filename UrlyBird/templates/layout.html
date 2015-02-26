@@ -7,12 +7,12 @@
   {% block nav %}
   <div class = metanav>
   {% if current_user.is_authenticated() %}
-  <a href="{{ url_for('logoff') }}">Logout</a>
+  <a href="{{ url_for('users.logoff') }}">Logout</a>
   <a href="/user_page">User page</a>
-  <a href="{{ url_for('index') }}">Homepage</a>
+  <a href="{{ url_for('bookmarks.index') }}">Homepage</a>
   {% else %}
-  <a href = "{{ url_for('register') }}">Register</a>
-  <a href="{{ url_for('login') }}">Log in</a>
+  <a href = "{{ url_for('users.register') }}">Register</a>
+  <a href="{{ url_for('users.login') }}">Log in</a>
   {% endif %}
   {% endblock %}
 

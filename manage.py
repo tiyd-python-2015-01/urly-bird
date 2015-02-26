@@ -3,8 +3,7 @@ import os
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
-from UrlyBird import app, db
-from UrlyBird.models import Click
+from UrlyBird import create_app, db, models
 from faker import Factory
 from random import randint
 fake = Factory.create()
@@ -12,6 +11,7 @@ fake = Factory.create()
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
 
+app = create_app()
 manager = Manager(app)
 manager.add_command('server', Server())
 manager.add_command('db', MigrateCommand)
@@ -39,9 +39,9 @@ def test():
 
 @manager.command
 def make_clicks():
-    for _ in range(1,10000 ):
+    for _ in range(1,100000 ):
         click_time = fake.date_time_this_month()
-        click = Click(bookmark_id = randint(1,17),
+        click = models.Click(bookmark_id = randint(1,17),
                              click_date = click_time,
                              user_id = randint(1,3),
                              ip_address = fake.ipv4())

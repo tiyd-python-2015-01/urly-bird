@@ -36,13 +36,22 @@ class Bookmark(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     sub_date = db.Column(db.DateTime)
 
+    user = db.relationship('User')
+
     def clicks_by_day(self):
         click_date = func.cast(Click.click_date, db.Date)
         return db.session.query(click_date, func.count(Click.id)). \
             group_by(click_date).filter_by(bookmark_id = self.id). \
             order_by(click_date).all()
+    def to_dict(self):
+        return {"id": self.id,
+                "url": self.url,
+                "shortlink": self.shortlink,
+                "title": self.title,
+                "user_id": self.user_id,
+                "sub_date": self.sub_date}
 
-    user = db.relationship('User')
+
 
 class Click(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
