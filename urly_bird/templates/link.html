@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="row">
+        <div class="small-1 columns"></div>
+        <div class="small-8 columns">
+            <form action="{{  url_for("urls.edit",shorty=url.short_address) }}" method="POST">
+                {{ form.hidden_tag() }}
+                <div>
+                    {{ form.title.label }}{{ form.title(size=20) }}
+                </div>
+                <div>
+                    {{ form.address.label }}{{ form.address() }}
+                </div>
+                <div>
+                    {{ form.description.label  }}{{  form.description() }}
+                </div>
+                <div>
+                    <input type='submit' value='Save' class="button">
+
+                    <a href="{{ url_for("urls.index") }}" class="button">Cancel</a>
+
+
+                </div>
+            </form>
+        </div>
+        <div class="small-3 columns"></div>
+    </div>
+    <p></p>
+
+{% endblock %}

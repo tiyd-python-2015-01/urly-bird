@@ -45,3 +45,9 @@ docs/_build
 # Virtualenvs
 env
 .python-version
+
+# Mac files
+.DS_Store
+
+#Seed files
+*.csv
