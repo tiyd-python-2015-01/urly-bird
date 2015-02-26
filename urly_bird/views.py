@@ -59,6 +59,7 @@ def link_data(link_id):
     link = Link.query.get_or_404(link_id)
     return render_template("link_data.html", link=link)
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -184,7 +185,7 @@ def make_chart(link):
     plt.tight_layout()
 
 
-@app.route("/link_data<int:link_id>")
+@app.route("/link_data<int:link_id>.png")
 @login_required
 def link_click_chart(link_id):
     link = Link.query.get_or_404(link_id)
