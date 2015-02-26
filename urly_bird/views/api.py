@@ -25,9 +25,6 @@ def unauthorized(request):
 def authorize_user(request):
     # Authorization: Basic username:password
     api_key = request.headers.get('Authorization')
-    print('******************')
-    print("\n\n\n\n\n", api_key, "\n\n\n")
-    print('******************')
     if api_key:
        api_key = api_key.replace('Basic ', '', 1)
        api_key = api_key.split(":")
@@ -45,12 +42,9 @@ def require_authorization():
     user = authorize_user(request)
     if user:
         login_user(user)
-        print('******************')
-        print("\n\n\n\n\n", api_key, "\n\n\n")
-        print('******************')
         return(user.id)
     else:
-        #abort(401)
+        abort(401)
         return None
 
 
@@ -69,8 +63,6 @@ def links():
 def create_link():
     """Creates a new link from a JSON request."""
     user_id=require_authorization()
-    print('************')
-    print(user_id)
     body = request.get_data(as_text=True)
     data = json.loads(body)
     form = LinkAddForm(data=data, formdata=None, csrf_enabled=False)
@@ -82,7 +74,6 @@ def create_link():
         last_id = db.session.query(db.func.max(Links.id)).scalar()
         link.set_short(last_id+1)
         link.user = user_id
-        flash(link)
         db.session.add(link)
         db.session.commit()
         return (json.dumps(link.to_dict()), 201, {"Location": url_for(".link", id=link.id)})
