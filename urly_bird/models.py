@@ -25,8 +25,6 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return "<User {}>".format(self.email)
 
-    def __str__(self):
-        return self.email
 
     @login_manager.user_loader
     def load_user(id):
@@ -41,6 +39,14 @@ class URL(db.Model):
     short_address = db.Column(db.String(255))
     owner = db.Column(db.Integer)  #User ID of the owner
     clicks = db.Column(db.Integer) #Obsolete
+
+    def to_dict(self):
+        return {"id": self.id,
+                "name": self.name,
+                "description": self.description,
+                "long_address": self.long_address,
+                "owner": self.owner
+                }
 
 
 class Timestamp(db.Model):

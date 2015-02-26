@@ -18,7 +18,8 @@ def index():
     if not current_user.is_authenticated():
         urls = URL.query.all()
         return render_template("index.html", urls=reversed(urls[-5::]), domain=request.url_root)
-    return redirect(url_for("sites"))
+    return redirect(url_for("urls.sites"))
+
 
 @urls.route("/sites", methods=['GET', 'POST'])
 @login_required
@@ -50,7 +51,7 @@ def sites():
             hashed_url.short_address = hashed_id
             db.session.commit()
             flash("URL added!")
-            return redirect(url_for("index"))
+            return redirect(url_for("urls.index"))
     elif request.method == 'POST':
         flash("Error adding URL.")
     return render_template("user.html", form=form, urls=url_list, domain=request.url_root)
@@ -67,7 +68,7 @@ def route(shorty):
     db.session.commit()
     return redirect(url.long_address)
 
-@urls.route('/e/<shorty>', methods=['GET','POST'])
+@urls.route('/e/<shorty>', methods=['GET', ' POST'])
 @login_required
 def edit(shorty):
     url = URL.query.filter_by(short_address=shorty).first()
@@ -82,7 +83,7 @@ def edit(shorty):
             db.session.commit()
             flash("Saved!")
     # Anything that fails the above if statements falls through to return index.html
-    return redirect(url_for("index"))
+    return redirect(url_for("urls.index"))
 
 @urls.route('/s/<shorty>')
 def stats(shorty):
@@ -98,7 +99,7 @@ def delete(shorty):
     if url:
         db.session.delete(url)
         db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("urls.index"))
 
 
 def edit_address(address):

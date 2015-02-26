@@ -1,14 +1,17 @@
 import csv
+
 from hashids import Hashids
 from faker import Factory
 from random import randint
 from urly_bird import models
 import datetime
 
+
 def seed_all(db):
     seed_users(db)
     seed_urls(db)
     seed_timestamps(db)
+
 
 def seed_users(db):
     users_added = 0
@@ -22,8 +25,9 @@ def seed_users(db):
                 users_added += 1
             else:
                 users_updated += 1
-            for key, value in row.items():
-                setattr(user, key, value)
+            user.name = row['name']
+            user.email = row['email']
+            user.set_password(row['password'])
             db.session.add(user)
         db.session.commit()
 
@@ -35,7 +39,8 @@ def seed_urls(db):
     with open('seed_urls.csv') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            url = models.URL.query.filter_by(long_address=row['long_address']).first()
+            url = (models.URL.query.filter_by(long_address=row['long_address']). \
+                   filter_by(owner=row['owner']).first())
             if url is None:
                 url = models.URL()
                 urls_added += 1
@@ -52,12 +57,13 @@ def seed_urls(db):
         print("Session commited")
     print("Quit")
 
+
 def seed_timestamps(db):
-    #  create list of timestamps and ip_addresses and assign them to url_ids
+    # create list of timestamps and ip_addresses and assign them to url_ids
     #  Then add them to the Timestamp table.
     fake = Factory.create()
     urls = models.URL.query.all()
-    url_count = len(urls)-1
+    url_count = len(urls) - 1
     for n in range(100000):
         fake_id = urls[randint(0, url_count)].id
         fake_user = fake.user_agent()
