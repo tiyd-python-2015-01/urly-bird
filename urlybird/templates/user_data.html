@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>{{ user.name }}</h1>
+
+
+<h3>Clicks</h3>
+<table>
+  <tr>
+    <th>Date/time</th>
+  <tr>
+    {% for click in user.clicks %}
+      <tr>
+        <td>{{ click.click_date }}</td>
+      </tr>
+    {% endfor %}
+
+{% endblock %}

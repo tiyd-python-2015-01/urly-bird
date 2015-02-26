@@ -1,4 +1,5 @@
 from flask import Flask
+from flask.ext.wtf import CsrfProtect
 
 from .extensions import (
     db,
@@ -9,21 +10,28 @@ from .extensions import (
     config
 )
 
+from . import models
+from .views.users import users
+from .views.bookmarks import bookmarks
+from .views.api import api
+
 SQLALCHEMY_DATABASE_URI = "postgres://localhost/urlybird"
 DEBUG = True
 SECRET_KEY = 'development-key'
 
+def create_app():
+    app = Flask("urlybird")
+    app.config.from_object(__name__)
+    app.register_blueprint(users)
+    app.register_blueprint(bookmarks)
+    app.register_blueprint(api, url_prefix="/api/v1")
 
-app = Flask("urlybird")
-app.config.from_object(__name__)
+    config.init_app(app)
+    db.init_app(app)
+    debug_toolbar.init_app(app)
+    migrate.init_app(app, db)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+    login_manager.login_view = "users.login"
 
-
-config.init_app(app)
-
-db.init_app(app)
-debug_toolbar.init_app(app)
-migrate.init_app(app, db)
-bcrypt.init_app(app)
-login_manager.init_app(app)
-
-from . import views, models
+    return app

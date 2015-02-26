@@ -1,9 +1,9 @@
-from flask import render_template, flash, redirect, request, url_for, send_file
+from flask import Blueprint, render_template, flash, redirect, request, url_for, send_file
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
-from . import app, db
-from .forms import LoginForm, RegistrationForm, BookmarkForm
-from .models import User, Bookmark, Click
+from ..extensions import db
+from ..forms import LoginForm, RegistrationForm, BookmarkForm
+from ..models import User, Bookmark, Click
 
 from hashids import Hashids
 import random
@@ -11,7 +11,7 @@ from datetime import datetime
 from io import BytesIO
 import matplotlib.pyplot as plt
 
-
+bookmarks = Blueprint("bookmarks", __name__)
 
 def flash_errors(form, category="warning"):
     '''Flash all errors for a form.'''
@@ -20,19 +20,19 @@ def flash_errors(form, category="warning"):
             flash("{0} - {1}".format(getattr(form, field).label.text, error), category)
 
 
-@app.route("/")
+@bookmarks.route("/")
 def index():
     bookmark_list = Bookmark.query.all()
     return render_template("index.html", bookmark_list=reversed(bookmark_list))
 
-@app.route("/logged_in")
+@bookmarks.route("/logged_in")
 @login_required
 def logged_in():
     bookmark_list = Bookmark.query.filter_by(user = current_user).all()
     return render_template("logged_in.html", bookmark_list=reversed(bookmark_list))
 
 
-@app.route("/bookmark", methods=["GET", "POST"])
+@bookmarks.route("/bookmark", methods=["GET", "POST"])
 @login_required
 def bookmark():
     form = BookmarkForm()
@@ -46,7 +46,7 @@ def bookmark():
                     user_id=current_user.id)
         db.session.add(bookmark)
         db.session.commit()
-        return redirect(url_for("logged_in"))
+        return redirect(url_for("bookmarks.logged_in"))
     flash_errors(form)
     return render_template("bookmark.html", form=form)
 
@@ -56,49 +56,7 @@ def hasher():
     y = hashids.encrypt(x)
     return y
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            flash("Logged in successfully.")
-            return redirect(request.args.get("next") or url_for("logged_in"))
-        else:
-            flash("That email or password is not correct.")
-
-    flash_errors(form)
-    return render_template("login.html", form=form)
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            flash("A user with that email address already exists.")
-        else:
-            user = User(name=form.name.data,
-                        email=form.email.data,
-                        password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            flash("You have been registered and logged in.")
-            return redirect(url_for("logged_in"))
-    else:
-        flash_errors(form)
-    return render_template("register.html", form=form)
-
-@app.route('/<shorturl>', methods = ["GET"])
+@bookmarks.route('/<shorturl>', methods = ["GET"])
 def go_to_bookmark(shorturl):
     a_link = Bookmark.query.filter_by(shorturl=shorturl).first()
     click = Click(bookmark = a_link,
@@ -108,12 +66,12 @@ def go_to_bookmark(shorturl):
     db.session.commit()
     return redirect(a_link.longurl, code = 301)
 
-@app.route("/bookmark/<int:id>/data")
+@bookmarks.route("/bookmark/<int:id>/data")
 def bookmark_data(id):
     bookmark =  Bookmark.query.get_or_404(id)
     return render_template("bookmark_data.html", bookmark=bookmark)
 
-@app.route("/bookmark/<int:id>_clicks.png")
+@bookmarks.route("/bookmark/<int:id>_clicks.png")
 def bookmark_clicks_chart(id):
     bookmark = Bookmark.query.get_or_404(id)
     click_data = bookmark.clicks_by_day()
@@ -126,8 +84,3 @@ def bookmark_clicks_chart(id):
     plt.clf()
     fig.seek(0)
     return send_file(fig, mimetype="image/png")
-
-@app.route("/user/<int:id>/data")
-def user_data(id):
-    user =  User.query.get_or_404(id)
-    return render_template("user_data.html", user=user)

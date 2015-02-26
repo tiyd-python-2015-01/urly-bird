@@ -6,7 +6,7 @@
 
 {% for bookmark in bookmark_list %}
 <div class="bookmark">
-  <a href="{{ url_for('go_to_bookmark', shorturl=bookmark.shorturl)}}">{{ bookmark.title }}</a>
+  <a href="{{ url_for('bookmarks.go_to_bookmark', shorturl=bookmark.shorturl)}}">{{ bookmark.title }}</a>
 </div>
 <div>
   {{ bookmark.shorturl }}

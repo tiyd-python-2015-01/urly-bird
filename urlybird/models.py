@@ -51,6 +51,15 @@ class Bookmark(db.Model):
             group_by(click_date).filter_by(bookmark_id=self.id). \
             order_by(click_date).all()
 
+    def to_dict(self):
+        return {"id": self.id,
+                "longurl": self.longurl,
+                "shorturl": self.shorturl,
+                "title": self.title,
+                "summary": self.summary,
+                "user_id": self.user_id,
+                "user": self.user}
+
     def __repr__(self):
         return "<Bookmark {}>".format(self.shorturl)
 

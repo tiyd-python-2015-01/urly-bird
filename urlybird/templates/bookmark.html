@@ -3,7 +3,7 @@
 {% block body %}
 <br>
 <br>
-<form method="POST" action="{{ url_for('bookmark') }}">
+<form method="POST" action="{{ url_for('bookmarks.bookmark') }}">
   {{ form.hidden_tag() }}
   <div>
     {{ form.longurl.label }} {{ form.longurl(size=100) }}
@@ -24,6 +24,6 @@
 <div>
   <br>
   <br>
-  <a href ="{{ url_for('index')}}">Nevermind, return to the index.</a>
+  <a href ="{{ url_for('bookmarks.index')}}">Nevermind, return to the index.</a>
 </div>
 {% endblock %}
