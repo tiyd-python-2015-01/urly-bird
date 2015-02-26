@@ -1,4 +1,6 @@
 from . import db, bcrypt, login_manager
+from datetime import date, timedelta, datetime
+from sqlalchemy import func, and_
 from flask.ext.login import UserMixin
 
 
@@ -46,6 +48,17 @@ class Link(db.Model):
     @property
     def clicks(self):
         return [click for click in self.clicks]
+
+    def clicks_by_day(self, days=30):
+        days = timedelta(days=days)
+        date_from = datetime.today() - days
+
+        click_date = func.date_trunc('day', Click.date)
+
+        return db.session.query(click_date, func.count(Click.id)). \
+            group_by(click_date). \
+            filter(and_(Click.link == self.id,
+            click_date >= str(date_from))).order_by(click_date).all()
 
 
 class Click(db.Model):

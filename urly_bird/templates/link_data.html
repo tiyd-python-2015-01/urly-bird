@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="row">
+        <div class="large-5 large-centered columns">
+            <h1>Link Usage Data:</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-3 large-centered columns">
+            <h2>Link Id: {{ link.short }}</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-8 large-centered columns">
+            <img src="{{ url_for('link_click_chart', link_id=link.id) }}" />
+        </div>
+    </div>
+{% endblock %}

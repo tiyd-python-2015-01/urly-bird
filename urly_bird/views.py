@@ -3,6 +3,7 @@ from flask.ext.login import (login_user, login_required, logout_user,
                              current_user)
 from datetime import datetime
 from pickle import dumps
+import matplotlib.pyplot as plt
 from . import app, db, shortner
 from .forms import LoginForm, RegistrationForm, LinkForm
 from .models import User, Link, Click
@@ -51,6 +52,12 @@ def add():
         flash_errors(form)
         return render_template("add_link.html", form=form)
 
+
+@app.route("/link_data/<int:link_id>")
+@login_required
+def link_data(link_id):
+    link = Link.query.get_or_404(link_id)
+    return render_template("link_data.html", link=link)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -156,3 +163,35 @@ def edit_link(link_id):
     else:
         return render_template("edit_link.html", form=form,
                                post_url=url_for("edit_link", link_id=link_id))
+
+
+def make_chart(link):
+    data = link.clicks_by_day()
+    dates = [item[0] for item in data]
+    date_labels = [date.strftime("%b %d") if i % 2 else ""
+                   for i, date in enumerate(dates)]
+    num_clicks = [item[1] for item in data]
+
+    ax = plt.subplot()
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.get_xaxis().tick_bottom()
+    ax.get_yaxis().tick_left()
+
+    plt.title("Link Clicks by Day")
+    plt.plot_date(x=dates, y=num_clicks, fmt="-")
+    plt.xticks(dates, date_labels, rotation=45, size="x-small")
+    plt.tight_layout()
+
+
+@app.route("/link_data<int:link_id>")
+@login_required
+def link_click_chart(link_id):
+    link = Link.query.get_or_404(link_id)
+    make_chart(link)
+
+    fig = BytesIO()
+    plt.savefig(fig)
+    plt.clf()
+    fig.seek(0)
+    return send_file(fig, mimetype="image/png")
