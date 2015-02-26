@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <form method="POST" action="{{ url_for("register") }}">
+    <form method="POST" action="{{ url_for("users.register") }}">
         {{ form.hidden_tag() }}
         <div class="row">
           <div class="large-12 columns">

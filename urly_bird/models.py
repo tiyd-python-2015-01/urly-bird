@@ -1,7 +1,12 @@
-from .app import db, bcrypt, login_manager
+from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
 from hashids import Hashids
-from sqlalchemy import func
+from sqlalchemy import func, and_
+from datetime import date, timedelta, datetime
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(id)
 
 
 class User(db.Model, UserMixin):
@@ -45,20 +50,33 @@ class Links(db.Model):
         hashids = Hashids()
         self.short = hashids.encode(id)
 
-    def clicks_by_day(self):
+    def clicks_by_day(self, days=30):
+        days = timedelta(days=days)
+        date_from = date.today() - days
         click_date = func.cast(Clicks.when, db.Date)
         return db.session.query(click_date, func.count(Clicks.id)). \
-            group_by(click_date).filter_by(link_id=self.id). \
+            group_by(click_date). \
+            filter(and_(Clicks.link_id == self.id),
+                   click_date >= str(date_from)). \
             order_by(click_date).all()
 
-    def clicks_by_country(self):
+    def to_dict(self):
+        return {'id': self.id,
+                'short': self.short,
+                'long': self.long,
+                'title': self.title,
+                'description': self.description,
+                }
 
+
+    def clicks_by_country(self):
         return db.session.query(Clicks.IP, func.count(Clicks.id)). \
             group_by(Clicks.IP).filter_by(link_id=self.id). \
             order_by(Clicks.IP).all()
 
     def __repr__(self):
         return "<Urly-bird {}>".format(self.short)
+
 
 class Clicks(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

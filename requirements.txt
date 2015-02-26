@@ -46,7 +46,7 @@ webtest
 
 hashids
 matplotlib
-ipwhois
+
 
 static3==0.5.1
 

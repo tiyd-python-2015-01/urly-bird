@@ -1,32 +1,22 @@
 from datetime import datetime
 from ipwhois import IPWhois
 from ipwhois.utils import get_countries
-"""Add your views here."""
-
-from flask import render_template, flash, redirect, request, url_for, send_file
-from flask.ext.login import login_user, logout_user, login_required, current_user
-import requests
-from .app import app, db,  login_manager
-from .forms import LoginForm, RegistrationForm, LinkAddForm, LinkUpdateForm
-from .models import User, Links, Clicks
-from .utils import flash_errors
 from io import BytesIO
 import matplotlib.pyplot as plt
 
+"""Add your views here."""
 
-def flash_errors(form, category="warning"):
-    '''Flash all errors for a form.'''
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash("{0} - {1}".format(getattr(form, field).label.text, error), category)
+from flask import Blueprint, render_template, flash, redirect, url_for, send_file
+from flask.ext.login import login_required, current_user
+
+from ..extensions import db
+from ..forms import LinkAddForm, LinkUpdateForm
+from ..models import Links, Clicks
+
+links = Blueprint("links",__name__)
 
 
-@login_manager.user_loader
-def load_user(id):
-    return User.query.get(id)
-
-
-@app.route("/")
+@links.route("/")
 def index():
     if current_user.is_authenticated():
         links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
@@ -35,20 +25,20 @@ def index():
         return render_template("index.html",links=[])
 
 
-@app.route("/links")
+@links.route("/links/<int:id>")
 @login_required
-def links():
-    links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
+def links_user(id):
+    links = Links.query.filter_by(user=id).order_by(Links.id.desc())
     return render_template("links.html",links=links)
 
 
-@app.route("/all_links")
+@links.route("/all_links")
 def all_links():
     links = Links.query.order_by(Links.id.desc()).all()
     return render_template("all_links.html",links=links)
 
 
-@app.route("/add_link", methods=["GET", "POST"])
+@links.route("/add_link", methods=["GET", "POST"])
 @login_required
 def add_link():
     form = LinkAddForm()
@@ -69,7 +59,7 @@ def add_link():
     return render_template("add_link.html", form=form)
 
 
-@app.route("/delete_link/<int:id>", methods=["GET", "POST"])
+@links.route("/delete_link/<int:id>", methods=["GET", "POST"])
 def delete_link(id):
     link_id = id
     link = Links.query.get(link_id)
@@ -79,7 +69,7 @@ def delete_link(id):
     return render_template("index.html",links=links)
 
 
-@app.route('/update_link/<int:id>', methods=["GET", "POST"])
+@links.route('/update_link/<int:id>', methods=["GET", "POST"])
 @login_required
 def update_link(id):
     update_link = Links.query.get(id)
@@ -95,23 +85,7 @@ def update_link(id):
                             form=form)
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
-            return render_template("index.html",links=links)
-        else:
-            flash("That email or password is not correct.")
-            return redirect(url_for("register"))
-    flash_errors(form)
-    return render_template("login.html", form=form)
-
-
-@app.route('/urly/<new_url>')
+@links.route('/urly/<new_url>')
 def show_link(new_url):
     link = Links.query.filter_by(short=new_url).first()
     cl_user = current_user.id
@@ -127,40 +101,14 @@ def show_link(new_url):
     return redirect(link.long)
 
 
-@app.route("/logout", methods=["GET","POST"])
-def logout():
-    logout_user()
-    return redirect(url_for("index"))
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            flash("A user with that email address already exists.")
-        else:
-            user = User(name=form.name.data,
-                        email=form.email.data,
-                        password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            flash("You have been registered and logged in.")
-            return redirect(url_for("index"))
-    else:
-        flash_errors(form)
-    return render_template("register.html", form=form)
-
-
 def get_country(ip):
     countries = get_countries()
     obj = IPWhois(ip)
     results = obj.lookup(False)
     return countries[results['nets'][0]['country']]
 
-@app.route("/link_clicks/<int:id>")
+
+@links.route("/link_clicks/<int:id>")
 def link_clicks(id):
     link = Links.query.get_or_404(id)
     country_data = link.clicks_by_country()
@@ -178,21 +126,32 @@ def link_clicks(id):
 
 
 
-@app.route("/link_clicks/<int:id>_clicks.png")
+@links.route("/link_clicks/<int:id>_clicks.png")
 def link_clicks_chart(id):
     link = Links.query.get_or_404(id)
     click_data = link.clicks_by_day()
     dates = [c[0] for c in click_data]
+    date_labels = [d.strftime("%b %d") for d in dates]
+    every_other_date_label = [d if i % 2 else "" for i, d in enumerate(date_labels)]
     num_clicks = [c[1] for c in click_data]
-    fig = BytesIO()  # will store the plot as bytes
+    ax = plt.subplot(111)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.get_xaxis().tick_bottom()
+    ax.get_yaxis().tick_left()
+    plt.title("Clicks by day")
     plt.plot_date(x=dates, y=num_clicks, fmt="-")
+    plt.xticks(dates, every_other_date_label, rotation=45, size="x-small")
+    plt.tight_layout()
+
+    fig = BytesIO()  # will store the plot as bytes
     plt.savefig(fig)
     plt.clf()
     fig.seek(0) #go back to the beginning
     return send_file(fig, mimetype="image/png")
 
 
-@app.route("/stats")
+@links.route("/stats")
 def stats():
     links = Links.query.all()
     pairs=[]

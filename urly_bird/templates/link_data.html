@@ -5,7 +5,7 @@
  <div class="row">
     <h3>Link: {{ link.title }}</h3>
     <h4>Clicks</h4>
-    <img src="{{ url_for("link_clicks_chart", id=link.id) }}" />
+    <img src="{{ url_for("links.link_clicks_chart", id=link.id) }}" />
     <table>
      <thead>
        <tr>
