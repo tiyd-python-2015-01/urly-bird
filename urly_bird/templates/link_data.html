@@ -1,11 +1,13 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div class ="small-12 columns">
+
  <div class="row">
+   <div class ="small-12 columns">
     <h3>Link: {{ link.title }}</h3>
     <h4>Clicks</h4>
-    <img src="{{ url_for("links.link_clicks_chart", id=link.id) }}" />
+    <img src="{{ url_for("linksb.link_clicks_chart", id=link.id) }}" />
+    <div class="large-8 large-offset-2 columns">
     <table>
      <thead>
        <tr>
@@ -14,7 +16,7 @@
        </tr>
      </thead>
      <tbody>
-
+       <h4>Clicks per urly Link in last 30 days</h4>
       <div class="row">
     {% for country, num_clicks in countries %}
       <tr>
@@ -23,6 +25,7 @@
       </tr>
 
     {% endfor %}
+  </div>
    </div>
    </div>
     </tbody>

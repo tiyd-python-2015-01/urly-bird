@@ -13,10 +13,10 @@ from ..extensions import db
 from ..forms import LinkAddForm, LinkUpdateForm
 from ..models import Links, Clicks
 
-links = Blueprint("links",__name__)
+linksb = Blueprint("linksb",__name__)
 
 
-@links.route("/")
+@linksb.route("/")
 def index():
     if current_user.is_authenticated():
         links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
@@ -25,20 +25,20 @@ def index():
         return render_template("index.html",links=[])
 
 
-@links.route("/links/<int:id>")
+@linksb.route("/links/<int:id>")
 @login_required
 def links_user(id):
     links = Links.query.filter_by(user=id).order_by(Links.id.desc())
     return render_template("links.html",links=links)
 
 
-@links.route("/all_links")
+@linksb.route("/all_links")
 def all_links():
     links = Links.query.order_by(Links.id.desc()).all()
     return render_template("all_links.html",links=links)
 
 
-@links.route("/add_link", methods=["GET", "POST"])
+@linksb.route("/add_link", methods=["GET", "POST"])
 @login_required
 def add_link():
     form = LinkAddForm()
@@ -53,13 +53,11 @@ def add_link():
         new_link.user = current_user.id
         db.session.add(new_link)
         db.session.commit()
-        return redirect(url_for("index"))
-    else:
-        flash_errors(form)
+        return redirect(url_for("linksb.index"))
     return render_template("add_link.html", form=form)
 
 
-@links.route("/delete_link/<int:id>", methods=["GET", "POST"])
+@linksb.route("/delete_link/<int:id>", methods=["GET", "POST"])
 def delete_link(id):
     link_id = id
     link = Links.query.get(link_id)
@@ -69,7 +67,7 @@ def delete_link(id):
     return render_template("index.html",links=links)
 
 
-@links.route('/update_link/<int:id>', methods=["GET", "POST"])
+@linksb.route('/update_link/<int:id>', methods=["GET", "POST"])
 @login_required
 def update_link(id):
     update_link = Links.query.get(id)
@@ -77,15 +75,13 @@ def update_link(id):
     if form.validate_on_submit():
         form.populate_obj(update_link)
         db.session.commit()
-        return redirect(url_for("index"))
-    else:
-        flash_errors(form)
+        return redirect(url_for("linksb.index"))
     return render_template("update_link.html",
-                            update_url = url_for("update_link",id=update_link.id),
+                            update_url = url_for("linksb.update_link",id=update_link.id),
                             form=form)
 
 
-@links.route('/urly/<new_url>')
+@linksb.route('/urly/<new_url>')
 def show_link(new_url):
     link = Links.query.filter_by(short=new_url).first()
     cl_user = current_user.id
@@ -108,7 +104,7 @@ def get_country(ip):
     return countries[results['nets'][0]['country']]
 
 
-@links.route("/link_clicks/<int:id>")
+@linksb.route("/link_clicks/<int:id>")
 def link_clicks(id):
     link = Links.query.get_or_404(id)
     country_data = link.clicks_by_country()
@@ -126,7 +122,7 @@ def link_clicks(id):
 
 
 
-@links.route("/link_clicks/<int:id>_clicks.png")
+@linksb.route("/link_clicks/<int:id>_clicks.png")
 def link_clicks_chart(id):
     link = Links.query.get_or_404(id)
     click_data = link.clicks_by_day()
@@ -134,12 +130,15 @@ def link_clicks_chart(id):
     date_labels = [d.strftime("%b %d") for d in dates]
     every_other_date_label = [d if i % 2 else "" for i, d in enumerate(date_labels)]
     num_clicks = [c[1] for c in click_data]
+    #plt.rc('figure', figsize=(6,4))
     ax = plt.subplot(111)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.get_xaxis().tick_bottom()
     ax.get_yaxis().tick_left()
     plt.title("Clicks by day")
+    fig = plt.gcf()
+    fig.set_size_inches(6,4)
     plt.plot_date(x=dates, y=num_clicks, fmt="-")
     plt.xticks(dates, every_other_date_label, rotation=45, size="x-small")
     plt.tight_layout()
@@ -151,7 +150,7 @@ def link_clicks_chart(id):
     return send_file(fig, mimetype="image/png")
 
 
-@links.route("/stats")
+@linksb.route("/stats")
 def stats():
     links = Links.query.all()
     pairs=[]

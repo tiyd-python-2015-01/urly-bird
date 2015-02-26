@@ -11,7 +11,7 @@ from .extensions import (
 
 from . import models
 from .views.users import users
-from .views.links import links
+from .views.links import linksb
 from .views.api import api
 
 SQLALCHEMY_DATABASE_URI = "postgres://localhost/urly_bird"
@@ -23,7 +23,7 @@ def create_app():
     app = Flask("urly_bird")
     app.config.from_object(__name__)
     app.register_blueprint(users)
-    app.register_blueprint(links)
+    app.register_blueprint(linksb)
     app.register_blueprint(api, url_prefix="/api/v1")
     config.init_app(app)
     db.init_app(app)

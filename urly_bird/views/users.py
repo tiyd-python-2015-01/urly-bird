@@ -14,19 +14,17 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            links = Links.query.filter_by(user=current_user.id).order_by(Links.id.desc())
-            return render_template("index.html",links=links)
+            return redirect(request.args.get("next") or url_for("linksb.index"))
         else:
             flash("That email or password is not correct.")
-            return redirect(url_for("register"))
-    flash_errors(form)
+            return redirect(url_for("users.register"))
     return render_template("login.html", form=form)
 
 
 @users.route("/logout", methods=["GET","POST"])
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("linksb.index"))
 
 
 @users.route("/register", methods=["GET", "POST"])
@@ -44,7 +42,5 @@ def register():
             db.session.commit()
             login_user(user)
             flash("You have been registered and logged in.")
-            return redirect(url_for("index"))
-    else:
-        flash_errors(form)
+            return redirect(url_for("linksb.index"))
     return render_template("register.html", form=form)
