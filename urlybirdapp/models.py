@@ -64,6 +64,12 @@ class Links(db.Model):
             order_by(click_date).all()
 
 
+    def to_dict(self):
+        return {'id': self.id,
+                'url': self.url,
+                'text': self.text,
+                'short': self.short}
+
     def __repr__(self):
         return "URL {}".format(self.url)
 
