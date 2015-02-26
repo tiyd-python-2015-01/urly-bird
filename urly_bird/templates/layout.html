@@ -18,20 +18,20 @@
           <nav class="top-bar" data-topbar role="navigation">
             <ul class="title-area">
               <li class="name">
-                <h1><a href="{{ url_for("index") }}">UrlyBird</a></h1>
+                <h1><a href="{{ url_for("link_blueprint.index") }}">UrlyBird</a></h1>
               </li>
             </ul>
             <section class="top-bar-section">
               <ul class="right">
               {% if not current_user.is_authenticated() %}
-                <li><a href={{ url_for('register') }}> Register </a></li>
-                <li><a href={{ url_for('login') }}> Login </a></li>
+                <li><a href={{ url_for('user_blueprint.register') }}> Register </a></li>
+                <li><a href={{ url_for('user_blueprint.login') }}> Login </a></li>
             {% endif %}
             {%  if current_user.is_authenticated() %}
                 <li><a href='/shorten'>Shorten Link</a></li>
-                <li><a href={{ url_for("your_links") }}>Your Links</a></li>
-                <li><a href={{ url_for("show_all") }}>All links</a></li>
-                <li><a href={{ url_for("logout") }}> Logout </a></li>
+                <li><a href={{ url_for("link_blueprint.your_links") }}>Your Links</a></li>
+                <li><a href={{ url_for("link_blueprint.show_all") }}>All links</a></li>
+                <li><a href={{ url_for("user_blueprint.logout") }}> Logout </a></li>
             {% endif %}
               </ul>
           </nav>

@@ -1,8 +1,6 @@
-from . import db, bcrypt, login_manager
+from .extensions import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
 from hashids import Hashids
-from flask import redirect
-from . import app
 from sqlalchemy import func
 
 
@@ -53,6 +51,13 @@ class Link(db.Model):
     def clicks_by_day(self):
         click_date = func.cast(Click.date, db.Date)
         return db.session.query(func.count(Click.id), click_date).group_by(click_date).order_by(click_date).all()
+
+    def to_dict(self):
+        return {'id': self.id,
+                'date': self.date,
+                'original_link': self.original_link,
+                'short_link': self.short_link,
+                'description': self.description}
 
 
 class Click(db.Model):

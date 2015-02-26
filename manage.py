@@ -1,14 +1,15 @@
 import os
 
-from flask.ext.script import Manager, Shell, Server
+from flask.ext.script import Manager, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 
-from urly_bird import app, db
+from urly_bird import create_app, db, models
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
 
+app = create_app()
 manager = Manager(app)
 manager.add_command('server', Server())
 manager.add_command('db', MigrateCommand)

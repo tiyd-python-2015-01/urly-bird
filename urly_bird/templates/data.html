@@ -3,5 +3,5 @@
 {% block body %}
 <h2>{{ link.original_link }}</h2>
 <h2>{{ link.short_link }}</h2>
-<img src="{{ url_for("link_clicks_chart", id=link.id) }}" />
+<img src="{{ url_for("link_blueprint.link_clicks_chart", id=link.id) }}" />
 {% endblock %}

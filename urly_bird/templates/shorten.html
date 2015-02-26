@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <form method="POST" action={{ url_for('shorten') }}>
+    <form method="POST" action={{ url_for('link_blueprint.shorten') }}>
     <div class="row">
         <div class="small-10 columns">
         {{ form.url.label }} {{ form.url }}

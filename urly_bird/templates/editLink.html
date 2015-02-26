@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
+    {% set link_id = link.id %}
 
-    <form method="POST" action={{ url_for('shorten') }}>
+    <form method="POST" action={{ url_for("link_blueprint.edit_link", id=link_id) }}>
     <div class="row">
         <div class="small-10 columns">
         {{ form.original_link.label }} {{ form.original_link }}
