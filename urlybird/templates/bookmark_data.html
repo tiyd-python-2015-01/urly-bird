@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <h1>{{ bookmark.title }}</h1>
+  <h2>{{ bookmark.shorturl }}</h2>
+
+  <h3>Clicks</h3>
+  {% for click in bookmark.clicks %}
+
+  {{ click.click_date }}
+
+  {% endfor %}
+
+
+  <img src="{{ url_for('bookmarks.bookmark_clicks_chart', id=bookmark.id) }}"
+{% endblock %}

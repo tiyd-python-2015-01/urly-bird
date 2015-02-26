@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<br>
+<br>
+<form method="POST" action="{{ url_for('bookmarks.bookmark') }}">
+  {{ form.hidden_tag() }}
+  <div>
+    {{ form.longurl.label }} {{ form.longurl(size=100) }}
+
+  </div>
+  <div>
+    {{ form.title.label }} {{ form.title(size=20) }}
+  </div>
+  <div>
+    {{ form.summary.label }} {{ form.summary(size=100) }}
+  <input type="submit" value="Create">
+</form>
+{% for message in get_flashed_messages() %}
+<div class="flash">
+  {{ message }}
+</div>
+{% endfor %}
+<div>
+  <br>
+  <br>
+  <a href ="{{ url_for('bookmarks.index')}}">Nevermind, return to the index.</a>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div>
+  <br>
+  <a href ="{{ url_for('bookmarks.bookmark')}}"><button type="button">Add a bookmark!</button></a>
+</div>
+
+<h2>Your links</h2>
+
+{% for bookmark in bookmark_list %}
+<div class="bookmark">
+  <a href="{{ url_for('bookmarks.go_to_bookmark', shorturl=bookmark.shorturl)}}">{{ bookmark.title }}</a>
+</div>
+<div>
+  {{ bookmark.shorturl }}
+</div>
+<div>
+  {% if bookmark.summary %}
+  {{ bookmark.summary }}
+  {% endif %}
+</div>
+<div>
+  <a href="{{ url_for('bookmarks.bookmark_data', id=bookmark.id)}}">Click Data</a>
+</div>
+<div>
+  <br>
+</div>
+{% endfor %}
+
+
+{% endblock %}
