@@ -28,7 +28,7 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash("Logged in successfully.")
-            return redirect(request.args.get("next") or url_for("users.logged_in"))
+            return redirect(request.args.get("next") or url_for("bookmarks.logged_in"))
         else:
             flash("That email or password is not correct.")
 
@@ -57,7 +57,7 @@ def register():
             db.session.commit()
             login_user(user)
             flash("You have been registered and logged in.")
-            return redirect(url_for("users.logged_in"))
+            return redirect(url_for("bookmarks.logged_in"))
     else:
         flash_errors(form)
     return render_template("register.html", form=form)

@@ -57,8 +57,7 @@ class Bookmark(db.Model):
                 "shorturl": self.shorturl,
                 "title": self.title,
                 "summary": self.summary,
-                "user_id": self.user_id,
-                "user": self.user}
+                "user_id": self.user_id}
 
     def __repr__(self):
         return "<Bookmark {}>".format(self.shorturl)
