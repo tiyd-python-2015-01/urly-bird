@@ -2,20 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05a7e803-9fa7-4dae-9e0c-ecdbfe6d41ca" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/urly_bird/views/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/urly_bird/views/api.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/urly_bird/views/link.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/urly_bird/views.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/__init__.py" afterPath="$PROJECT_DIR$/urly_bird/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/templates/data.html" afterPath="$PROJECT_DIR$/urly_bird/templates/data.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/templates/editLink.html" afterPath="$PROJECT_DIR$/urly_bird/templates/editLink.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/templates/layout.html" afterPath="$PROJECT_DIR$/urly_bird/templates/layout.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/templates/login.html" afterPath="$PROJECT_DIR$/urly_bird/templates/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manage.py" afterPath="$PROJECT_DIR$/manage.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/models.py" afterPath="$PROJECT_DIR$/urly_bird/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/templates/register.html" afterPath="$PROJECT_DIR$/urly_bird/templates/register.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/templates/shorten.html" afterPath="$PROJECT_DIR$/urly_bird/templates/shorten.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urly_bird/views/user.py" afterPath="$PROJECT_DIR$/urly_bird/views/user.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="urly-bird.iws" />
@@ -641,12 +627,18 @@
       <option name="project" value="LOCAL" />
       <updated>1424910604870</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="added basic api">
+      <created>1424985148839</created>
+      <option name="number" value="00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1424985148839</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="547" y="27" width="858" height="799" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -718,7 +710,8 @@
     <MESSAGE value="added foundation" />
     <MESSAGE value="added click data function&#10;" />
     <MESSAGE value="made user blueprint" />
-    <option name="LAST_COMMIT_MESSAGE" value="made user blueprint" />
+    <MESSAGE value="added basic api" />
+    <option name="LAST_COMMIT_MESSAGE" value="added basic api" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
