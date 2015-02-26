@@ -19,9 +19,17 @@ def flash_errors(form, category="warning"):
 @app.route("/")
 def index():
     if current_user.is_authenticated():
-        return render_template("index.html")
+        return redirect(url_for("display_user_links", page=1))
     else:
         return redirect(url_for("show_all"))
+
+
+@app.route("/user/<int:page>")
+def display_user_links(page):
+    all_links = Link.query.filter_by(owner=current_user.id).order_by(
+        Link.id.desc()).paginate(page, per_page=20, error_out=False)
+    return render_template("index.html", links=all_links)
+
 
 @app.route("/add", methods=["GET", "POST"])
 @login_required
@@ -117,7 +125,13 @@ def redirect_to(short):
 
 @app.route("/show_all")
 def show_all():
-    all_links = db.session.query(Link).order_by(Link.id.desc()).all()
+    return redirect(url_for("show_page", page=1))
+
+
+@app.route("/show_all/<int:page>")
+def show_page(page):
+    all_links = Link.query.order_by(Link.id.desc()).paginate(page,
+                                    per_page=40, error_out=False)
     return render_template("show_all.html", links=all_links)
 
 

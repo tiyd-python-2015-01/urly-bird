@@ -1,5 +1,5 @@
 """Extensions"""
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy, Pagination
 from flask.ext.migrate import Migrate
 from flask.ext.debugtoolbar import DebugToolbarExtension
 from flask.ext.bcrypt import Bcrypt
