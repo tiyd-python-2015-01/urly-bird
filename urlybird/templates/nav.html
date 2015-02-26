@@ -1,0 +1,49 @@
+{% block nav %}
+    <nav class="top-bar" data-topbar role="navigation">
+        <ul class="title-area">
+            <li class="name">
+                <h1><a href="{{ url_for('index') }}">URLy Bird!</a></h1>
+            </li>
+            <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+            <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+        </ul>
+        <section class="top-bar-section">
+            <!-- Right Nav Section -->
+            <ul class="right">
+                {% if current_user.is_authenticated() %}
+                    <li class="divider"></li>
+                    <li class="active">
+                        <a href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="divider"></li>
+                    <li class="active">
+                        <a href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="active">
+                        <a href="{{ url_for('register') }}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <!-- Left Nav Section -->
+            <ul class="left">
+                {% if current_user.is_authenticated() %}
+                    <li class="divider"></li>
+                    <li class="active">
+                        <a href="{{ url_for('create_link') }}">Create link</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="active">
+                        <a href="{{ url_for('show_links') }}">See links</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="active">
+                        <a href="{{ url_for('show_stats') }}">Show stats</a>
+                    </li>
+                    <li class="divider"></li>
+                {% endif %}
+            </ul>
+        </section>
+    </nav>
+{% endblock %}
