@@ -1,6 +1,5 @@
-from flask import render_template, flash, request, url_for, redirect
-from flask.ext.login import login_user, logout_user, login_required, current_user
-from .forms import LoginForm, RegistrationForm#, CreateLinkForm
+from flask import render_template, flash, request, url_for, redirect, ext
+from .forms import LoginForm, RegistrationForm
 from . import app, db
 from .utils import flash_errors
 from .models import User, Link
@@ -10,9 +9,9 @@ from .models import User, Link
 
 
 @app.route("/logout", methods=["GET"])
-@login_required
+@ext.login.login_required
 def logout():
-    logout_user()
+    ext.login.logout_user()
     return redirect("/login")
 
 
@@ -22,10 +21,9 @@ def home():
 
 
 @app.route("/index", methods=["POST"])
-@login_required
+@ext.login.login_required
 def index():
     return render_template("layout.html")
-
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -34,7 +32,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
-            login_user(user)
+            ext.login.login_user(user)
             flash("Logged in successfully.")
             return redirect(request.args.get('next') or url_for("index"))
         else:
@@ -57,7 +55,7 @@ def register():
                         password=form.password.data)
             db.session.add(user)
             db.session.commit()
-            login_user(user)
+            login(user)
             flash("You have been registered and logged in.")
             return redirect(url_for("index"))
     else:

@@ -3,6 +3,7 @@ import flask.ext.login as fel
 from datetime import datetime
 import random
 
+
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(id)
