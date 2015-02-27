@@ -60,6 +60,15 @@ class Link(db.Model):
                                 click_date >= str(date_from))). \
                                 order_by(click_date).all()
 
+    def to_dict(self):
+        return {"id": self.id,
+                "date": self.date,
+                "title": self.title,
+                "owner": self.owner,
+                "link": self.original,
+                "short": self.short,
+                "description": self.description}
+
 
 class Click(db.Model):
 
