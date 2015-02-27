@@ -15,7 +15,7 @@ SECRET_KEY = 'development-key'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-# app.config.from_pyfile('application.cfg', silent=True)
+app.config.from_pyfile('application.cfg', silent=True)
 
 config.init_app(app)
 db.init_app(app)
