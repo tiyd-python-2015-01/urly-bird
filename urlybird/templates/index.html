@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+  {% if not current_user.is_authenticated() %}
+    <center>
+      <u><h2>Login/Register</h2></u>
+      <div>If already registered, please Log In.</div>
+      <br>
+      <form action="/login">
+        <input type="submit" value="Log In" style="height:75px; width:100px">
+      </form>
+      <br><br>
+      <div>If you are a new user, Continue to Register.</div>
+      <br>
+      <form action="/register">
+        <input type="submit" value="Register" style="height:75px; width:100px">
+      </form>
+    </center>
+
+
+  {% else %}
+    <center>
+      <h2>Welcome {{ current_user.name }}</h2>
+      <form action="/logout">
+        <input type="submit" value="Log Out" style="height:75px; width:100px">
+      </form>
+
+    </center>
+  {% endif %}
+
+{% endblock %}
