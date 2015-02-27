@@ -1,40 +1,34 @@
-from flask import (render_template, flash, redirect, request, url_for,
-                   session, send_file)
-from flask.ext.login import (login_user, login_required, logout_user,
-                             current_user)
+from flask import (Blueprint, render_template, flash, redirect, request,
+                   url_for, session, send_file)
+from flask.ext.login import login_required, current_user
 from datetime import datetime
 from pickle import dumps
 from io import BytesIO
 import matplotlib.pyplot as plt
-from . import app, db, shortner
-from .forms import LoginForm, RegistrationForm, LinkForm
-from .models import User, Link, Click
+from ..forms import LinkForm
+from ..models import Link, Click
+from ..extensions import db, shortner, flash_errors
 
 
-def flash_errors(form, category="warning"):
-    """Show all errors from a form."""
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash("{0} - {1}".format(
-                getattr(form, field).label.text, error), category)
+links = Blueprint("links", __name__)
 
 
-@app.route("/")
+@links.route("/")
 def index():
     if current_user.is_authenticated():
-        return redirect(url_for("display_user_links", page=1))
+        return redirect(url_for("links.display_user_links", page=1))
     else:
-        return redirect(url_for("show_all"))
+        return redirect(url_for("links.show_all"))
 
 
-@app.route("/user/<int:page>")
+@links.route("/user/<int:page>")
 def display_user_links(page):
     all_links = Link.query.filter_by(owner=current_user.id).order_by(
         Link.id.desc()).paginate(page, per_page=20, error_out=False)
     return render_template("index.html", links=all_links)
 
 
-@app.route("/add", methods=["GET", "POST"])
+@links.route("/add", methods=["GET", "POST"])
 @login_required
 def add():
     form = LinkForm()
@@ -49,64 +43,20 @@ def add():
         submission.short = shortner.encode(submission.id)
         db.session.commit()
         flash("Link successfully added!")
-        return redirect(url_for("index"))
+        return redirect(url_for("links.index"))
     else:
         flash_errors(form)
         return render_template("add_link.html", form=form)
 
 
-@app.route("/link_data/<int:link_id>")
+@links.route("/link_data/<int:link_id>")
 @login_required
 def link_data(link_id):
     link = Link.query.get_or_404(link_id)
     return render_template("link_data.html", link=link)
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            flash("You were logged in!")
-            return redirect(request.args.get("next") or url_for("index"))
-        else:
-            flash("E-mail address or password invalid.")
-    flash_errors(form)
-    return render_template("login.html", form=form)
-
-
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for("index"))
-
-
-@app.route("/create_user", methods=["GET", "POST"])
-def create_user():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            flash("E-mail address already in use.")
-        else:
-            user = User(name=form.name.data,
-                        email=form.email.data,
-                        password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            session["username"] = user.name
-            flash("Registration Successful!  You have been logged in.")
-            return redirect(url_for("index"))
-    else:
-        flash_errors(form)
-    return render_template("register.html", form=form)
-
-
-@app.route("/<short>")
+@links.route("/<short>")
 def redirect_to(short):
     url = db.session.query(Link).filter_by(short=short).first()
     if url:
@@ -130,31 +80,31 @@ def redirect_to(short):
         return redirect(url)
     else:
         flash("URL Not Found.")
-        return redirect(url_for("index"))
+        return redirect(url_for("links.index"))
 
 
-@app.route("/show_all")
+@links.route("/show_all")
 def show_all():
-    return redirect(url_for("show_page", page=1))
+    return redirect(url_for("links.show_page", page=1))
 
 
-@app.route("/show_all/<int:page>")
+@links.route("/show_all/<int:page>")
 def show_page(page):
     all_links = Link.query.order_by(Link.id.desc()).paginate(page,
                                     per_page=40, error_out=False)
     return render_template("show_all.html", links=all_links)
 
 
-@app.route("/delete/<int:link_id>")
+@links.route("/delete/<int:link_id>")
 @login_required
 def delete_item(link_id):
     record = Link.query.get(link_id)
     db.session.delete(record)
     db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("links.index"))
 
 
-@app.route("/edit_link/<int:link_id>", methods=["GET", "POST"])
+@links.route("/edit_link/<int:link_id>", methods=["GET", "POST"])
 @login_required
 def edit_link(link_id):
     record = Link.query.get(link_id)
@@ -162,10 +112,11 @@ def edit_link(link_id):
     if form.validate_on_submit():
         form.populate_obj(record)
         db.session.commit()
-        return redirect(url_for("index"))
+        return redirect(url_for("links.index"))
     else:
         return render_template("edit_link.html", form=form,
-                               post_url=url_for("edit_link", link_id=link_id))
+                               post_url=url_for("links.edit_link",
+                                                link_id=link_id))
 
 
 def make_chart(link):
@@ -185,10 +136,9 @@ def make_chart(link):
     plt.plot_date(x=dates, y=num_clicks, fmt="-")
     plt.xticks(dates, date_labels, rotation=45, size="x-small")
     plt.tight_layout()
-    print(data)
 
 
-@app.route("/link_data<int:link_id>.png")
+@links.route("/link_data<int:link_id>.png")
 @login_required
 def link_click_chart(link_id):
     link = Link.query.get_or_404(link_id)

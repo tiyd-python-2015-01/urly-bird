@@ -17,10 +17,10 @@
     <div class="row">
         <div class="large-5 large-centered columns">
             {% if links.prev_num > 0 %}
-                <button class="tiny" onclick="location.href='{{ url_for('show_page', page=links.prev_num)}}'">Previous</button>
+                <button class="tiny" onclick="location.href='{{ url_for('links.show_page', page=links.prev_num)}}'">Previous</button>
             {% endif %}
             {% if links.next_num <= links.pages %}
-                <button class="tiny" onclick="location.href='{{ url_for('show_page', page=links.next_num)}}'">Next</button>
+                <button class="tiny" onclick="location.href='{{ url_for('links.show_page', page=links.next_num)}}'">Next</button>
             {% endif %}
         </div>
     </div>

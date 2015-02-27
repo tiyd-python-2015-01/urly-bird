@@ -7,7 +7,11 @@ from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 
-from urly_bird import app, db, bcrypt, models, shortner
+from urly_bird import create_app, db, bcrypt, models
+
+from urly_bird.extensions import shortner
+
+app = create_app()
 
 manager = Manager(app)
 manager.add_command('server', Server())

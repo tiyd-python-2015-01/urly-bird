@@ -5,7 +5,7 @@
             <h2>Account Registration</h2>
         </div>
     </div>
-    <form method=POST action="{{ url_for('create_user') }}">
+    <form method=POST action="{{ url_for('users.create_user') }}">
         {{ form.hidden_tag() }}
         <div class="row">
             <div class="large-1 large-offset-3 columns">{{ form.name.label }}</div>
