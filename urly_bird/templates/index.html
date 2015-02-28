@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+    <div class="large-3 columns"></div>
+    <div class="large-6  large-centered columns">
+        <h2>Your submitted links:</h2>
+    </div>
+    <div class="large-3 columns"></div>
+</div>
+{% for link in links.items %}
+    <div class="row">
+        <div class="large-2 columns">{{ link.title }}:</div>
+        <div class="large-5 columns"><a href="http://stormy-bastion-5647.herokuapp.com/{{ link.short }}" title="{{ link.description }}">
+        http://stormy-bastion-5647.herokuapp.com/{{ link.short }}</a></div>
+        <div class="large-3 columns"><button class="tiny" onclick="location.href='{{ url_for('links.edit_link', link_id=link.id)}}'">Edit</button>
+        <button class="tiny" onclick="location.href='{{ url_for('links.delete_item', link_id=link.id)}}'">Delete</button>
+        <button class="tiny" onclick="location.href='{{ url_for('links.link_data', link_id=link.id)}}'">Data</button></div>
+    </div>
+{% endfor %}
+<div class="row">
+    <div class="large-5 large-centered columns">
+        {% if links.prev_num > 0 %}
+            <button class="tiny" onclick="location.href='{{ url_for('links.display_user_links', page=links.prev_num)}}'">Previous</button>
+        {% endif %}
+        {% if links.next_num <= links.pages %}
+            <button class="tiny" onclick="location.href='{{ url_for('links.display_user_links', page=links.next_num)}}'">Next</button>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
