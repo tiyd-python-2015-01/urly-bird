@@ -14,7 +14,7 @@ from .views.users import users
 from .views.links import links
 from .views.api import api
 
-SQLALCHEMY_DATABASE_URI = "postgres://localhost/"
+SQLALCHEMY_DATABASE_URI = "postgres://localhost/urly_bird"
 DEBUG = True
 SECRET_KEY = 'development key'
 DEBUG_TB_INTERCEPT_REDIRECTS = False

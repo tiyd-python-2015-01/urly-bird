@@ -45,6 +45,7 @@ class Link(db.Model):
     date = db.Column(db.DateTime())
     links = db.relationship('User',
                             backref=db.backref('submitted', lazy='dynamic'))
+
     @property
     def clicks(self):
         return [click for click in self.clicks]
