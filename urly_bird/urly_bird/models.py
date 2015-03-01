@@ -1,5 +1,6 @@
 from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
+from hashids import Hashids
 
 
 @login_manager.user_loader
@@ -28,9 +29,18 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return "<User {}>".format(self.email)
 
-class Link
+class Link(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    original_link = db.Column(db.text, nullable=False)
+    short_link = db.Column(db.text)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-table Relationship
+    def shorten_url(self):
+        self.short_link = Hashids()
+        return self.short_link
+
+
+# table Relationship
 
 
 
