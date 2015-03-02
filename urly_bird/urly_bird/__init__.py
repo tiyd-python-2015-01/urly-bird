@@ -24,6 +24,6 @@ migrate.init_app(app, db)
 bcrypt.init_app(app)
 login_manager.init_app(app)
 
-hashid = Hashids(salt=app.config['SECRET_KEY'])
+hashid = Hashids(salt="salt mines dehydrate the world")
 
 from . import views, models

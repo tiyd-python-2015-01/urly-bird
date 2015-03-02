@@ -1,6 +1,5 @@
-from . import db, bcrypt, login_manager
+from . import db, bcrypt, login_manager, hashid
 from flask.ext.login import UserMixin
-from hashids import Hashids
 from sqlalchemy import func
 
 @login_manager.user_loader
@@ -40,8 +39,7 @@ class Link(db.Model):
     clicks = db.relationship('Click', backref='link', lazy='select')
 
     def shorten_url(self):
-        self.short_link = Hashids()
-        return self.short_link
+        self.short_link = hashid.encode(self.id)
 
     @property
     def clicks_by_day(self):

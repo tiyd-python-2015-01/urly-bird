@@ -1,8 +1,5 @@
 from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_user, login_required, logout_user
-# from urllib.request import urlopen
-
-
 from . import app, db
 from .forms import LoginForm, RegistrationForm
 from .models import User, Link
@@ -65,6 +62,7 @@ def logout():
     flash("You have been logged out")
     return redirect(url_for('index'))
 
+
 @app.route('/shorten', methods=['GET', 'POST'])
 def shorten():
     if request.method == 'POST':
@@ -75,19 +73,16 @@ def shorten():
         link.get_short_link()
         db.session.add(link)
         db.session.commit()
-        print('link'+ link.short_link)
-        return render_template("shorten.html", short_link=link.short_link)
-    return render_template("shorten.html")
+        return render_template("add_link.html", short_link=link.short_link)
+    return render_template("add_link.html")
+
 
 @app.route('/<hashid>')
-def short_link(hashid):
+def get_short_link(hashid):
     link = Link.query.filter(Link.short_link == hashid).first()
-    print(link)
     if link:
-        print(redirect(link.original_link))
         return redirect(link.original_link)
-        #return urlopen(link.original_link)
     else:
-        flash("Link not found!")
+        flash("Link not found.")
         return redirect(url_for('index'))
 
