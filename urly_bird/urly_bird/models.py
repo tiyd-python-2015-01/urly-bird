@@ -1,4 +1,5 @@
-from . import db, bcrypt, login_manager, hashid
+from .extensions import db, bcrypt, login_manager
+from . import hashid
 from flask.ext.login import UserMixin
 from sqlalchemy import func
 
