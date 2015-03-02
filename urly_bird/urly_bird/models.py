@@ -13,6 +13,8 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     encrypted_password = db.Column(db.String(60))
+    links = db.relationship('Link', backref='user', lazy='dynamic')
+    clicks = db.relationship('Click', backref='user', lazy='dynamic')
 
     def get_password(self):
         return getattr(self, "_password", None)

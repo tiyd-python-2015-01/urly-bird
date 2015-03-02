@@ -27,7 +27,7 @@ def login():
             flash("Logged in successfully.")
             return redirect(request.args.get("next") or url_for("index"))
         else:
-            flash("That email or password is not correct.")
+            flash("The email or password you entered is not correct.")
 
     flash_errors(form)
     return render_template("login.html", form=form)
@@ -47,7 +47,7 @@ def register():
             db.session.add(user)
             db.session.commit()
             login_user(user)
-            flash("You have been registered and logged in.")
+            flash("Thank you for registering. You are now logged in.")
             return redirect(url_for("index"))
     else:
         flash_errors(form)
