@@ -33,11 +33,27 @@ class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     original_link = db.Column(db.text, nullable=False)
     short_link = db.Column(db.text)
-    user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    description = db.Column(db.Text)
+    date = db.Column(db.DateTime)
+    clicks = db.relationship('Click', backref='link', lazy='select')
 
     def shorten_url(self):
         self.short_link = Hashids()
         return self.short_link
+
+
+    @property
+    def clicks_by_day(self):
+        click_date = func.cast(Click.date, db.Date)
+        return db.session.query(func.count(Click.id), click_date).group_by(click_date).order_by(click_date).all()
+
+    def to_dict(self):
+        return {'id': self.id,
+                'date': self.date,
+                'original_link': self.original_link,
+                'short_link': self.short_link,
+                'description': self.description}
 
 
 # table Relationship
