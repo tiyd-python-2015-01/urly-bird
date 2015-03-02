@@ -1,7 +1,7 @@
 from . import db, bcrypt, login_manager
 from flask.ext.login import UserMixin
 from hashids import Hashids
-
+from sqlalchemy import func
 
 @login_manager.user_loader
 def load_user(id):
@@ -29,6 +29,7 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return "<User {}>".format(self.email)
 
+
 class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     original_link = db.Column(db.text, nullable=False)
@@ -41,7 +42,6 @@ class Link(db.Model):
     def shorten_url(self):
         self.short_link = Hashids()
         return self.short_link
-
 
     @property
     def clicks_by_day(self):
@@ -56,18 +56,12 @@ class Link(db.Model):
                 'description': self.description}
 
 
-# table Relationship
+class Click(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    link_id = db.Column(db.Integer, db.ForeignKey('link.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    ip = db.Column(db.String(20))
+    date = db.Column(db.DateTime)
 
 
-
-
-
-
-
-
-
-
-
-
-
-"""needs to stay at bottom: from . import views"""
+from . import views
