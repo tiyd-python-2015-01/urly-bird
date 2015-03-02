@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="row">
+  {% for click in clicks %}
+  <div class="small-6 columns">
+    <div class="panel small-10 columns">
+      <p><a href={{ link.date }}>{{ link.date }}</a></p>
+      <p>{{ link }}</p>
+      <p>{{ click }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

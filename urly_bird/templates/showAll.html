@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="row">
+  {% for link in links %}
+  <div class="small-6 columns">
+    <div class="panel small-10 columns">
+    <a href={{ link.original_link }}>{{ link.original_link }}</a>
+    <p><a href="http://localhost:5000/{{ link.short_link }}">http://localhost:5000/{{ link.short_link }}</a></p>
+    <p>{{ link.description }}</p>
+    <p>click counter: {{ link.clicks|length }}</p>
+    <p><a href="/link/{{ link.id }}/data">Statistics</a></p>
+    <p></p><a href="/link/{{ link.id }}"><input type="button" value="edit"></a>
+    <a href="/delete/{{ link.id }}" }}><input type="button" value="delete"></a></p>
+  </div>
+</div>
+  <div class="small-1 columns"> </div>
+  {% endfor %}
+</div>
+{% endblock %}
