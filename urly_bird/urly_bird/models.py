@@ -1,4 +1,4 @@
-from .extensions import db, bcrypt, login_manager
+from . import db, bcrypt, login_manager
 from . import hashid
 from flask.ext.login import UserMixin
 from sqlalchemy import func
@@ -34,8 +34,8 @@ class User(db.Model, UserMixin):
 
 class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    original_link = db.Column(db.text, nullable=False)
-    short_link = db.Column(db.text)
+    original_link = db.Column(db.Text, nullable=False)
+    short_link = db.Column(db.Text)
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     description = db.Column(db.Text)
     date = db.Column(db.DateTime)
@@ -64,5 +64,3 @@ class Click(db.Model):
     ip = db.Column(db.String(20))
     date = db.Column(db.DateTime)
 
-
-from . import views

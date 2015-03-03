@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_user, login_required, logout_user
-from . import app, db
+from . import db, app
 from .forms import LoginForm, RegistrationForm
 from .models import User, Link
 
@@ -85,4 +85,3 @@ def get_short_link(hashid):
     else:
         flash("Link not found.")
         return redirect(url_for('index'))
-

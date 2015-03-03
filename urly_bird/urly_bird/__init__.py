@@ -9,13 +9,14 @@ from .extensions import (
     login_manager
 )
 
-SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/urly_bird.db"
+SQLALCHEMY_DATABASE_URI = "postgres://localhost/urly_bird"
 DEBUG = True
 SECRET_KEY = 'development-key'
 
-app = Flask(__name__)
+
+#def create_app():
+app = Flask("urly_bird")
 app.config.from_object(__name__)
-# app.config.from_pyfile('application.cfg', silent=True)
 
 config.init_app(app)
 db.init_app(app)
@@ -24,6 +25,8 @@ migrate.init_app(app, db)
 bcrypt.init_app(app)
 login_manager.init_app(app)
 
+    #return app
+
 hashid = Hashids(salt="salt mines dehydrate the world")
 
-from . import views, models
+from . import models, views
