@@ -13,8 +13,8 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     encrypted_password = db.Column(db.String(60))
-    links = db.relationship('Link', backref='user', lazy='dynamic')
-    clicks = db.relationship('Click', backref='user', lazy='dynamic')
+
+    urls = db.relationship('Link', secondary='urls')
 
     def get_password(self):
         return getattr(self, "_password", None)
@@ -64,3 +64,8 @@ class Click(db.Model):
     ip = db.Column(db.String(20))
     date = db.Column(db.DateTime)
 
+
+URL = db.Table('urls',
+                    db.Column('id', db.Integer, primary_key=True, autoincrement=True),
+                    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                    db.Column('link_id', db.Integer, db.ForeignKey('link.id')))

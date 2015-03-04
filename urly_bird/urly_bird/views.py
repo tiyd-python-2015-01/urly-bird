@@ -69,20 +69,20 @@ def shorten():
     form = CreateLinkForm()
     if request.method == 'POST':
         url_input = form.link.data
-        link = Link(original_link = url_input)
+        link = Link(original_link=url_input)
         link.description = form.description.data
         link.date = datetime.now()
         link.user = current_user
         db.session.add(link)
         db.session.commit()
-        link.get_short_link()
+        link.shorten_url()
         db.session.commit()
         return render_template("add_link.html", short_link=link.short_link, form=form)
     return render_template("add_link.html", form=form)
 
 
 @app.route('/<hashid>')
-def get_short_link(hashid):
+def go_to_short_link(hashid):
     link = Link.query.filter(Link.short_link == hashid).first()
     if link:
         return redirect(link.original_link)
