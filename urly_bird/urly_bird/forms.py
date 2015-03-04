@@ -23,4 +23,3 @@ class RegistrationForm(Form):
 class CreateLinkForm(Form):
     link = StringField('Link', validators=[DataRequired(), URL()])
     description = StringField('description')
-
