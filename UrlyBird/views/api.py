@@ -56,7 +56,7 @@ def books():
 
 
 def create_bookmark():
-    """Creates a new book from a JSON request."""
+    """Creates a new bookmark from a JSON request."""
     require_authorization()
     body = request.get_data(as_text=True)
     data = json.loads(body)
