@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}">
+    <script src="{{ url_for('static', filename='js/vendor/modernizr.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
+</head>
+<body>
+<div id="wrapper">
+    {% block header %}
+        <header>
+          <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+              <li class="name">
+                <h1><a href="{{ url_for("index") }}">UrlyBird</a></h1>
+              </li>
+            </ul>
+            <section class="top-bar-section">
+              <ul class="right">
+              {% if not current_user.is_authenticated() %}
+                <li><a href={{ url_for('register') }}> Register </a></li>
+                <li><a href={{ url_for('login') }}> Login </a></li>
+            {% endif %}
+            {%  if current_user.is_authenticated() %}
+                <li><a href='/shorten'>Shorten Link</a></li>
+                <li><a href={{ url_for("your_links") }}>Your Links</a></li>
+                <li><a href={{ url_for("show_all") }}>All links</a></li>
+                <li><a href={{ url_for("logout") }}> Logout </a></li>
+            {% endif %}
+              </ul>
+          </nav>
+          {% if current_user.is_authenticated() %}
+          <h3>"Welcome {{ current_user.name.capitalize() }}!"</h3>
+          {% else %}
+           <h3>"Welcome to UrlyBird"</h3>
+          {% endif %}
+        </header>
+
+        {% for message in get_flashed_messages() %}
+            <div class="flash">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endblock %}
+
+    {% block body %}{% endblock %}
+
+    {% block footer %}
+        <footer>
+
+        </footer>
+    {% endblock %}
+</div>
+
+<script type="text/javascript" href="{{ url_for('static', filename='modernizr.js') }}"></script>
+<script type="text/javascript" href="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>

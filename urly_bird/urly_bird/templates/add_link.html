@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <form method="POST" action={{ url_for('shorten') }}>
+    <div class="row">
+        <div class="small-10 columns">
+        {{ form.link.label }} {{ form.link }}
+        </div>
+    </div>
+    <div class="row">
+      <div class="small-10 columns">
+        {{ form.description.label }} {{ form.description}}
+        </div>
+    </div>
+        <input class='round button' type="submit" value="shorten" />
+    </form>
+    <p>Your hash id is: {{ short_link }}</p>
+
+{% endblock %}
