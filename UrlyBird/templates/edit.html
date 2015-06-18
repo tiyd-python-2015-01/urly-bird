@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block nav %}
+  <div class = metanav>
+{% if current_user.is_authenticated() %}
+  <a href="{{ url_for('users.logoff') }}">Logout</a>
+  <a href="{{ url_for('bookmarks.index') }}">Homepage</a>
+{% else %}
+  <a href = "{{ url_for('users.register') }}">Register</a>
+  <a href="{{ url_for('users.login') }}">Log in</a>
+{% endif %}
+{% endblock %}
+{% block body %}
+<h3>User Page</h3>
+
+<div>
+  <form method="POST" action= "{{ post_url }}" >
+  {{form.hidden_tag()}}
+  {{ form.url.label }} {{ form.url(size=30)}}
+  {{form.title.label }} {{ form.title(size=30) }}
+
+
+    <input type="submit" class="btn btn-blue" value="{{ button }}">
+  </form>
+</div>
+{% endblock %}

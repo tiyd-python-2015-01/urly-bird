@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<br></br>
+<h1>Recently Added Links</h1>
+{% for link in links %}
+    <div class="links">
+      <h2>{{ link.title }} </h2> &nbsp <a href = {{url_for("bookmarks.go_to_bookmark",
+                      shortlink = link.shortlink)}}>{{link.shortlink}}</a>
+                      </br></br>
+    </div>
+{% endfor %}
+{% endblock %}
